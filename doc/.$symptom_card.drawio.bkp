@@ -1,0 +1,61 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
+  <diagram name="Figure" id="RMDWmy_7FDqxof4XQgl3">
+    <mxGraphModel dx="1094" dy="1067" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-1" value="&lt;b&gt;Symptom Card (core)&lt;/b&gt;&lt;br/&gt;[tests_failed, exceptions, perf, …]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="130" y="80" width="250" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-2" value="&lt;b&gt;domain_hints.traffic&lt;/b&gt;&lt;br/&gt;[signaling / sensing / right_of_way]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="80" width="250" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-3" value="&lt;b&gt;human_hints&lt;/b&gt;&lt;br/&gt;[free-form + structured, overrides allowed]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="790" y="80" width="250" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-4" value="+" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="400" y="105" width="40" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-5" value="+" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="730" y="105" width="40" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-6" value="&lt;b&gt;Hints Merge&lt;/b&gt;&lt;br/&gt;(auto → domain → human)" style="shape=process;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="190" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-7" style="endArrow=block;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="KkY-tIh-1KdOo6p5TkcM-1" target="KkY-tIh-1KdOo6p5TkcM-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-8" style="endArrow=block;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="KkY-tIh-1KdOo6p5TkcM-2" target="KkY-tIh-1KdOo6p5TkcM-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-9" style="endArrow=block;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="KkY-tIh-1KdOo6p5TkcM-3" target="KkY-tIh-1KdOo6p5TkcM-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-10" value="&lt;b&gt;Merged Hints (for prompt)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="280" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-11" style="endArrow=block;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="KkY-tIh-1KdOo6p5TkcM-6" target="KkY-tIh-1KdOo6p5TkcM-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-12" value="&lt;b&gt;Architecture Card&lt;/b&gt;&lt;br/&gt;[invariants, budgets,&lt;br/&gt;allowed components…]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="420" y="350" width="330" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-13" style="endArrow=block;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="KkY-tIh-1KdOo6p5TkcM-10" target="KkY-tIh-1KdOo6p5TkcM-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-14" value="&lt;b&gt;Prompt Assembler (T0..T3)&lt;/b&gt;" style="shape=process;rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="470" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-15" style="endArrow=block;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="KkY-tIh-1KdOo6p5TkcM-12" target="KkY-tIh-1KdOo6p5TkcM-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-16" value="\" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="355" y="165" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="KkY-tIh-1KdOo6p5TkcM-17" value="/" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="795" y="165" width="20" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,25 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
+  <diagram name="Page-1" id="piRVszY0lBjSROY5dp7T">
+    <mxGraphModel dx="1092" dy="1067" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="aKyeIFflzTVPAnTqtBTZ-1" value="Visual Graph Feature Extractor (VGFE) - engine-generic" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E3F2FD;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="240" y="280" width="940" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="aKyeIFflzTVPAnTqtBTZ-2" value="Input&#xa;UE5 Blueprint (K2 graphs) or other visual-scripting assets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFDE7;" vertex="1" parent="1">
+          <mxGeometry x="240" y="370" width="280" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="aKyeIFflzTVPAnTqtBTZ-3" value="Process&#xa;Enumerate graphs -&gt; nodes -&gt; pins (no domain logic)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;" vertex="1" parent="1">
+          <mxGeometry x="560" y="370" width="300" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="aKyeIFflzTVPAnTqtBTZ-4" value="Outputs&#xa;visual_graph = {&#xa;  node_histogram:        { &lt;NodeClass&gt;: count, ... },&#xa;  call_histogram:        { &lt;EngineFunctionSymbol&gt;: count, ... },&#xa;  prop_access_histogram: { &lt;PropertyName&gt;: count, ... },&#xa;  degree_stats:          { in_min, in_med, in_max, out_min, out_med, out_max }&#xa;}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="910" y="350" width="270" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="aKyeIFflzTVPAnTqtBTZ-5" value="Notes&#xa;- No right_of_way, traffic, or game semantics here.&#xa;- Domain packs may later interpret these generic features (optional).&#xa;- Same extractor can be reused across projects/bug families." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;" vertex="1" parent="1">
+          <mxGeometry x="240" y="510" width="940" height="110" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

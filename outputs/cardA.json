@@ -1,0 +1,51 @@
+{
+  "bug_id": "A-CrosswalkDesync",
+  "engine": "Unity",
+  "tests_failed": [
+    {
+      "name": "TimeScaleDesync_ShouldNotAllowWalkOnCarGreen",
+      "message": "Walk permitted while CarPhase=Green",
+      "stack": "CrosswalkController.Update → PedestrianAgent.Step"
+    }
+  ],
+  "exceptions": [
+    {
+      "type": "NullReferenceException",
+      "count": 3,
+      "stacks_sample": [
+        "CrosswalkController.OnPedPhase",
+        "PedestrianAgent.OnDisable"
+      ]
+    }
+  ],
+  "perf": {
+    "FixedUpdate_ms_avg": 2.8,
+    "FixedUpdate_ms_p95": 4.1
+  },
+  "invariants": [
+    { "name": "CrosswalkMutualExclusion", "violations": 5 },
+    { "name": "ListenerLifecycle", "violations": 3 }
+  ],
+  "static_features": {
+    "api_usage": {
+      "CSharp.event_add_assignments": 4,
+      "CSharp.event_remove_assignments": 0
+    },
+    "complexity": { "cyclomatic_total": 47, "maintainability_index": 72 }
+  },
+  "visual_graph": {},
+  "context_map": {
+    "CrosswalkController.cs": ["TrafficLightController.cs", "PedestrianAgent.cs"]
+  },
+  "domain_hints": {
+    "traffic": {
+      "signaling": {
+        "expected_single_source_of_truth": true,
+        "central_state_present": false,
+        "consumer_subscription_count": 2,
+        "desync_evidence": { "ped_green_while_car_green": 5 },
+        "recommended_components": ["TrafficSignalState"]
+      }
+    }
+  }
+}

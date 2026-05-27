@@ -1,0 +1,129 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.7 Chrome/138.0.7204.251 Electron/37.7.1 Safari/537.36" version="28.2.7">
+  <diagram name="Flow" id="uT_s43sMqkLEQ2egNZmT">
+    <mxGraphModel dx="54134" dy="39381" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="kj4App4j1QEQWtFuBize-1" value="&lt;b&gt;Static phase (per commit)&lt;/b&gt;&lt;br&gt;&lt;blockquote style=&quot;margin: 0 0 0 40px; border: none; padding: 0px;&quot;&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- Source index (Roslyn, clangd)&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- 1-hop call graph&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- API/ref checks&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- Complexity/smells&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- VGFE stats (blueprint generic node/call/prop stats)&lt;/span&gt;&lt;/div&gt;&lt;/blockquote&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="150" y="140" width="200" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-2" value="&lt;b&gt;Dynamic phase (per trial)&lt;/b&gt;&lt;br&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- Run tests/scenes with fixed&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;seeds &amp;amp; perf mode)&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- Collect:&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;* tests_failed (names, messages, stacks)&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;* exceptions (type, stack)&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;* perf counters / budgets&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;* invariants (named)&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="385" y="140" width="220" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-3" value="CACHED: static_features, visual_graph" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1f5fe;" parent="1" vertex="1">
+          <mxGeometry x="222" y="290" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-4" value="Symptom Card (JSON)&#xa;core: tests_failed, exceptions, perf, invariants, static_features, visual_graph, context_map" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff8e1;" parent="1" vertex="1">
+          <mxGeometry x="292" y="350" width="270" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-5" value="Hints fuse&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f1f8e9;" parent="1" vertex="1">
+          <mxGeometry x="387" y="450" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-6" value="Architecture Card (YAML)&#xa;- invariants, perf&#xa;- allowed components&#xa;- touchlists, gates" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="182" y="510" width="155" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-7" value="Trial policy (T0..T3):&#xa;- context, gates&#xa;- allowed_actions" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="467" y="530" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-8" value="PROMPT ASSEMBLY&#xa;(code context + Symptom Card + Arch Card + Trial policy)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ede7f6;" parent="1" vertex="1">
+          <mxGeometry x="240" y="630" width="370" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-9" value="LLM patch (diff)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f3e5f5;" parent="1" vertex="1">
+          <mxGeometry x="382" y="690" width="115" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-10" value="Patch application &amp;amp; CI gates&lt;br&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- validate allowlists&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- asset validators&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- Build → Unit → Integration → Perf → Invariants&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;(stop on first fail)&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8f5e9;" parent="1" vertex="1">
+          <mxGeometry x="260" y="750" width="360" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-11" value="Repair Card UI (HITL)&#xa;- show card, neighbors&#xa;- policy excerpt&#xa;- diffs, metrics&#xa;Actions: Run T2, Promote T3, Open Nbrs, Show Diff, Save Tmpl" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff3e0;" parent="1" vertex="1">
+          <mxGeometry x="345" y="829" width="190" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-12" parent="1" source="kj4App4j1QEQWtFuBize-1" target="kj4App4j1QEQWtFuBize-3" edge="1" />
+        <mxCell id="kj4App4j1QEQWtFuBize-13" parent="1" source="kj4App4j1QEQWtFuBize-2" target="kj4App4j1QEQWtFuBize-3" edge="1" />
+        <mxCell id="kj4App4j1QEQWtFuBize-14" parent="1" source="kj4App4j1QEQWtFuBize-3" target="kj4App4j1QEQWtFuBize-4" edge="1" />
+        <mxCell id="kj4App4j1QEQWtFuBize-15" parent="1" source="kj4App4j1QEQWtFuBize-4" target="kj4App4j1QEQWtFuBize-5" edge="1" />
+        <mxCell id="kj4App4j1QEQWtFuBize-16" parent="1" source="kj4App4j1QEQWtFuBize-5" target="kj4App4j1QEQWtFuBize-6" edge="1" />
+        <mxCell id="kj4App4j1QEQWtFuBize-17" parent="1" source="kj4App4j1QEQWtFuBize-5" target="kj4App4j1QEQWtFuBize-7" edge="1" />
+        <mxCell id="kj4App4j1QEQWtFuBize-18" parent="1" source="kj4App4j1QEQWtFuBize-6" target="kj4App4j1QEQWtFuBize-8" edge="1" />
+        <mxCell id="kj4App4j1QEQWtFuBize-19" parent="1" source="kj4App4j1QEQWtFuBize-7" target="kj4App4j1QEQWtFuBize-8" edge="1" />
+        <mxCell id="kj4App4j1QEQWtFuBize-20" parent="1" source="kj4App4j1QEQWtFuBize-8" target="kj4App4j1QEQWtFuBize-9" edge="1" />
+        <mxCell id="kj4App4j1QEQWtFuBize-21" parent="1" source="kj4App4j1QEQWtFuBize-9" target="kj4App4j1QEQWtFuBize-10" edge="1" />
+        <mxCell id="kj4App4j1QEQWtFuBize-22" parent="1" source="kj4App4j1QEQWtFuBize-10" target="kj4App4j1QEQWtFuBize-11" edge="1" />
+        <mxCell id="kj4App4j1QEQWtFuBize-25" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;" parent="1" source="kj4App4j1QEQWtFuBize-3" target="kj4App4j1QEQWtFuBize-6" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="240" y="350" as="sourcePoint" />
+            <mxPoint x="290" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-27" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="kj4App4j1QEQWtFuBize-2" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="480" as="sourcePoint" />
+            <mxPoint x="260" y="340" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="495" y="340" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-28" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;deterministic&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;text-align: center;&quot;&gt;merge:&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="450" y="410" width="147.5" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-29" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="kj4App4j1QEQWtFuBize-6" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="260" y="600" as="sourcePoint" />
+            <mxPoint x="260" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-30" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" parent="1" source="kj4App4j1QEQWtFuBize-7" target="kj4App4j1QEQWtFuBize-8" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="569.8" y="575" as="sourcePoint" />
+            <mxPoint x="569.8" y="625" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-31" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" target="kj4App4j1QEQWtFuBize-9" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="439.96000000000004" y="670" as="sourcePoint" />
+            <mxPoint x="439.76" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-32" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="kj4App4j1QEQWtFuBize-9" target="kj4App4j1QEQWtFuBize-10" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="436.91" y="720" as="sourcePoint" />
+            <mxPoint x="436.71" y="770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-33" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="kj4App4j1QEQWtFuBize-10" target="kj4App4j1QEQWtFuBize-11" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="437" y="820" as="sourcePoint" />
+            <mxPoint x="437" y="840" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-37" value="" style="endArrow=classic;startArrow=none;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startFill=0;" parent="1" source="kj4App4j1QEQWtFuBize-4" target="kj4App4j1QEQWtFuBize-5" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="410" y="560" as="sourcePoint" />
+            <mxPoint x="520" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-38" value="&lt;div&gt;Human hints&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f1f8e9;" parent="1" vertex="1">
+          <mxGeometry x="510" y="450" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-39" value="" style="endArrow=none;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endFill=0;" parent="1" source="kj4App4j1QEQWtFuBize-5" target="kj4App4j1QEQWtFuBize-38" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="483" y="460" as="sourcePoint" />
+            <mxPoint x="551" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-40" value="" style="endArrow=classic;startArrow=none;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startFill=0;" parent="1" source="kj4App4j1QEQWtFuBize-5" target="kj4App4j1QEQWtFuBize-8" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="440" y="550" as="sourcePoint" />
+            <mxPoint x="440" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="KloZxqlsga2AETDQrX7s-1" value="" style="endArrow=none;html=1;rounded=0;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.544;entryY=0.993;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="258.5" y="290.00000000000364" as="sourcePoint" />
+            <mxPoint x="257.8000000000029" y="259.16000000000713" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

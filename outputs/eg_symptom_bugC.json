@@ -1,0 +1,26 @@
+{
+  "bug_id": "C-FourWayDeadlock",
+  "engine": "UE5",
+
+  "tests_failed": [...],
+  "exceptions": [...],
+  "perf": {...},
+  "invariants": [...],
+
+  "static_features": {
+    "api_usage": {"Raycast": 0, "Alloc": 0},           // language-agnostic
+    "complexity": {"cyclomatic": 123, "mi": 68}
+  },
+
+  "visual_graph": {                                     // from VGFE
+    "node_histogram": {"K2Node_CallFunction": 31, "K2Node_VariableGet": 42},
+    "call_histogram": {"Array_Sort": 1, "RandomIntegerInRange": 1},
+    "prop_access_histogram": {"DistanceToStopLine": 3, "EntryTime": 0, "Heading": 0},
+    "degree_stats": {"in_min":0,"in_med":1,"in_max":5,"out_min":0,"out_med":1,"out_max":4}
+  },
+
+  "domain_hints": {                                     // optional; pack or human
+    "ordering_key_candidates": ["DistanceToStopLine"],
+    "has_priority_queue": false
+  }
+}

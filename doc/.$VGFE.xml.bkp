@@ -1,0 +1,40 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="VGFE (engine-generic)" id="vgfe-diagram">
+    <mxGraphModel dx="1500" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Title -->
+        <mxCell id="title" value="Visual Graph Feature Extractor (VGFE) - engine-generic" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E3F2FD;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="940" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Input -->
+        <mxCell id="input" value="Input&#10;UE5 Blueprint (K2 graphs) or other visual-scripting assets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFDE7;" vertex="1" parent="1">
+          <mxGeometry x="80" y="130" width="280" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- Process -->
+        <mxCell id="process" value="Process&#10;Enumerate graphs -&gt; nodes -&gt; pins (no domain logic)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;" vertex="1" parent="1">
+          <mxGeometry x="400" y="130" width="300" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- Outputs -->
+        <mxCell id="outputs" value="Outputs&#10;visual_graph = {&#10;  node_histogram:        { &lt;NodeClass&gt;: count, ... },&#10;  call_histogram:        { &lt;EngineFunctionSymbol&gt;: count, ... },&#10;  prop_access_histogram: { &lt;PropertyName&gt;: count, ... },&#10;  degree_stats:          { in_min, in_med, in_max, out_min, out_med, out_max }&#10;}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="750" y="110" width="270" height="170" as="geometry"/>
+        </mxCell>
+
+        <!-- Notes -->
+        <mxCell id="notes" value="Notes&#10;- No right_of_way, traffic, or game semantics here.&#10;- Domain packs may later interpret these generic features (optional).&#10;- Same extractor can be reused across projects/bug families." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="270" width="940" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="edge1" edge="1" parent="1" source="input" target="process" style="endArrow=block;endFill=1;strokeWidth=2;"/>
+        <mxCell id="edge2" edge="1" parent="1" source="process" target="outputs" style="endArrow=block;endFill=1;strokeWidth=2;"/>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

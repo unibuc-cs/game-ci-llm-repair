@@ -1,0 +1,37 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.7 Chrome/138.0.7204.251 Electron/37.7.1 Safari/537.36" version="28.2.7">
+  <diagram id="F1" name="Repair Pipeline">
+    <mxGraphModel dx="27856" dy="18769" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="box1" value="&lt;b&gt;Extract Static Evidence&lt;/b&gt;&lt;br&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;What&lt;/i&gt;: build engine-aware indexes and generic code features per commit.&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;How&lt;/i&gt;: Roslyn (C#), clangd (C++), Blueprint graph scan.&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;Output&lt;/i&gt;: static_features (APIs, refs, metrics) and visual_graph (generic node/call/property stats).&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=13" parent="1" vertex="1">
+          <mxGeometry x="100" y="80" width="380" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="box2" value="&lt;b&gt;Collect Dynamic Evidence&lt;/b&gt;&lt;br&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;What&lt;/i&gt;: run seeded scenes/tests with warm-ups; capture facts, not prose.&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;How&lt;/i&gt;: oracles with parsable failures; named invariants; profiler/stat counters; exception aggregation.&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;Output&lt;/i&gt;: tests_failed, invariants, perf, exceptions.&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=13" parent="1" vertex="1">
+          <mxGeometry x="100" y="260" width="600" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="box3" value="&lt;b&gt;Build Evidence &amp;amp; Policy Cards&lt;/b&gt;&lt;br&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;Symptom Card&lt;/i&gt;: evidence bundle with dynamic outputs + static_features, visual_graph, and a context_map (buggy file + one-hop neighbors).&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;Architecture Card&lt;/i&gt;: invariants to respect, performance budgets, allowed components and file touchlists, CI gates.&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;Optional hints&lt;/i&gt;: auto (from analyzers) → domain (e.g., Traffic) → human (engineer notes); merged deterministically.&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=13" parent="1" vertex="1">
+          <mxGeometry x="100" y="450" width="600" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="box4" value="&lt;b&gt;Assemble Trial Prompt&lt;/b&gt;&lt;br&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;Inputs&lt;/i&gt;: code context selected by the trial policy + Symptom Card (+ Architecture Card if enabled).&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;Output&lt;/i&gt;: compact, auditable key-value prompt for the LLM.&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;Scope control&lt;/i&gt;: policy chooses rung (T0–T3), neighbor hops, and allowed actions.&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;fontSize=13" parent="1" vertex="1">
+          <mxGeometry x="100" y="650" width="600" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="box5" value="&lt;b&gt;Propose Patch (LLM)&lt;/b&gt;&lt;br&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;Task&lt;/i&gt;: return a unified diff plus a brief rationale and test plan.&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;Guardrails&lt;/i&gt;: policy-bounded actions (e.g., no new assets at T2).&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;fontSize=13" parent="1" vertex="1">
+          <mxGeometry x="100" y="820" width="600" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="box6" value="&lt;b&gt;Apply Patch and Run Validation Gates&lt;/b&gt;&lt;br&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;What&lt;/i&gt;: check allowlists and asset rules; then run Build → Unit → Integration → Performance → Invariants.&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;Behavior&lt;/i&gt;: stop on first failure and roll back; otherwise accept the trial result.&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e2f0d9;strokeColor=#76923c;strokeWidth=2;fontSize=13" parent="1" vertex="1">
+          <mxGeometry x="100" y="960" width="600" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="box7" value="&lt;b&gt;Reviewer Console (Human-in-the-Loop)&lt;/b&gt;&lt;br&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;View&lt;/i&gt;: cards, neighbor files, policy excerpt, diffs, and key metrics.&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;i&gt;Actions&lt;/i&gt;: re-run a rung, promote to a higher rung, open neighbors, inspect diff, save as template.&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=13" parent="1" vertex="1">
+          <mxGeometry x="100" y="1150" width="600" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" style="endArrow=block;endFill=1;strokeWidth=2;edgeStyle=orthogonalEdgeStyle;" parent="1" source="box1" target="box2" edge="1" />
+        <mxCell id="e2" style="endArrow=block;endFill=1;strokeWidth=2;edgeStyle=orthogonalEdgeStyle;" parent="1" source="box2" target="box3" edge="1" />
+        <mxCell id="e3" style="endArrow=block;endFill=1;strokeWidth=2;edgeStyle=orthogonalEdgeStyle;" parent="1" source="box3" target="box4" edge="1" />
+        <mxCell id="e4" style="endArrow=block;endFill=1;strokeWidth=2;edgeStyle=orthogonalEdgeStyle;" parent="1" source="box4" target="box5" edge="1" />
+        <mxCell id="e5" style="endArrow=block;endFill=1;strokeWidth=2;edgeStyle=orthogonalEdgeStyle;" parent="1" source="box5" target="box6" edge="1" />
+        <mxCell id="e6" style="endArrow=block;endFill=1;strokeWidth=2;edgeStyle=orthogonalEdgeStyle;" parent="1" source="box6" target="box7" edge="1" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

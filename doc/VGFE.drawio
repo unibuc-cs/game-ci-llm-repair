@@ -1,0 +1,34 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
+  <diagram name="Page-1" id="piRVszY0lBjSROY5dp7T">
+    <mxGraphModel dx="1500" dy="1067" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="aKyeIFflzTVPAnTqtBTZ-1" value="Visual Graph Feature Extractor (VGFE)&amp;nbsp;&lt;div&gt;engine-generic&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E3F2FD;fontStyle=1;align=center;verticalAlign=top;fontSize=15;" parent="1" vertex="1">
+          <mxGeometry x="500" y="260" width="360" height="470" as="geometry" />
+        </mxCell>
+        <mxCell id="aKyeIFflzTVPAnTqtBTZ-2" value="Input&#xa;UE5 Blueprint (K2 graphs) or other visual-scripting assets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFDE7;" parent="1" vertex="1">
+          <mxGeometry x="570" y="310" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="aKyeIFflzTVPAnTqtBTZ-3" value="Process&#xa;Enumerate graphs -&gt; nodes -&gt; pins (no domain logic)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;" parent="1" vertex="1">
+          <mxGeometry x="608.5" y="420" width="103" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="aKyeIFflzTVPAnTqtBTZ-4" value="Outputs&lt;br&gt;visual_graph = {&lt;br&gt;  node_histogram:        { &amp;lt;NodeClass&amp;gt;: count, ... },&lt;br&gt;  call_histogram:        { &amp;lt;EngineFunctionSymbol&amp;gt;: count, ... },&lt;br&gt;  prop_access_histogram: { &amp;lt;PropertyName&amp;gt;: count, ... },&lt;br&gt;  degree_stats:          { in_min, in_med, in_max, out_min, out_med, out_max }&lt;br&gt;}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;fontFamily=Courier New;align=left;" parent="1" vertex="1">
+          <mxGeometry x="520" y="550" width="330" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="VvCohSrkxgbkI-mJbSES-1" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="aKyeIFflzTVPAnTqtBTZ-2" target="aKyeIFflzTVPAnTqtBTZ-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="740" y="570" as="sourcePoint" />
+            <mxPoint x="790" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VvCohSrkxgbkI-mJbSES-2" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="659.5" y="510" as="sourcePoint" />
+            <mxPoint x="659.5" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,137 @@
+<mxfile host="app.diagrams.net" modified="2025-11-16T10:00:00Z" agent="Mozilla/5.0" version="28.2.7">
+  <diagram id="LLMRepairPipeline" name="LLM Repair Pipeline">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Column 1: Project & Engineers -->
+        <mxCell id="dev" value="Developers / QA&#xa;Human review, hints" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="repo" value="Game repositories&#xa;(Unity, UE5)&#xa;Tests, scenes, CI config" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="180" width="160" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Column 2: Evidence collection -->
+        <mxCell id="static" value="Static extraction&#xa;Roslyn, clangd, VGFE&#xa;static_features, visual_graph" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="260" y="80" width="210" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="dynamic" value="Dynamic harness&#xa;Tests, scenes, invariants, perf&#xa;tests_failed, invariants, perf" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="260" y="200" width="210" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Column 3: Cards & Policies -->
+        <mxCell id="codectx" value="CodeContext builder&#xa;primary_files, neighbors" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="520" y="60" width="210" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="symptom" value="Symptom Card builder&#xa;Bug evidence, hints, context" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="520" y="150" width="210" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="domain" value="Domain pack (optional)&#xa;domain_hints" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="520" y="250" width="210" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="arch" value="Architecture Card&#xa;Invariants, perf budgets, allowlists" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="760" y="150" width="210" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="policies" value="Trial policies T0–T3&#xa;Context, actions, gates, prompt" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="760" y="60" width="210" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Column 4: Orchestration & LLM -->
+        <mxCell id="prompt" value="Prompt assembler&#xa;Policy-bound prompt" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="80" width="210" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="llm" value="LLM repair agent&#xa;Policy-guided patch (unified diff)" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="170" width="210" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="loop" value="Bounded trial loop&#xa;T0–T3, patch apply, rollback" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="270" width="210" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Column 5: CI & Outcomes -->
+        <mxCell id="ci" value="CI gates&#xa;Build, unit, integration, performance, invariants" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="180" width="230" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="outcome" value="Outcome recorder&#xa;Per-gate results, maintainability, ablations" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="80" width="230" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="review" value="Engineer review&#xa;Adopt patch, refine policies and hints" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="290" width="230" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges: project -> evidence -->
+        <mxCell id="e1" edge="1" parent="1" source="repo" target="static" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="sourcePoint"/>
+            <mxPoint x="0" y="0" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="repo" target="dynamic" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="dev" target="arch" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges: evidence -> cards -->
+        <mxCell id="e4" edge="1" parent="1" source="static" target="codectx" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="static" target="symptom" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="dynamic" target="symptom" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="codectx" target="symptom" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="domain" target="symptom" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges: cards -> orchestration -->
+        <mxCell id="e9" edge="1" parent="1" source="symptom" target="prompt" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="codectx" target="prompt" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="arch" target="prompt" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="policies" target="prompt" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e13" edge="1" parent="1" source="prompt" target="llm" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="llm" target="loop" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Orchestration -> CI & outcomes -->
+        <mxCell id="e15" edge="1" parent="1" source="loop" target="ci" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="ci" target="outcome" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="ci" target="review" style="endArrow=block;endFill=1;html=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Feedback loops -->
+        <mxCell id="e18" edge="1" parent="1" source="review" target="arch" style="endArrow=block;endFill=1;html=1;curved=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="outcome" target="policies" style="endArrow=block;endFill=1;html=1;curved=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

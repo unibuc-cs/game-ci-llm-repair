@@ -1,0 +1,52 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
+  <diagram name="Trial Ladder F4" id="I32iJDhVg0PGQxwsyqUL">
+    <mxGraphModel dx="1092" dy="1069" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ltxU20zIlhY0gICXXTlX-1" value="Trial ladder (F4): context, actions, and gates" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="20" y="30" width="370" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ltxU20zIlhY0gICXXTlX-2" value="&lt;b&gt;T0&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="30" y="90" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ltxU20zIlhY0gICXXTlX-3" value="&lt;b&gt;Context:&lt;/b&gt; buggy files only&lt;br&gt;&lt;b&gt;Actions:&lt;/b&gt; edit existing files (touchlist narrow)&lt;br&gt;&lt;b&gt;Gates:&lt;/b&gt; Build → Unit&lt;br&gt;&lt;b&gt;Use:&lt;/b&gt; quick sanity; cheap failures surface fast" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=12;align=left;" vertex="1" parent="1">
+          <mxGeometry x="140" y="70" width="180" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="ltxU20zIlhY0gICXXTlX-4" value="&lt;b&gt;T1&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="30" y="200" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ltxU20zIlhY0gICXXTlX-5" value="&lt;b&gt;Context:&lt;/b&gt; + 1-hop neighbors; failing test names/stacks&lt;br&gt;&lt;b&gt;Actions:&lt;/b&gt; edit existing files (touchlist wider)&lt;br&gt;&lt;b&gt;Gates:&lt;/b&gt; Build → Unit → Integration&lt;br&gt;&lt;b&gt;Use:&lt;/b&gt; local fixes that need neighbor awareness" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=12;align=left;" vertex="1" parent="1">
+          <mxGeometry x="140" y="180" width="240" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="ltxU20zIlhY0gICXXTlX-6" value="&lt;b&gt;T2&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="30" y="310" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ltxU20zIlhY0gICXXTlX-7" value="&lt;b&gt;Context:&lt;/b&gt; + Architecture Card; + perf counters; + VGFE stats&lt;br&gt;&lt;b&gt;Actions:&lt;/b&gt; may add new source files (no new assets)&lt;br&gt;&lt;b&gt;Gates:&lt;/b&gt; Build → Unit → Integration → Perf → Invariants&lt;br&gt;&lt;b&gt;Use:&lt;/b&gt; policy-constrained, budget-aware structural fixes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=12;align=left;" vertex="1" parent="1">
+          <mxGeometry x="140" y="280" width="260" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="ltxU20zIlhY0gICXXTlX-8" value="&lt;b&gt;T3&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="30" y="420" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ltxU20zIlhY0gICXXTlX-9" value="&lt;b&gt;Context:&lt;/b&gt; all of T2&lt;br&gt;&lt;b&gt;Actions:&lt;/b&gt; may add new assets/abstractions (per policy); HITL approval&lt;br&gt;&lt;b&gt;Gates:&lt;/b&gt; Full (as T2), plus human review if required&lt;br&gt;&lt;b&gt;Use:&lt;/b&gt; introduce shared state, queues, spatial grids, etc." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=12;align=left;" vertex="1" parent="1">
+          <mxGeometry x="130" y="430" width="190" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ltxU20zIlhY0gICXXTlX-10" style="endArrow=block;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="ltxU20zIlhY0gICXXTlX-2" target="ltxU20zIlhY0gICXXTlX-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ltxU20zIlhY0gICXXTlX-11" style="endArrow=block;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="ltxU20zIlhY0gICXXTlX-4" target="ltxU20zIlhY0gICXXTlX-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ltxU20zIlhY0gICXXTlX-12" style="endArrow=block;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="ltxU20zIlhY0gICXXTlX-6" target="ltxU20zIlhY0gICXXTlX-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ltxU20zIlhY0gICXXTlX-13" value="Prompt at each run" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="264" y="575" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ltxU20zIlhY0gICXXTlX-14" value="CodeContext + SymptomCard (+ Traffic hints) + (optional) ArchitectureCard + TrialPolicy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="40" y="555" width="210" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

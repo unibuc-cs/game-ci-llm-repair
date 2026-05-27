@@ -1,0 +1,83 @@
+<mxfile host="app.diagrams.net" modified="2025-10-03T17:00:00Z" agent="GPT-5 Thinking" version="22.0.8">
+  <diagram id="symptom-merge-arch-card" name="Figure">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Row 1: three sources -->
+        <mxCell id="symptom" value="&lt;b&gt;Symptom Card (core)&lt;/b&gt;&lt;br/&gt;[tests_failed, exceptions, perf, …]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="130" y="80" width="250" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="domain" value="&lt;b&gt;domain_hints.traffic&lt;/b&gt;&lt;br/&gt;[signaling / sensing / right_of_way]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="80" width="250" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="human" value="&lt;b&gt;human_hints&lt;/b&gt;&lt;br/&gt;[free-form + structured, overrides allowed]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="790" y="80" width="250" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Plus signs (optional visual separators) -->
+        <mxCell id="plus1" value="+" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="400" y="105" width="40" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="plus2" value="+" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="730" y="105" width="40" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- Merge node -->
+        <mxCell id="merge" value="&lt;b&gt;Hints Merge&lt;/b&gt;&lt;br/&gt;(auto → domain → human)" style="shape=process;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="190" width="250" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges from sources to merge -->
+        <mxCell id="e1" edge="1" parent="1" source="symptom" target="merge" style="endArrow=block;endFill=1;strokeWidth=1.2;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="domain" target="merge" style="endArrow=block;endFill=1;strokeWidth=1.2;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="human" target="merge" style="endArrow=block;endFill=1;strokeWidth=1.2;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Merged Hints -->
+        <mxCell id="merged" value="&lt;b&gt;Merged Hints (for prompt)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="280" width="250" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e4" edge="1" parent="1" source="merge" target="merged" style="endArrow=block;endFill=1;strokeWidth=1.2;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Architecture Card block -->
+        <mxCell id="arch" value="&lt;b&gt;Architecture Card&lt;/b&gt;&lt;br/&gt;[invariants, budgets,&lt;br/&gt;allowed components…]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="420" y="350" width="330" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e5" edge="1" parent="1" source="merged" target="arch" style="endArrow=block;endFill=1;strokeWidth=1.2;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Prompt Assembler -->
+        <mxCell id="prompt" value="&lt;b&gt;Prompt Assembler (T0..T3)&lt;/b&gt;" style="shape=process;rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="470" width="250" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e6" edge="1" parent="1" source="arch" target="prompt" style="endArrow=block;endFill=1;strokeWidth=1.2;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Tiny labels replicating ASCII slashes (optional) -->
+        <mxCell id="slashL" value="\" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="355" y="165" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="slashR" value="/" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="795" y="165" width="20" height="20" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

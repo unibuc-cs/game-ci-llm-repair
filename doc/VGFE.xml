@@ -1,0 +1,12 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
+  <diagram name="VGFE (engine-generic)" id="vgfe-diagram">
+    <mxGraphModel dx="46108" dy="34390" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="edge1" style="endArrow=block;endFill=1;strokeWidth=2;" parent="1" source="input" target="process" edge="1" />
+        <mxCell id="edge2" style="endArrow=block;endFill=1;strokeWidth=2;" parent="1" source="process" target="outputs" edge="1" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

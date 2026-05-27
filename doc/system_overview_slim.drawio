@@ -1,0 +1,73 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.7 Chrome/138.0.7204.251 Electron/37.7.1 Safari/537.36" version="28.2.7">
+  <diagram id="F1" name="Repair Pipeline (Mini)">
+    <mxGraphModel dx="167783" dy="145235" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="800" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="b1" value="&lt;b&gt;Extract Static Evidence&lt;/b&gt;&lt;br&gt;- engine aware indexes and generic features" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13" parent="1" vertex="1">
+          <mxGeometry x="-226" y="219" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="b2" value="&lt;b&gt;Collect Dynamic&lt;/b&gt; Evidence&lt;br&gt;- parsable oracles, invariants, counters, logs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="-41" y="220" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="b3" value="&lt;b&gt;Evidence and Policy&lt;/b&gt; &lt;b&gt;Cards&lt;/b&gt;&lt;br&gt;- Symptom Card + Architecture Card" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="146" y="220" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="b4" value="&lt;b&gt;Assemble Trial Prompt&lt;/b&gt;&lt;br&gt;- policy bound context and deliverables T0 to T3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="330" y="215" width="162" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="b5" value="&lt;b&gt;Propose Patch LLM&lt;/b&gt;&lt;br&gt;- unified diff with rationale and test plan" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="520" y="215" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="b6" value="&lt;b&gt;Patch and CI Gates&lt;/b&gt;&lt;br&gt;- allowlists;&amp;nbsp;&lt;div&gt;Build-&amp;gt;Unit-&amp;gt;Int-&amp;gt;Perf-&amp;gt;Inv&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e2f0d9;strokeColor=#76923c;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="679" y="220" width="181" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="b7" value="&lt;b&gt;Reviewer UI&lt;br&gt;&lt;/b&gt;- view evidence;&amp;nbsp;&lt;div&gt;re-run or promote trials&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="890" y="220" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" style="endArrow=block;endFill=1;strokeWidth=2;edgeStyle=orthogonalEdgeStyle;" parent="1" source="b1" target="b2" edge="1" />
+        <mxCell id="e2" style="endArrow=block;endFill=1;strokeWidth=2;edgeStyle=orthogonalEdgeStyle;" parent="1" source="b2" target="b3" edge="1" />
+        <mxCell id="e3" style="endArrow=block;endFill=1;strokeWidth=2;edgeStyle=orthogonalEdgeStyle;" parent="1" source="b3" target="b4" edge="1" />
+        <mxCell id="e4" style="endArrow=block;endFill=1;strokeWidth=2;edgeStyle=orthogonalEdgeStyle;" parent="1" source="b4" target="b5" edge="1" />
+        <mxCell id="e5" style="endArrow=block;endFill=1;strokeWidth=2;edgeStyle=orthogonalEdgeStyle;" parent="1" source="b5" target="b6" edge="1" />
+        <mxCell id="e6" style="endArrow=block;endFill=1;strokeWidth=2;edgeStyle=orthogonalEdgeStyle;" parent="1" source="b6" target="b7" edge="1" />
+        <mxCell id="k0D6IcYiWNS6IFrvwKAz-1" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="b1" target="b2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="420" y="490" as="sourcePoint" />
+            <mxPoint x="470" y="440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="k0D6IcYiWNS6IFrvwKAz-2" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="b2" target="b3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-60" y="250" as="sourcePoint" />
+            <mxPoint x="-25" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="k0D6IcYiWNS6IFrvwKAz-3" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="b3" target="b4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="210" y="360" as="sourcePoint" />
+            <mxPoint x="237" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="k0D6IcYiWNS6IFrvwKAz-4" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="b4" target="b5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="670" y="430" as="sourcePoint" />
+            <mxPoint x="694" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="k0D6IcYiWNS6IFrvwKAz-5" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="b5" target="b6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="610" y="440" as="sourcePoint" />
+            <mxPoint x="638" y="440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="k0D6IcYiWNS6IFrvwKAz-6" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="b6" target="b7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="730" y="500" as="sourcePoint" />
+            <mxPoint x="758" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,75 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
+  <diagram name="Flow" id="uT_s43sMqkLEQ2egNZmT">
+    <mxGraphModel dx="103146" dy="102129" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="kj4App4j1QEQWtFuBize-1" value="&lt;b&gt;Static phase (per commit)&lt;/b&gt;&lt;br&gt;&lt;blockquote style=&quot;margin: 0 0 0 40px; border: none; padding: 0px;&quot;&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- Source index (Roslyn, clangd)&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- 1-hop call graph&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- API/ref checks&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- Complexity/smells&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- VGFE stats (blueprint generic node/call/prop stats)&lt;/span&gt;&lt;/div&gt;&lt;/blockquote&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="140" width="200" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-2" value="&lt;b&gt;Dynamic phase (per trial)&lt;/b&gt;&lt;br&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- Run tests/scenes with fixed&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;seeds &amp;amp; perf mode)&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- Collect:&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;* tests_failed (names, messages, stacks)&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;* exceptions (type, stack)&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;* perf counters / budgets&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;* invariants (named)&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="385" y="140" width="220" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-3" value="CACHED: static_features, visual_graph" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1f5fe;" vertex="1" parent="1">
+          <mxGeometry x="222" y="290" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-4" value="Symptom Card (JSON)&#xa;core: tests_failed, exceptions, perf, invariants, static_features, visual_graph, context_map" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff8e1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="380" width="360" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-5" value="Hints fuse&#xa;deterministic merge:&#xa;auto + domain + human" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f1f8e9;" vertex="1" parent="1">
+          <mxGeometry x="265" y="490" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-6" value="Architecture Card (YAML)&#xa;- invariants, perf&#xa;- allowed components&#xa;- touchlists, gates" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="135" y="580" width="250" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-7" value="Trial policy (T0..T3):&#xa;- context, gates&#xa;- allowed_actions" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="580" width="250" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-8" value="PROMPT ASSEMBLY&#xa;(code context + Symptom Card + Arch Card + Trial policy)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ede7f6;" vertex="1" parent="1">
+          <mxGeometry x="220" y="750" width="300" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-9" value="LLM patch (diff)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f3e5f5;" vertex="1" parent="1">
+          <mxGeometry x="280" y="860" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-10" value="Patch application &amp; CI gates&#xa;- validate allowlists&#xa;- asset validators&#xa;- Build → Unit → Integration → Perf → Invariants&#xa;(stop on first fail)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8f5e9;" vertex="1" parent="1">
+          <mxGeometry x="150" y="950" width="400" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-11" value="Repair Card UI (HITL)&#xa;- show card, neighbors&#xa;- policy excerpt&#xa;- diffs, metrics&#xa;Actions: Run T2, Promote T3, Open Nbrs, Show Diff, Save Tmpl" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff3e0;" vertex="1" parent="1">
+          <mxGeometry x="220" y="1140" width="300" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-12" edge="1" parent="1" source="kj4App4j1QEQWtFuBize-1" target="kj4App4j1QEQWtFuBize-3" />
+        <mxCell id="kj4App4j1QEQWtFuBize-13" edge="1" parent="1" source="kj4App4j1QEQWtFuBize-2" target="kj4App4j1QEQWtFuBize-3" />
+        <mxCell id="kj4App4j1QEQWtFuBize-14" edge="1" parent="1" source="kj4App4j1QEQWtFuBize-3" target="kj4App4j1QEQWtFuBize-4" />
+        <mxCell id="kj4App4j1QEQWtFuBize-15" edge="1" parent="1" source="kj4App4j1QEQWtFuBize-4" target="kj4App4j1QEQWtFuBize-5" />
+        <mxCell id="kj4App4j1QEQWtFuBize-16" edge="1" parent="1" source="kj4App4j1QEQWtFuBize-5" target="kj4App4j1QEQWtFuBize-6" />
+        <mxCell id="kj4App4j1QEQWtFuBize-17" edge="1" parent="1" source="kj4App4j1QEQWtFuBize-5" target="kj4App4j1QEQWtFuBize-7" />
+        <mxCell id="kj4App4j1QEQWtFuBize-18" edge="1" parent="1" source="kj4App4j1QEQWtFuBize-6" target="kj4App4j1QEQWtFuBize-8" />
+        <mxCell id="kj4App4j1QEQWtFuBize-19" edge="1" parent="1" source="kj4App4j1QEQWtFuBize-7" target="kj4App4j1QEQWtFuBize-8" />
+        <mxCell id="kj4App4j1QEQWtFuBize-20" edge="1" parent="1" source="kj4App4j1QEQWtFuBize-8" target="kj4App4j1QEQWtFuBize-9" />
+        <mxCell id="kj4App4j1QEQWtFuBize-21" edge="1" parent="1" source="kj4App4j1QEQWtFuBize-9" target="kj4App4j1QEQWtFuBize-10" />
+        <mxCell id="kj4App4j1QEQWtFuBize-22" edge="1" parent="1" source="kj4App4j1QEQWtFuBize-10" target="kj4App4j1QEQWtFuBize-11" />
+        <mxCell id="kj4App4j1QEQWtFuBize-24" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" target="kj4App4j1QEQWtFuBize-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="260" y="260" as="sourcePoint" />
+            <mxPoint x="310" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-25" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="kj4App4j1QEQWtFuBize-3" target="kj4App4j1QEQWtFuBize-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="240" y="350" as="sourcePoint" />
+            <mxPoint x="290" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kj4App4j1QEQWtFuBize-27" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="kj4App4j1QEQWtFuBize-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="480" as="sourcePoint" />
+            <mxPoint x="260" y="360" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="495" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
