@@ -1,0 +1,428 @@
+[
+  {
+    "case_id": "A-CrosswalkDesync",
+    "description": "Unity crosswalk state update is missed by a neighboring pedestrian agent.",
+    "architecture_card": "unity_traffic",
+    "human_hints": [
+      "Preserve TrafficLightController as the single source of phase truth."
+    ],
+    "symptom_card": {
+      "bug_id": "A-CrosswalkDesync",
+      "engine": "Unity",
+      "tests_failed": [
+        {
+          "name": "TimeScaleDesync_ShouldNotAllowWalkOnCarGreen",
+          "message": "Walk permitted while CarPhase=Green",
+          "stack": "CrosswalkController.Update -> PedestrianAgent.Step"
+        }
+      ],
+      "exceptions": [],
+      "perf": {
+        "FixedUpdate_ms_avg": 2.8,
+        "Physics_Step_ms_p95": 4.1
+      },
+      "invariants": [],
+      "static_features": {
+        "api_usage": {
+          "CSharp.event_add_assignments": 4,
+          "CSharp.event_remove_assignments": 4
+        },
+        "complexity": {
+          "cyclomatic_total": 47,
+          "maintainability_index": 72
+        }
+      },
+      "visual_graph": {},
+      "domain_hints": {
+        "traffic": {
+          "signaling": {
+            "expected_single_source_of_truth": true,
+            "consumer_subscription_count": 2,
+            "recommended_components": [
+              "TrafficSignalState"
+            ]
+          }
+        }
+      }
+    },
+    "code_context": {
+      "primary_files": [
+        {
+          "path": "src/unity/CrosswalkController.cs",
+          "component": "Traffic"
+        }
+      ],
+      "neighbors": {
+        "src/unity/CrosswalkController.cs": [
+          {
+            "path": "src/unity/TrafficLightController.cs",
+            "component": "Traffic"
+          },
+          {
+            "path": "src/unity/PedestrianAgent.cs",
+            "component": "Gameplay"
+          }
+        ]
+      }
+    },
+    "candidates": [
+      {
+        "level": "T1",
+        "attempt": 1,
+        "patch_id": "A-T1-propagate-phase-state",
+        "summary": "Propagate phase changes through PedestrianAgent instead of caching walk state locally.",
+        "modified_files": [
+          "src/unity/CrosswalkController.cs",
+          "src/unity/PedestrianAgent.cs"
+        ],
+        "requires_visual_graph_edit": false,
+        "gate_results": {
+          "build": {
+            "ok": true,
+            "metrics": {},
+            "message": "C# compilation succeeded."
+          },
+          "unit": {
+            "ok": true,
+            "metrics": {
+              "tests": 14
+            },
+            "message": "Traffic unit tests passed."
+          },
+          "integration": {
+            "ok": true,
+            "metrics": {
+              "scene_replays": 3
+            },
+            "message": "Crosswalk scene replay passed."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "B-BrakeOscillation",
+    "description": "Unity vehicle braking repeatedly raycasts from every car and exceeds the physics budget.",
+    "architecture_card": "unity_traffic",
+    "human_hints": [
+      "Prefer shared sensing data over per-agent raycast loops."
+    ],
+    "symptom_card": {
+      "bug_id": "B-BrakeOscillation",
+      "engine": "Unity",
+      "tests_failed": [
+        {
+          "name": "Perf_300Cars_PhysicsBudget",
+          "message": "avg FixedUpdate > 12ms at N=300",
+          "stack": "PerformanceSuite.Run -> CarController.FixedUpdate"
+        }
+      ],
+      "exceptions": [],
+      "perf": {
+        "FixedUpdate_ms_avg": 14.7,
+        "Physics_Step_ms_p95": 13.9,
+        "RaycastCount_per_frame_avg": 18230
+      },
+      "invariants": [
+        {
+          "name": "NoBackwardTeleport",
+          "violations": 2
+        }
+      ],
+      "static_features": {
+        "api_usage": {
+          "Physics.Raycast": 18230,
+          "GC.Alloc": 6
+        },
+        "complexity": {
+          "cyclomatic_total": 83,
+          "maintainability_index": 64
+        }
+      },
+      "visual_graph": {},
+      "domain_hints": {
+        "traffic": {
+          "sensing": {
+            "shared_sensing_present": false,
+            "hotspots": [
+              "CarController.FixedUpdate"
+            ],
+            "risk_flags": [
+              "per-agent sensing loop"
+            ],
+            "recommended_components": [
+              "ProximityGrid",
+              "BrakeIntent"
+            ]
+          }
+        }
+      }
+    },
+    "code_context": {
+      "primary_files": [
+        {
+          "path": "src/unity/CarController.cs",
+          "component": "Traffic"
+        }
+      ],
+      "neighbors": {
+        "src/unity/CarController.cs": [
+          {
+            "path": "src/unity/TrafficAIPlanner.cs",
+            "component": "AI"
+          },
+          {
+            "path": "src/unity/VehicleSensors.cs",
+            "component": "Traffic"
+          }
+        ]
+      }
+    },
+    "candidates": [
+      {
+        "level": "T2",
+        "attempt": 1,
+        "patch_id": "B-T2-cache-last-raycast-only",
+        "summary": "Cache the last raycast result on each car.",
+        "modified_files": [
+          "src/unity/CarController.cs"
+        ],
+        "requires_visual_graph_edit": false,
+        "gate_results": {
+          "build": {
+            "ok": true,
+            "metrics": {},
+            "message": "C# compilation succeeded."
+          },
+          "unit": {
+            "ok": true,
+            "metrics": {
+              "tests": 21
+            },
+            "message": "Vehicle unit tests passed."
+          },
+          "integration": {
+            "ok": true,
+            "metrics": {
+              "scene_replays": 2
+            },
+            "message": "Traffic scene replay passed."
+          },
+          "perf": {
+            "ok": false,
+            "metrics": {
+              "FixedUpdate_ms_avg": 13.4,
+              "Physics_Step_ms_p95": 12.8,
+              "RaycastCount_per_frame_avg": 10420
+            },
+            "message": "The patch improves the hotspot but remains above budget."
+          }
+        }
+      },
+      {
+        "level": "T2",
+        "attempt": 2,
+        "patch_id": "B-T2-shared-proximity-grid",
+        "summary": "Move sensing into a shared grid and consume BrakeIntent values in CarController.",
+        "modified_files": [
+          "src/unity/CarController.cs",
+          "src/unity/VehicleSensors.cs",
+          "src/unity/ProximityGrid.cs"
+        ],
+        "creates_new_file": true,
+        "requires_visual_graph_edit": false,
+        "gate_results": {
+          "build": {
+            "ok": true,
+            "metrics": {},
+            "message": "C# compilation succeeded."
+          },
+          "unit": {
+            "ok": true,
+            "metrics": {
+              "tests": 21
+            },
+            "message": "Vehicle unit tests passed."
+          },
+          "integration": {
+            "ok": true,
+            "metrics": {
+              "scene_replays": 2
+            },
+            "message": "Traffic scene replay passed."
+          },
+          "perf": {
+            "ok": true,
+            "metrics": {
+              "FixedUpdate_ms_avg": 10.6,
+              "Physics_Step_ms_p95": 9.8,
+              "RaycastCount_per_frame_avg": 1370
+            },
+            "message": "Performance budget is satisfied."
+          },
+          "invariants": {
+            "ok": true,
+            "metrics": {
+              "violations": {
+                "NoBackwardTeleport": 0
+              }
+            },
+            "message": "Runtime invariants passed."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "C-FourWayDeadlock",
+    "description": "UE5 four-way stop Blueprint uses an unstable random tie-break and can stop granting turns.",
+    "architecture_card": "ue5_traffic",
+    "human_hints": [
+      "Do not replace the intersection manager; keep Blueprint event names stable."
+    ],
+    "symptom_card": {
+      "bug_id": "C-FourWayDeadlock",
+      "engine": "UE5",
+      "tests_failed": [
+        {
+          "name": "NoDeadlock_4WayStop_50Vehicles",
+          "message": "Queue non-empty for 10.0s; no GrantNext events emitted",
+          "stack": "BP_IntersectionController::Tick"
+        }
+      ],
+      "exceptions": [],
+      "perf": {
+        "GameThread_ms_avg": 5.1,
+        "GameThread_ms_p95": 7.4
+      },
+      "invariants": [
+        {
+          "name": "NoCollisionOnGrant",
+          "violations": 0
+        },
+        {
+          "name": "FairWaitDistribution",
+          "violations": 1
+        }
+      ],
+      "static_features": {
+        "api_usage": {
+          "RandomIntegerInRange": 1
+        },
+        "complexity": {
+          "cyclomatic_total": 39,
+          "maintainability_index": 70
+        }
+      },
+      "visual_graph": {
+        "node_histogram": {
+          "K2Node_CallFunction": 31,
+          "K2Node_VariableGet": 42,
+          "K2Node_VariableSet": 7
+        },
+        "call_histogram": {
+          "Array_Sort": 1,
+          "RandomIntegerInRange": 1
+        },
+        "prop_access_histogram": {
+          "DistanceToStopLine": 3,
+          "EntryTime": 0,
+          "Heading": 0
+        },
+        "degree_stats": {
+          "in_min": 0,
+          "in_med": 1,
+          "in_max": 5,
+          "out_min": 0,
+          "out_med": 1,
+          "out_max": 4
+        }
+      },
+      "domain_hints": {
+        "traffic": {
+          "right_of_way": {
+            "ordering_key_candidates": [
+              "DistanceToStopLine"
+            ],
+            "anti_patterns": [
+              "random_tiebreak",
+              "timeout_release"
+            ],
+            "recommended_components": [
+              "UIntersectionManager",
+              "FRightOfWayTicket"
+            ]
+          }
+        }
+      }
+    },
+    "code_context": {
+      "primary_files": [
+        {
+          "path": "Content/Blueprints/BP_IntersectionController.uasset.json",
+          "component": "Blueprints"
+        }
+      ],
+      "neighbors": {
+        "Content/Blueprints/BP_IntersectionController.uasset.json": [
+          {
+            "path": "src/ue5/AI/VehicleController.cpp",
+            "component": "AI"
+          }
+        ]
+      }
+    },
+    "candidates": [
+      {
+        "level": "T3",
+        "attempt": 1,
+        "patch_id": "C-T3-distance-sort-blueprint",
+        "summary": "Replace random Blueprint tie-break with distance sorting while preserving event names.",
+        "modified_files": [
+          "Content/Blueprints/BP_IntersectionController.uasset.json",
+          "src/ue5/AI/VehicleController.cpp"
+        ],
+        "requires_visual_graph_edit": true,
+        "gate_results": {
+          "build": {
+            "ok": true,
+            "metrics": {},
+            "message": "UE module compilation and Blueprint load checks passed."
+          },
+          "unit": {
+            "ok": true,
+            "metrics": {
+              "tests": 9
+            },
+            "message": "Right-of-way unit tests passed."
+          },
+          "integration": {
+            "ok": true,
+            "metrics": {
+              "scene_replays": 4
+            },
+            "message": "No-deadlock replay passed."
+          },
+          "perf": {
+            "ok": true,
+            "metrics": {
+              "GameThread_ms_avg": 5.4,
+              "GameThread_ms_p95": 7.9
+            },
+            "message": "Game-thread budget is satisfied."
+          },
+          "invariants": {
+            "ok": false,
+            "metrics": {
+              "violations": {
+                "NoCollisionOnGrant": 0,
+                "FairWaitDistribution": 1
+              }
+            },
+            "message": "Fairness invariant still has one violation."
+          }
+        }
+      }
+    ]
+  }
+]

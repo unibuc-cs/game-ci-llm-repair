@@ -1,0 +1,63 @@
+{
+  "ue5_traffic": {
+    "version": "demo-1",
+    "engine": "UE5",
+    "invariants": [
+      "NoCollisionOnGrant",
+      "FairWaitDistribution"
+    ],
+    "perf_budget": {
+      "GameThread_ms_avg": 8.0,
+      "GameThread_ms_p95": 12.0
+    },
+    "allowed_components": [
+      "Traffic",
+      "AI",
+      "Blueprints",
+      "Tests"
+    ],
+    "file_allowlist": [
+      "src/ue5/**",
+      "Content/Blueprints/**",
+      "tests/ue5/**"
+    ],
+    "gates": [
+      "build",
+      "unit",
+      "integration",
+      "perf",
+      "invariants"
+    ],
+    "approval_required_for_broad_scope": true
+  },
+  "unity_traffic": {
+    "version": "demo-1",
+    "engine": "Unity",
+    "invariants": [
+      "CrosswalkMutualExclusion",
+      "ListenerLifecycle",
+      "NoBackwardTeleport"
+    ],
+    "perf_budget": {
+      "FixedUpdate_ms_avg": 12.0,
+      "Physics_Step_ms_p95": 12.0
+    },
+    "allowed_components": [
+      "Traffic",
+      "Gameplay",
+      "Tests"
+    ],
+    "file_allowlist": [
+      "src/unity/**",
+      "tests/unity/**"
+    ],
+    "gates": [
+      "build",
+      "unit",
+      "integration",
+      "perf",
+      "invariants"
+    ],
+    "approval_required_for_broad_scope": true
+  }
+}

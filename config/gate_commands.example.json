@@ -1,0 +1,7 @@
+{
+  "build": "python -c \"print('build gate placeholder')\"",
+  "unit": "python -m unittest discover -s tests",
+  "integration": "python -c \"print('integration gate placeholder')\"",
+  "perf": "python -c \"print('perf gate placeholder')\"",
+  "invariants": "python -c \"print('invariants gate placeholder')\""
+}

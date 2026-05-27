@@ -1,0 +1,122 @@
+{
+  "T0": {
+    "level": "T0",
+    "context": {
+      "cg_hops": 0,
+      "include_arch_card": false,
+      "include_invariants": false,
+      "include_profiler": false,
+      "include_static_features": false,
+      "include_visual_graph": false
+    },
+    "allowed_actions": {
+      "file_allowlist": [
+        "src/**",
+        "tests/**",
+        "!src/**/experimental/**"
+      ],
+      "new_files": false,
+      "visual_graph_edits": false
+    },
+    "gates": [
+      "build",
+      "unit"
+    ],
+    "prompt": {
+      "attempts": 1,
+      "temperature": 0.0
+    }
+  },
+  "T1": {
+    "level": "T1",
+    "context": {
+      "cg_hops": 1,
+      "include_arch_card": false,
+      "include_invariants": false,
+      "include_profiler": false,
+      "include_static_features": true,
+      "include_visual_graph": false
+    },
+    "allowed_actions": {
+      "file_allowlist": [
+        "src/**",
+        "tests/**",
+        "!src/**/experimental/**"
+      ],
+      "new_files": false,
+      "visual_graph_edits": false
+    },
+    "gates": [
+      "build",
+      "unit",
+      "integration"
+    ],
+    "prompt": {
+      "attempts": 1,
+      "temperature": 0.0
+    }
+  },
+  "T2": {
+    "level": "T2",
+    "context": {
+      "cg_hops": 1,
+      "include_arch_card": true,
+      "include_invariants": true,
+      "include_profiler": true,
+      "include_static_features": true,
+      "include_visual_graph": true
+    },
+    "allowed_actions": {
+      "file_allowlist": [
+        "src/**",
+        "tests/**",
+        "!src/**/experimental/**"
+      ],
+      "new_files": true,
+      "visual_graph_edits": false
+    },
+    "gates": [
+      "build",
+      "unit",
+      "integration",
+      "perf",
+      "invariants"
+    ],
+    "prompt": {
+      "attempts": 2,
+      "temperature": 0.0
+    }
+  },
+  "T3": {
+    "level": "T3",
+    "context": {
+      "cg_hops": 1,
+      "include_arch_card": true,
+      "include_invariants": true,
+      "include_profiler": true,
+      "include_static_features": true,
+      "include_visual_graph": true
+    },
+    "allowed_actions": {
+      "file_allowlist": [
+        "src/**",
+        "tests/**",
+        "Content/Blueprints/**",
+        "!src/**/experimental/**"
+      ],
+      "new_files": true,
+      "visual_graph_edits": true
+    },
+    "gates": [
+      "build",
+      "unit",
+      "integration",
+      "perf",
+      "invariants"
+    ],
+    "prompt": {
+      "attempts": 1,
+      "temperature": 0.0
+    }
+  }
+}
