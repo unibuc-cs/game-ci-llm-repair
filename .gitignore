@@ -6,3 +6,5 @@ __pycache__/
 
 .idea/deployment.xml
 doc/.$*.dtmp
+outputs/replay_trials/
+outputs/test_replay_trials/

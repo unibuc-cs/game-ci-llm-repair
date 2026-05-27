@@ -15,6 +15,9 @@ can be inspected and tested anywhere Python runs.
   - `B-BrakeOscillation`: Unity performance/invariant repair routed to T2.
   - `C-FourWayDeadlock`: UE5 visual-scripting repair routed to T3 and reported
     as a partial repair after a late invariant failure.
+- `synthetic_project/` is a replayable failing project fixture. Replay mode
+  copies it per attempt, applies the candidate unified diff, and runs real
+  unittest-based gates against the patched copy.
 - `config/architecture_cards.json` stores project-level constraints and CI
   gate order.
 - `config/policies.json` stores the T0-T3 evidence, permission, gate, and
@@ -45,6 +48,10 @@ Run the full demo command:
 python run_demo.py
 ```
 
+By default, `run_demo.py` uses replay mode: each candidate patch is applied to
+a copied synthetic project under `outputs/replay_trials/`, and the configured
+unittest gates are executed against that patched trial.
+
 Run tests with:
 
 ```powershell
@@ -71,6 +78,12 @@ Offline synthetic mode:
 
 ```powershell
 python run_demo.py --patch-provider synthetic --gate-runner synthetic
+```
+
+Replay mode with real synthetic gates:
+
+```powershell
+python run_demo.py --patch-provider synthetic --gate-runner replay
 ```
 
 OpenAI patch proposal mode uses `gpt-5.5` by default:

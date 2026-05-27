@@ -3,6 +3,14 @@
     "case_id": "A-CrosswalkDesync",
     "description": "Unity crosswalk state update is missed by a neighboring pedestrian agent.",
     "architecture_card": "unity_traffic",
+    "replay": {
+      "project_path": "synthetic_project",
+      "gate_commands": {
+        "build": "python -m unittest tests.test_build",
+        "unit": "python -m unittest tests.test_crosswalk_unit",
+        "integration": "python -m unittest tests.test_crosswalk_integration"
+      }
+    },
     "human_hints": [
       "Preserve TrafficLightController as the single source of phase truth."
     ],
@@ -71,9 +79,9 @@
         "attempt": 1,
         "patch_id": "A-T1-propagate-phase-state",
         "summary": "Propagate phase changes through PedestrianAgent instead of caching walk state locally.",
+        "unified_diff": "diff --git a/src/unity/CrosswalkController.py b/src/unity/CrosswalkController.py\n--- a/src/unity/CrosswalkController.py\n+++ b/src/unity/CrosswalkController.py\n@@ -9,8 +9,7 @@ class CrosswalkController:\n         self.traffic_light.subscribe(self.on_phase_change)\n \n     def on_phase_change(self, phase: str) -> None:\n-        if phase == \"Pedestrian\":\n-            self._walk_allowed = True\n+        self._walk_allowed = phase == \"Pedestrian\"\n \n     def can_walk(self) -> bool:\n         return self._walk_allowed",
         "modified_files": [
-          "src/unity/CrosswalkController.cs",
-          "src/unity/PedestrianAgent.cs"
+          "src/unity/CrosswalkController.py"
         ],
         "requires_visual_graph_edit": false,
         "gate_results": {
@@ -104,6 +112,16 @@
     "case_id": "B-BrakeOscillation",
     "description": "Unity vehicle braking repeatedly raycasts from every car and exceeds the physics budget.",
     "architecture_card": "unity_traffic",
+    "replay": {
+      "project_path": "synthetic_project",
+      "gate_commands": {
+        "build": "python -m unittest tests.test_build",
+        "unit": "python -m unittest tests.test_brake_unit",
+        "integration": "python -m unittest tests.test_brake_integration",
+        "perf": "python -m unittest tests.test_brake_perf",
+        "invariants": "python -m unittest tests.test_brake_invariants"
+      }
+    },
     "human_hints": [
       "Prefer shared sensing data over per-agent raycast loops."
     ],
@@ -184,8 +202,9 @@
         "attempt": 1,
         "patch_id": "B-T2-cache-last-raycast-only",
         "summary": "Cache the last raycast result on each car.",
+        "unified_diff": "diff --git a/src/unity/VehicleSensors.py b/src/unity/VehicleSensors.py\n--- a/src/unity/VehicleSensors.py\n+++ b/src/unity/VehicleSensors.py\n@@ -1,4 +1,4 @@\n-RAYCASTS_PER_VEHICLE = 61\n+RAYCASTS_PER_VEHICLE = 35\n \n \n class VehicleSensors:",
         "modified_files": [
-          "src/unity/CarController.cs"
+          "src/unity/VehicleSensors.py"
         ],
         "requires_visual_graph_edit": false,
         "gate_results": {
@@ -224,10 +243,10 @@
         "attempt": 2,
         "patch_id": "B-T2-shared-proximity-grid",
         "summary": "Move sensing into a shared grid and consume BrakeIntent values in CarController.",
+        "unified_diff": "diff --git a/src/unity/CarController.py b/src/unity/CarController.py\n--- a/src/unity/CarController.py\n+++ b/src/unity/CarController.py\n@@ -1,11 +1,11 @@\n-from src.unity.VehicleSensors import VehicleSensors\n+from src.unity.ProximityGrid import ProximityGrid\n \n \n def simulate_brake_frame(vehicle_count: int) -> dict[str, float]:\n     vehicles = list(range(vehicle_count))\n-    sensors = VehicleSensors()\n-    sensors.scan(vehicles)\n+    grid = ProximityGrid(cell_size=12.0)\n+    grid.populate(vehicles)\n \n-    raycasts = sensors.raycast_count\n+    raycasts = grid.raycast_count\n     fixed_update_ms = 4.6 + raycasts / 1800.0\n     physics_step_ms_p95 = 4.8 + raycasts / 1300.0\n     return {\ndiff --git a/src/unity/ProximityGrid.py b/src/unity/ProximityGrid.py\nnew file mode 100644\n--- /dev/null\n+++ b/src/unity/ProximityGrid.py\n@@ -0,0 +1,9 @@\n+class ProximityGrid:\n+    def __init__(self, cell_size: float) -> None:\n+        self.cell_size = cell_size\n+        self.raycast_count = 0\n+\n+    def populate(self, vehicles: list[int]) -> None:\n+        # One compact grid probe per nearby cluster instead of per-agent rays.\n+        clusters = max(1, len(vehicles) // 12)\n+        self.raycast_count = clusters * 8",
         "modified_files": [
-          "src/unity/CarController.cs",
-          "src/unity/VehicleSensors.cs",
-          "src/unity/ProximityGrid.cs"
+          "src/unity/CarController.py",
+          "src/unity/ProximityGrid.py"
         ],
         "creates_new_file": true,
         "requires_visual_graph_edit": false,
@@ -277,6 +296,16 @@
     "case_id": "C-FourWayDeadlock",
     "description": "UE5 four-way stop Blueprint uses an unstable random tie-break and can stop granting turns.",
     "architecture_card": "ue5_traffic",
+    "replay": {
+      "project_path": "synthetic_project",
+      "gate_commands": {
+        "build": "python -m unittest tests.test_build",
+        "unit": "python -m unittest tests.test_fourway_unit",
+        "integration": "python -m unittest tests.test_fourway_integration",
+        "perf": "python -m unittest tests.test_fourway_perf",
+        "invariants": "python -m unittest tests.test_fourway_invariants"
+      }
+    },
     "human_hints": [
       "Do not replace the intersection manager; keep Blueprint event names stable."
     ],
@@ -378,9 +407,9 @@
         "attempt": 1,
         "patch_id": "C-T3-distance-sort-blueprint",
         "summary": "Replace random Blueprint tie-break with distance sorting while preserving event names.",
+        "unified_diff": "diff --git a/Content/Blueprints/BP_IntersectionController.json b/Content/Blueprints/BP_IntersectionController.json\n--- a/Content/Blueprints/BP_IntersectionController.json\n+++ b/Content/Blueprints/BP_IntersectionController.json\n@@ -1,7 +1,7 @@\n {\n   \"name\": \"BP_IntersectionController\",\n   \"grant_strategy\": \"sort\",\n-  \"tie_break\": \"random\",\n+  \"tie_break\": \"entry_order\",\n   \"sort_key\": \"DistanceToStopLine\",\n   \"fair_wait_enabled\": false,\n   \"node_count\": 31,",
         "modified_files": [
-          "Content/Blueprints/BP_IntersectionController.uasset.json",
-          "src/ue5/AI/VehicleController.cpp"
+          "Content/Blueprints/BP_IntersectionController.json"
         ],
         "requires_visual_graph_edit": true,
         "gate_results": {

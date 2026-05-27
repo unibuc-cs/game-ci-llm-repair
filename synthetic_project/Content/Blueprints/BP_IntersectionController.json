@@ -1,0 +1,12 @@
+{
+  "name": "BP_IntersectionController",
+  "grant_strategy": "sort",
+  "tie_break": "random",
+  "sort_key": "DistanceToStopLine",
+  "fair_wait_enabled": false,
+  "node_count": 31,
+  "events": [
+    "RequestRightOfWay",
+    "GrantNext"
+  ]
+}

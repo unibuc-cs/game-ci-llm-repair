@@ -11,8 +11,12 @@ import argparse
 import fnmatch
 import json
 import os
+import re
+import shutil
+import stat
 import subprocess
 import tempfile
+import uuid
 from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
@@ -21,6 +25,7 @@ from typing import Any, Protocol
 
 LEVEL_ORDER = ["T0", "T1", "T2", "T3"]
 DEFAULT_OPENAI_MODEL = "gpt-5.5"
+METRICS_PREFIX = "SANERBUG_METRICS "
 
 
 @dataclass(frozen=True)
@@ -322,7 +327,9 @@ class SyntheticPatchProvider:
         arch: dict[str, Any],
     ) -> dict[str, Any]:
         del prompt, symptom, policy, arch
-        return candidate_for(case, level, attempt)
+        candidate = candidate_for(case, level, attempt)
+        attach_case_runtime(candidate, case)
+        return candidate
 
 
 def openai_candidate_schema() -> dict[str, Any]:
@@ -413,8 +420,16 @@ class OpenAIPatchProvider:
             "unified_diff": payload["unified_diff"],
             "test_plan": payload["test_plan"],
             "provider": self.name,
+            "case_id": case["case_id"],
+            "replay": deepcopy(case.get("replay", {})),
             "gate_results": {},
         }
+
+
+def attach_case_runtime(candidate: dict[str, Any], case: dict[str, Any]) -> None:
+    candidate.setdefault("case_id", case["case_id"])
+    if case.get("replay"):
+        candidate.setdefault("replay", deepcopy(case["replay"]))
 
 
 def validate_candidate_permissions(
@@ -579,6 +594,193 @@ class CommandGateRunner:
             json.dump(candidate, fh, indent=2, sort_keys=True)
             fh.write("\n")
             return Path(fh.name)
+
+
+def safe_path_segment(value: str) -> str:
+    return re.sub(r"[^A-Za-z0-9_.-]+", "-", value).strip("-") or "trial"
+
+
+def parse_metrics(stdout: str) -> dict[str, Any]:
+    metrics: dict[str, Any] = {}
+    for line in stdout.splitlines():
+        line = line.strip()
+        if not line.startswith(METRICS_PREFIX):
+            continue
+        payload = line[len(METRICS_PREFIX) :]
+        try:
+            parsed = json.loads(payload)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(parsed, dict):
+            metrics.update(parsed)
+    return metrics
+
+
+class ReplayProjectGateRunner:
+    def __init__(
+        self,
+        workspace_root: Path,
+        trials_root: Path = Path("outputs/replay_trials"),
+        timeout_s: int = 120,
+        keep_trials: bool = True,
+    ) -> None:
+        self.workspace_root = workspace_root
+        self.trials_root = trials_root
+        self.timeout_s = timeout_s
+        self.keep_trials = keep_trials
+        self.name = "replay"
+        self._prepared: dict[str, Path] = {}
+
+    def run(
+        self,
+        gate: str,
+        candidate: dict[str, Any],
+        policy: dict[str, Any],
+        arch: dict[str, Any],
+    ) -> GateOutcome:
+        if gate == "build":
+            allowed, message = validate_candidate_permissions(candidate, policy, arch)
+            if not allowed:
+                return GateOutcome(gate=gate, ok=False, metrics={}, message=message)
+
+        try:
+            trial_dir = self._prepare_trial(candidate)
+        except RuntimeError as exc:
+            return GateOutcome(gate=gate, ok=False, metrics={}, message=str(exc))
+
+        replay = candidate.get("replay") or {}
+        command = (replay.get("gate_commands") or {}).get(gate)
+        if not command:
+            return GateOutcome(
+                gate=gate,
+                ok=False,
+                metrics={"trial_dir": str(trial_dir)},
+                message=f"no replay command configured for gate '{gate}'",
+            )
+
+        env = dict(os.environ)
+        env.update(
+            {
+                "PYTHONDONTWRITEBYTECODE": "1",
+                "SANERBUG_GATE": gate,
+                "SANERBUG_PATCH_ID": candidate.get("patch_id", ""),
+                "SANERBUG_CASE_ID": candidate.get("case_id", ""),
+                "SANERBUG_TRIAL_DIR": str(trial_dir),
+            }
+        )
+        try:
+            completed = subprocess.run(
+                command,
+                cwd=str(trial_dir),
+                env=env,
+                shell=True,
+                text=True,
+                capture_output=True,
+                timeout=self.timeout_s,
+            )
+        except subprocess.TimeoutExpired as exc:
+            return GateOutcome(
+                gate=gate,
+                ok=False,
+                metrics={"trial_dir": str(trial_dir), "timeout_s": self.timeout_s},
+                message=f"replay gate timed out: {exc}",
+            )
+
+        metrics = parse_metrics(completed.stdout)
+        metrics.update(
+            {
+                "returncode": completed.returncode,
+                "trial_dir": str(trial_dir),
+                "stdout_tail": completed.stdout[-1200:],
+                "stderr_tail": completed.stderr[-1200:],
+            }
+        )
+        ok = completed.returncode == 0
+        message = "replay gate passed" if ok else self._failure_message(completed)
+        ok, message = enforce_gate_policy(gate, ok, metrics, message, arch)
+        return GateOutcome(gate=gate, ok=ok, metrics=metrics, message=message)
+
+    def _prepare_trial(self, candidate: dict[str, Any]) -> Path:
+        patch_id = candidate.get("patch_id")
+        if not patch_id:
+            raise RuntimeError("candidate is missing patch_id")
+        if patch_id in self._prepared:
+            return self._prepared[patch_id]
+
+        replay = candidate.get("replay") or {}
+        project_path = replay.get("project_path")
+        if not project_path:
+            raise RuntimeError("candidate is missing replay.project_path")
+
+        source = (self.workspace_root / project_path).resolve()
+        if not source.exists():
+            raise RuntimeError(f"replay project does not exist: {source}")
+
+        case_id = safe_path_segment(candidate.get("case_id", "case"))
+        patch_segment = safe_path_segment(patch_id)
+        trials_base = (self.workspace_root / self.trials_root).resolve()
+        trial_dir = (trials_base / case_id / patch_segment).resolve()
+        if not str(trial_dir).startswith(str(trials_base)):
+            raise RuntimeError(f"refusing trial path outside replay root: {trial_dir}")
+
+        if trial_dir.exists():
+            try:
+                self._remove_tree(trial_dir)
+            except OSError:
+                trial_dir = (trials_base / case_id / f"{patch_segment}-{uuid.uuid4().hex[:8]}").resolve()
+                if not str(trial_dir).startswith(str(trials_base)):
+                    raise RuntimeError(f"refusing trial path outside replay root: {trial_dir}")
+        trial_dir.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(source, trial_dir)
+        init = subprocess.run(
+            ["git", "init", "--quiet"],
+            cwd=str(trial_dir),
+            text=True,
+            capture_output=True,
+        )
+        if init.returncode != 0:
+            raise RuntimeError("failed to initialize replay trial git root: " + init.stderr.strip())
+
+        diff_text = candidate.get("unified_diff", "").strip()
+        if diff_text:
+            diff_path = trial_dir / "candidate.patch"
+            diff_path.write_text(diff_text + "\n", encoding="utf-8")
+            completed = subprocess.run(
+                [
+                    "git",
+                    "apply",
+                    "--ignore-space-change",
+                    "--ignore-whitespace",
+                    "--whitespace=nowarn",
+                    str(diff_path),
+                ],
+                cwd=str(trial_dir),
+                text=True,
+                capture_output=True,
+            )
+            if completed.returncode != 0:
+                raise RuntimeError(
+                    "failed to apply candidate patch: "
+                    + (completed.stderr or completed.stdout).strip()
+                )
+            diff_path.unlink(missing_ok=True)
+
+        candidate["trial_dir"] = str(trial_dir)
+        self._prepared[patch_id] = trial_dir
+        return trial_dir
+
+    def _failure_message(self, completed: subprocess.CompletedProcess[str]) -> str:
+        text = (completed.stderr or completed.stdout or "replay gate failed").strip()
+        lines = [line.strip() for line in text.splitlines() if line.strip()]
+        return lines[-1] if lines else "replay gate failed"
+
+    def _remove_tree(self, path: Path) -> None:
+        def clear_readonly(function, failed_path, excinfo) -> None:
+            del excinfo
+            os.chmod(failed_path, stat.S_IWRITE)
+            function(failed_path)
+
+        shutil.rmtree(path, onexc=clear_readonly)
 
 
 def run_gate(
@@ -801,6 +1003,12 @@ def build_patch_provider(args: argparse.Namespace) -> PatchProvider:
 def build_gate_runner(args: argparse.Namespace) -> GateRunner:
     if args.gate_runner == "synthetic":
         return SyntheticGateRunner()
+    if args.gate_runner == "replay":
+        return ReplayProjectGateRunner(
+            workspace_root=Path(".").resolve(),
+            trials_root=Path(args.replay_trials_root),
+            timeout_s=args.gate_timeout_s,
+        )
     if args.gate_runner == "command":
         commands = load_json(Path(args.gate_commands))
         return CommandGateRunner(
@@ -841,7 +1049,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--gate-runner",
-        choices=["synthetic", "command"],
+        choices=["synthetic", "replay", "command"],
         default="synthetic",
         help="How CI gates are evaluated.",
     )
@@ -860,6 +1068,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
         type=int,
         default=300,
         help="Timeout in seconds for each command gate.",
+    )
+    parser.add_argument(
+        "--replay-trials-root",
+        default="outputs/replay_trials",
+        help="Directory for copied replay trial projects.",
     )
     parser.add_argument("--verbose", action="store_true", help="Print route reasons and patch ids.")
     return parser

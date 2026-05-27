@@ -27,8 +27,8 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--gate-runner",
-        choices=["synthetic", "command"],
-        default="synthetic",
+        choices=["synthetic", "replay", "command"],
+        default="replay",
         help="How CI gates are evaluated.",
     )
     parser.add_argument(

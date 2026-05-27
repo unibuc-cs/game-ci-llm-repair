@@ -37,6 +37,28 @@ class OrchestratorDemoTests(unittest.TestCase):
         self.assertEqual(by_case["B-BrakeOscillation"].attempts, 2)
         self.assertEqual(by_case["C-FourWayDeadlock"].last_failing_gate, "invariants")
 
+    def test_replay_runner_applies_real_patches_and_gates(self):
+        gate_runner = orchestrator.ReplayProjectGateRunner(
+            workspace_root=ROOT,
+            trials_root=Path("outputs/test_replay_trials"),
+            timeout_s=60,
+        )
+        results = [
+            orchestrator.run_case(
+                case,
+                self.policies,
+                self.architectures,
+                gate_runner=gate_runner,
+            )
+            for case in self.cases
+        ]
+        by_case = {result.case_id: result for result in results}
+
+        self.assertEqual(by_case["A-CrosswalkDesync"].status, "accepted")
+        self.assertEqual(by_case["B-BrakeOscillation"].status, "accepted")
+        self.assertEqual(by_case["C-FourWayDeadlock"].status, "partial")
+        self.assertEqual(by_case["C-FourWayDeadlock"].last_failing_gate, "invariants")
+
     def test_permission_gate_rejects_disallowed_visual_edits_before_t3(self):
         case = next(item for item in self.cases if item["case_id"] == "C-FourWayDeadlock")
         arch = self.architectures[case["architecture_card"]]
