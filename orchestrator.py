@@ -795,6 +795,7 @@ class ReplayProjectGateRunner:
         workspace_posix = self.workspace_root.as_posix()
         if workspace_posix != str(self.workspace_root):
             cleaned = cleaned.replace(workspace_posix, ".")
+        cleaned = re.sub(r"Ran (\d+) (test|tests) in [0-9.]+s", r"Ran \1 \2 in <duration>s", cleaned)
         return cleaned[-1200:]
 
     def _remove_tree(self, path: Path) -> None:

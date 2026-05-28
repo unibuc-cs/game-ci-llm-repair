@@ -106,6 +106,14 @@ To use GPT-5.5 for candidate generation instead of deterministic synthetic
 patches, set `OPENAI_API_KEY` and add `--patch-provider openai --llm-model
 gpt-5.5` to either `orchestrator.py`, `run_demo.py`, or `evaluate.py`.
 
+## Paper and Demo Artifacts
+
+- `docs/paper_traceability.md` maps paper criteria to the concrete repo files,
+  commands, and generated evidence.
+- `DEMO.md` gives a short presentation script with expected command output.
+- `.github/workflows/ci.yml` runs JSON validation, tests, the replay demo, and
+  the evaluation suite on GitHub Actions.
+
 ## Providers and Gates
 
 The orchestrator now has replaceable patch providers and gate runners.

@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  prototype:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate JSON inputs
+        run: |
+          python -m json.tool data/synthetic_cases.json > /dev/null
+          python -m json.tool config/policies.json > /dev/null
+          python -m json.tool config/architecture_cards.json > /dev/null
+          python -m json.tool config/gate_commands.example.json > /dev/null
+
+      - name: Compile Python sources
+        run: |
+          python -m py_compile orchestrator.py dashboard.py run_demo.py evaluate.py
+          python -m py_compile tests/test_orchestrator.py tests/test_dashboard.py tests/test_evaluate.py
+          python -m py_compile synthetic_project/src/unity/SpeedLimiter.py synthetic_project/tests/test_speed_limiter_unit.py synthetic_project/tests/test_build.py
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests
+
+      - name: Run replay demo
+        run: python run_demo.py
+
+      - name: Run evaluation suite
+        run: python evaluate.py
+
+      - name: Verify generated artifacts
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          required = [
+              Path("outputs/demo_report.json"),
+              Path("outputs/dashboard.html"),
+              Path("outputs/eval_results.json"),
+              Path("outputs/eval_summary.csv"),
+              Path("outputs/eval_dashboard.html"),
+          ]
+          missing = [str(path) for path in required if not path.exists()]
+          if missing:
+              raise SystemExit(f"Missing generated artifacts: {missing}")
+
+          report = json.loads(Path("outputs/demo_report.json").read_text(encoding="utf-8"))
+          assert report["summary"]["cases"] == 4, report["summary"]
+          assert report["summary"]["accepted"] == 3, report["summary"]
+          assert report["summary"]["partial"] == 1, report["summary"]
+
+          rows = {
+              row["mode"]: row
+              for row in csv.DictReader(Path("outputs/eval_summary.csv").open(encoding="utf-8"))
+          }
+          assert rows["governed"]["accepted"] == "3", rows["governed"]
+          assert rows["governed"]["partial"] == "1", rows["governed"]
+          assert rows["fixed_ladder"]["ci_runs"] == "12", rows["fixed_ladder"]
+          assert int(rows["fixed_ladder"]["ci_runs"]) > int(rows["governed"]["ci_runs"])
+          PY

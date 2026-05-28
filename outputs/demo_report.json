@@ -63,7 +63,7 @@
               "message": "replay gate passed",
               "metrics": {
                 "returncode": 0,
-                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                 "stdout_tail": "",
                 "trial_dir": "outputs/replay_trials/D-SpeedLimitClamp/D-T0-clamp-speed-limit"
               },
@@ -74,7 +74,7 @@
               "message": "replay gate passed",
               "metrics": {
                 "returncode": 0,
-                "stderr_tail": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+                "stderr_tail": "..\n----------------------------------------------------------------------\nRan 2 tests in <duration>s\n\nOK\n",
                 "stdout_tail": "",
                 "trial_dir": "outputs/replay_trials/D-SpeedLimitClamp/D-T0-clamp-speed-limit"
               },
@@ -162,7 +162,7 @@
               "message": "replay gate passed",
               "metrics": {
                 "returncode": 0,
-                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                 "stdout_tail": "",
                 "trial_dir": "outputs/replay_trials/A-CrosswalkDesync/A-T1-propagate-phase-state"
               },
@@ -173,7 +173,7 @@
               "message": "replay gate passed",
               "metrics": {
                 "returncode": 0,
-                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                 "stdout_tail": "",
                 "trial_dir": "outputs/replay_trials/A-CrosswalkDesync/A-T1-propagate-phase-state"
               },
@@ -184,7 +184,7 @@
               "message": "replay gate passed",
               "metrics": {
                 "returncode": 0,
-                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                 "stdout_tail": "",
                 "trial_dir": "outputs/replay_trials/A-CrosswalkDesync/A-T1-propagate-phase-state"
               },
@@ -251,7 +251,7 @@
                 "message": "replay gate passed",
                 "metrics": {
                   "returncode": 0,
-                  "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                  "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                   "stdout_tail": "",
                   "trial_dir": "outputs/replay_trials/B-BrakeOscillation/B-T2-cache-last-raycast-only"
                 },
@@ -262,7 +262,7 @@
                 "message": "replay gate passed",
                 "metrics": {
                   "returncode": 0,
-                  "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                  "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                   "stdout_tail": "",
                   "trial_dir": "outputs/replay_trials/B-BrakeOscillation/B-T2-cache-last-raycast-only"
                 },
@@ -273,7 +273,7 @@
                 "message": "replay gate passed",
                 "metrics": {
                   "returncode": 0,
-                  "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                  "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                   "stdout_tail": "SANERBUG_METRICS {\"violations\": {\"NoBackwardTeleport\": 0}}\n",
                   "trial_dir": "outputs/replay_trials/B-BrakeOscillation/B-T2-cache-last-raycast-only",
                   "violations": {
@@ -291,7 +291,7 @@
                   "Physics_Step_ms_p95": 12.88,
                   "RaycastCount_per_frame_avg": 10500,
                   "returncode": 1,
-                  "stderr_tail": "F\n======================================================================\nFAIL: test_fixed_update_and_physics_budget (tests.test_brake_perf.BrakePerfGate.test_fixed_update_and_physics_budget)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\replay_trials\\B-BrakeOscillation\\B-T2-cache-last-raycast-only\\tests\\test_brake_perf.py\", line 12, in test_fixed_update_and_physics_budget\n    self.assertLessEqual(metrics[\"Physics_Step_ms_p95\"], 12.0)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 12.88 not less than or equal to 12.0\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)\n",
+                  "stderr_tail": "F\n======================================================================\nFAIL: test_fixed_update_and_physics_budget (tests.test_brake_perf.BrakePerfGate.test_fixed_update_and_physics_budget)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\replay_trials\\B-BrakeOscillation\\B-T2-cache-last-raycast-only\\tests\\test_brake_perf.py\", line 12, in test_fixed_update_and_physics_budget\n    self.assertLessEqual(metrics[\"Physics_Step_ms_p95\"], 12.0)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 12.88 not less than or equal to 12.0\n\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nFAILED (failures=1)\n",
                   "stdout_tail": "SANERBUG_METRICS {\"FixedUpdate_ms_avg\": 10.43, \"Physics_Step_ms_p95\": 12.88, \"RaycastCount_per_frame_avg\": 10500, \"NoBackwardTeleport\": 0}\n",
                   "trial_dir": "outputs/replay_trials/B-BrakeOscillation/B-T2-cache-last-raycast-only"
                 },
@@ -318,7 +318,7 @@
           "Physics_Step_ms_p95": 12.88,
           "RaycastCount_per_frame_avg": 10500,
           "returncode": 1,
-          "stderr_tail": "F\n======================================================================\nFAIL: test_fixed_update_and_physics_budget (tests.test_brake_perf.BrakePerfGate.test_fixed_update_and_physics_budget)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\replay_trials\\B-BrakeOscillation\\B-T2-cache-last-raycast-only\\tests\\test_brake_perf.py\", line 12, in test_fixed_update_and_physics_budget\n    self.assertLessEqual(metrics[\"Physics_Step_ms_p95\"], 12.0)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 12.88 not less than or equal to 12.0\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)\n",
+          "stderr_tail": "F\n======================================================================\nFAIL: test_fixed_update_and_physics_budget (tests.test_brake_perf.BrakePerfGate.test_fixed_update_and_physics_budget)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\replay_trials\\B-BrakeOscillation\\B-T2-cache-last-raycast-only\\tests\\test_brake_perf.py\", line 12, in test_fixed_update_and_physics_budget\n    self.assertLessEqual(metrics[\"Physics_Step_ms_p95\"], 12.0)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 12.88 not less than or equal to 12.0\n\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nFAILED (failures=1)\n",
           "stdout_tail": "SANERBUG_METRICS {\"FixedUpdate_ms_avg\": 10.43, \"Physics_Step_ms_p95\": 12.88, \"RaycastCount_per_frame_avg\": 10500, \"NoBackwardTeleport\": 0}\n",
           "trial_dir": "outputs/replay_trials/B-BrakeOscillation/B-T2-cache-last-raycast-only"
         },
@@ -350,7 +350,7 @@
               "message": "replay gate passed",
               "metrics": {
                 "returncode": 0,
-                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                 "stdout_tail": "",
                 "trial_dir": "outputs/replay_trials/B-BrakeOscillation/B-T2-cache-last-raycast-only"
               },
@@ -361,7 +361,7 @@
               "message": "replay gate passed",
               "metrics": {
                 "returncode": 0,
-                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                 "stdout_tail": "",
                 "trial_dir": "outputs/replay_trials/B-BrakeOscillation/B-T2-cache-last-raycast-only"
               },
@@ -372,7 +372,7 @@
               "message": "replay gate passed",
               "metrics": {
                 "returncode": 0,
-                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                 "stdout_tail": "SANERBUG_METRICS {\"violations\": {\"NoBackwardTeleport\": 0}}\n",
                 "trial_dir": "outputs/replay_trials/B-BrakeOscillation/B-T2-cache-last-raycast-only",
                 "violations": {
@@ -390,7 +390,7 @@
                 "Physics_Step_ms_p95": 12.88,
                 "RaycastCount_per_frame_avg": 10500,
                 "returncode": 1,
-                "stderr_tail": "F\n======================================================================\nFAIL: test_fixed_update_and_physics_budget (tests.test_brake_perf.BrakePerfGate.test_fixed_update_and_physics_budget)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\replay_trials\\B-BrakeOscillation\\B-T2-cache-last-raycast-only\\tests\\test_brake_perf.py\", line 12, in test_fixed_update_and_physics_budget\n    self.assertLessEqual(metrics[\"Physics_Step_ms_p95\"], 12.0)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 12.88 not less than or equal to 12.0\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)\n",
+                "stderr_tail": "F\n======================================================================\nFAIL: test_fixed_update_and_physics_budget (tests.test_brake_perf.BrakePerfGate.test_fixed_update_and_physics_budget)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\replay_trials\\B-BrakeOscillation\\B-T2-cache-last-raycast-only\\tests\\test_brake_perf.py\", line 12, in test_fixed_update_and_physics_budget\n    self.assertLessEqual(metrics[\"Physics_Step_ms_p95\"], 12.0)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 12.88 not less than or equal to 12.0\n\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nFAILED (failures=1)\n",
                 "stdout_tail": "SANERBUG_METRICS {\"FixedUpdate_ms_avg\": 10.43, \"Physics_Step_ms_p95\": 12.88, \"RaycastCount_per_frame_avg\": 10500, \"NoBackwardTeleport\": 0}\n",
                 "trial_dir": "outputs/replay_trials/B-BrakeOscillation/B-T2-cache-last-raycast-only"
               },
@@ -408,7 +408,7 @@
               "message": "replay gate passed",
               "metrics": {
                 "returncode": 0,
-                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                 "stdout_tail": "",
                 "trial_dir": "outputs/replay_trials/B-BrakeOscillation/B-T2-shared-proximity-grid"
               },
@@ -419,7 +419,7 @@
               "message": "replay gate passed",
               "metrics": {
                 "returncode": 0,
-                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                 "stdout_tail": "",
                 "trial_dir": "outputs/replay_trials/B-BrakeOscillation/B-T2-shared-proximity-grid"
               },
@@ -430,7 +430,7 @@
               "message": "replay gate passed",
               "metrics": {
                 "returncode": 0,
-                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                 "stdout_tail": "SANERBUG_METRICS {\"violations\": {\"NoBackwardTeleport\": 0}}\n",
                 "trial_dir": "outputs/replay_trials/B-BrakeOscillation/B-T2-shared-proximity-grid",
                 "violations": {
@@ -448,7 +448,7 @@
                 "Physics_Step_ms_p95": 4.95,
                 "RaycastCount_per_frame_avg": 200,
                 "returncode": 0,
-                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                 "stdout_tail": "SANERBUG_METRICS {\"FixedUpdate_ms_avg\": 4.71, \"Physics_Step_ms_p95\": 4.95, \"RaycastCount_per_frame_avg\": 200, \"NoBackwardTeleport\": 0}\n",
                 "trial_dir": "outputs/replay_trials/B-BrakeOscillation/B-T2-shared-proximity-grid"
               },
@@ -459,7 +459,7 @@
               "message": "replay gate passed",
               "metrics": {
                 "returncode": 0,
-                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                 "stdout_tail": "SANERBUG_METRICS {\"violations\": {\"NoBackwardTeleport\": 0}}\n",
                 "trial_dir": "outputs/replay_trials/B-BrakeOscillation/B-T2-shared-proximity-grid",
                 "violations": {
@@ -483,7 +483,7 @@
         {
           "attempt": "2",
           "level": "T2",
-          "text": "Role: Senior engineer\nTask: Propose minimal patch\nBug: B-BrakeOscillation\nEngine: Unity\n\nEvidence:\n{\n  \"domain_hints\": {\n    \"traffic\": {\n      \"sensing\": {\n        \"hotspots\": [\n          \"CarController.FixedUpdate\"\n        ],\n        \"recommended_components\": [\n          \"ProximityGrid\",\n          \"BrakeIntent\"\n        ],\n        \"risk_flags\": [\n          \"per-agent sensing loop\"\n        ],\n        \"shared_sensing_present\": false\n      }\n    }\n  },\n  \"exceptions\": [],\n  \"human_hints\": [\n    \"Prefer shared sensing data over per-agent raycast loops.\"\n  ],\n  \"invariants\": [\n    {\n      \"name\": \"NoBackwardTeleport\",\n      \"violations\": 2\n    }\n  ],\n  \"last_failing_gate\": \"perf\",\n  \"paths\": [\n    \"src/unity/CarController.cs\",\n    \"src/unity/TrafficAIPlanner.cs\",\n    \"src/unity/VehicleSensors.cs\"\n  ],\n  \"perf\": {\n    \"FixedUpdate_ms_avg\": 10.43,\n    \"NoBackwardTeleport\": 0,\n    \"Physics_Step_ms_p95\": 12.88,\n    \"RaycastCount_per_frame_avg\": 10500,\n    \"returncode\": 1,\n    \"stderr_tail\": \"F\\n======================================================================\\nFAIL: test_fixed_update_and_physics_budget (tests.test_brake_perf.BrakePerfGate.test_fixed_update_and_physics_budget)\\n----------------------------------------------------------------------\\nTraceback (most recent call last):\\n  File \\\".\\\\outputs\\\\replay_trials\\\\B-BrakeOscillation\\\\B-T2-cache-last-raycast-only\\\\tests\\\\test_brake_perf.py\\\", line 12, in test_fixed_update_and_physics_budget\\n    self.assertLessEqual(metrics[\\\"Physics_Step_ms_p95\\\"], 12.0)\\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError: 12.88 not less than or equal to 12.0\\n\\n----------------------------------------------------------------------\\nRan 1 test in 0.001s\\n\\nFAILED (failures=1)\\n\",\n    \"stdout_tail\": \"SANERBUG_METRICS {\\\"FixedUpdate_ms_avg\\\": 10.43, \\\"Physics_Step_ms_p95\\\": 12.88, \\\"RaycastCount_per_frame_avg\\\": 10500, \\\"NoBackwardTeleport\\\": 0}\\n\",\n    \"trial_dir\": \"outputs/replay_trials/B-BrakeOscillation/B-T2-cache-last-raycast-only\"\n  },\n  \"static_features\": {\n    \"api_usage\": {\n      \"GC.Alloc\": 6,\n      \"Physics.Raycast\": 18230\n    },\n    \"complexity\": {\n      \"cyclomatic_total\": 83,\n      \"maintainability_index\": 64\n    }\n  },\n  \"tests_failed\": [\n    {\n      \"message\": \"avg FixedUpdate > 12ms at N=300\",\n      \"name\": \"Perf_300Cars_PhysicsBudget\",\n      \"stack\": \"PerformanceSuite.Run -> CarController.FixedUpdate\"\n    }\n  ],\n  \"visual_graph\": {}\n}\n\nPolicy:\n{\n  \"allowed_actions\": {\n    \"file_allowlist\": [\n      \"src/**\",\n      \"tests/**\",\n      \"!src/**/experimental/**\"\n    ],\n    \"new_files\": true,\n    \"visual_graph_edits\": false\n  },\n  \"architecture_card\": {\n    \"allowed_components\": [\n      \"Traffic\",\n      \"Gameplay\",\n      \"Tests\"\n    ],\n    \"file_allowlist\": [\n      \"src/unity/**\",\n      \"tests/unity/**\"\n    ],\n    \"invariants\": [\n      \"CrosswalkMutualExclusion\",\n      \"ListenerLifecycle\",\n      \"NoBackwardTeleport\"\n    ],\n    \"perf_budget\": {\n      \"FixedUpdate_ms_avg\": 12.0,\n      \"Physics_Step_ms_p95\": 12.0\n    }\n  },\n  \"attempts\": 2,\n  \"gates\": [\n    \"build\",\n    \"unit\",\n    \"integration\",\n    \"perf\",\n    \"invariants\"\n  ],\n  \"level\": \"T2\"\n}\n\nDeliver: unified diff; 3-line rationale; test plan"
+          "text": "Role: Senior engineer\nTask: Propose minimal patch\nBug: B-BrakeOscillation\nEngine: Unity\n\nEvidence:\n{\n  \"domain_hints\": {\n    \"traffic\": {\n      \"sensing\": {\n        \"hotspots\": [\n          \"CarController.FixedUpdate\"\n        ],\n        \"recommended_components\": [\n          \"ProximityGrid\",\n          \"BrakeIntent\"\n        ],\n        \"risk_flags\": [\n          \"per-agent sensing loop\"\n        ],\n        \"shared_sensing_present\": false\n      }\n    }\n  },\n  \"exceptions\": [],\n  \"human_hints\": [\n    \"Prefer shared sensing data over per-agent raycast loops.\"\n  ],\n  \"invariants\": [\n    {\n      \"name\": \"NoBackwardTeleport\",\n      \"violations\": 2\n    }\n  ],\n  \"last_failing_gate\": \"perf\",\n  \"paths\": [\n    \"src/unity/CarController.cs\",\n    \"src/unity/TrafficAIPlanner.cs\",\n    \"src/unity/VehicleSensors.cs\"\n  ],\n  \"perf\": {\n    \"FixedUpdate_ms_avg\": 10.43,\n    \"NoBackwardTeleport\": 0,\n    \"Physics_Step_ms_p95\": 12.88,\n    \"RaycastCount_per_frame_avg\": 10500,\n    \"returncode\": 1,\n    \"stderr_tail\": \"F\\n======================================================================\\nFAIL: test_fixed_update_and_physics_budget (tests.test_brake_perf.BrakePerfGate.test_fixed_update_and_physics_budget)\\n----------------------------------------------------------------------\\nTraceback (most recent call last):\\n  File \\\".\\\\outputs\\\\replay_trials\\\\B-BrakeOscillation\\\\B-T2-cache-last-raycast-only\\\\tests\\\\test_brake_perf.py\\\", line 12, in test_fixed_update_and_physics_budget\\n    self.assertLessEqual(metrics[\\\"Physics_Step_ms_p95\\\"], 12.0)\\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError: 12.88 not less than or equal to 12.0\\n\\n----------------------------------------------------------------------\\nRan 1 test in <duration>s\\n\\nFAILED (failures=1)\\n\",\n    \"stdout_tail\": \"SANERBUG_METRICS {\\\"FixedUpdate_ms_avg\\\": 10.43, \\\"Physics_Step_ms_p95\\\": 12.88, \\\"RaycastCount_per_frame_avg\\\": 10500, \\\"NoBackwardTeleport\\\": 0}\\n\",\n    \"trial_dir\": \"outputs/replay_trials/B-BrakeOscillation/B-T2-cache-last-raycast-only\"\n  },\n  \"static_features\": {\n    \"api_usage\": {\n      \"GC.Alloc\": 6,\n      \"Physics.Raycast\": 18230\n    },\n    \"complexity\": {\n      \"cyclomatic_total\": 83,\n      \"maintainability_index\": 64\n    }\n  },\n  \"tests_failed\": [\n    {\n      \"message\": \"avg FixedUpdate > 12ms at N=300\",\n      \"name\": \"Perf_300Cars_PhysicsBudget\",\n      \"stack\": \"PerformanceSuite.Run -> CarController.FixedUpdate\"\n    }\n  ],\n  \"visual_graph\": {}\n}\n\nPolicy:\n{\n  \"allowed_actions\": {\n    \"file_allowlist\": [\n      \"src/**\",\n      \"tests/**\",\n      \"!src/**/experimental/**\"\n    ],\n    \"new_files\": true,\n    \"visual_graph_edits\": false\n  },\n  \"architecture_card\": {\n    \"allowed_components\": [\n      \"Traffic\",\n      \"Gameplay\",\n      \"Tests\"\n    ],\n    \"file_allowlist\": [\n      \"src/unity/**\",\n      \"tests/unity/**\"\n    ],\n    \"invariants\": [\n      \"CrosswalkMutualExclusion\",\n      \"ListenerLifecycle\",\n      \"NoBackwardTeleport\"\n    ],\n    \"perf_budget\": {\n      \"FixedUpdate_ms_avg\": 12.0,\n      \"Physics_Step_ms_p95\": 12.0\n    }\n  },\n  \"attempts\": 2,\n  \"gates\": [\n    \"build\",\n    \"unit\",\n    \"integration\",\n    \"perf\",\n    \"invariants\"\n  ],\n  \"level\": \"T2\"\n}\n\nDeliver: unified diff; 3-line rationale; test plan"
         }
       ],
       "status": "accepted"
@@ -534,7 +534,7 @@
                 "message": "replay gate passed",
                 "metrics": {
                   "returncode": 0,
-                  "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                  "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                   "stdout_tail": "",
                   "trial_dir": "outputs/replay_trials/C-FourWayDeadlock/C-T3-distance-sort-blueprint"
                 },
@@ -545,7 +545,7 @@
                 "message": "replay gate passed",
                 "metrics": {
                   "returncode": 0,
-                  "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                  "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                   "stdout_tail": "",
                   "trial_dir": "outputs/replay_trials/C-FourWayDeadlock/C-T3-distance-sort-blueprint"
                 },
@@ -556,7 +556,7 @@
                 "message": "replay gate passed",
                 "metrics": {
                   "returncode": 0,
-                  "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                  "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                   "stdout_tail": "",
                   "trial_dir": "outputs/replay_trials/C-FourWayDeadlock/C-T3-distance-sort-blueprint"
                 },
@@ -569,7 +569,7 @@
                   "GameThread_ms_avg": 5.39,
                   "GameThread_ms_p95": 7.92,
                   "returncode": 0,
-                  "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                  "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                   "stdout_tail": "SANERBUG_METRICS {\"GameThread_ms_avg\": 5.39, \"GameThread_ms_p95\": 7.92}\n",
                   "trial_dir": "outputs/replay_trials/C-FourWayDeadlock/C-T3-distance-sort-blueprint"
                 },
@@ -580,7 +580,7 @@
                 "message": "invariant violations remain: {'FairWaitDistribution': 1}",
                 "metrics": {
                   "returncode": 1,
-                  "stderr_tail": "F\n======================================================================\nFAIL: test_fair_wait_distribution (tests.test_fourway_invariants.FourWayInvariantGate.test_fair_wait_distribution)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\replay_trials\\C-FourWayDeadlock\\C-T3-distance-sort-blueprint\\tests\\test_fourway_invariants.py\", line 16, in test_fair_wait_distribution\n    self.assertEqual(violations[\"FairWaitDistribution\"], 0)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 1 != 0\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)\n",
+                  "stderr_tail": "F\n======================================================================\nFAIL: test_fair_wait_distribution (tests.test_fourway_invariants.FourWayInvariantGate.test_fair_wait_distribution)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\replay_trials\\C-FourWayDeadlock\\C-T3-distance-sort-blueprint\\tests\\test_fourway_invariants.py\", line 16, in test_fair_wait_distribution\n    self.assertEqual(violations[\"FairWaitDistribution\"], 0)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 1 != 0\n\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nFAILED (failures=1)\n",
                   "stdout_tail": "SANERBUG_METRICS {\"violations\": {\"NoCollisionOnGrant\": 0, \"FairWaitDistribution\": 1}}\n",
                   "trial_dir": "outputs/replay_trials/C-FourWayDeadlock/C-T3-distance-sort-blueprint",
                   "violations": {
@@ -613,7 +613,7 @@
           "GameThread_ms_avg": 5.39,
           "GameThread_ms_p95": 7.92,
           "returncode": 0,
-          "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+          "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
           "stdout_tail": "SANERBUG_METRICS {\"GameThread_ms_avg\": 5.39, \"GameThread_ms_p95\": 7.92}\n",
           "trial_dir": "outputs/replay_trials/C-FourWayDeadlock/C-T3-distance-sort-blueprint"
         },
@@ -667,7 +667,7 @@
               "message": "replay gate passed",
               "metrics": {
                 "returncode": 0,
-                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                 "stdout_tail": "",
                 "trial_dir": "outputs/replay_trials/C-FourWayDeadlock/C-T3-distance-sort-blueprint"
               },
@@ -678,7 +678,7 @@
               "message": "replay gate passed",
               "metrics": {
                 "returncode": 0,
-                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                 "stdout_tail": "",
                 "trial_dir": "outputs/replay_trials/C-FourWayDeadlock/C-T3-distance-sort-blueprint"
               },
@@ -689,7 +689,7 @@
               "message": "replay gate passed",
               "metrics": {
                 "returncode": 0,
-                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                 "stdout_tail": "",
                 "trial_dir": "outputs/replay_trials/C-FourWayDeadlock/C-T3-distance-sort-blueprint"
               },
@@ -702,7 +702,7 @@
                 "GameThread_ms_avg": 5.39,
                 "GameThread_ms_p95": 7.92,
                 "returncode": 0,
-                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
                 "stdout_tail": "SANERBUG_METRICS {\"GameThread_ms_avg\": 5.39, \"GameThread_ms_p95\": 7.92}\n",
                 "trial_dir": "outputs/replay_trials/C-FourWayDeadlock/C-T3-distance-sort-blueprint"
               },
@@ -713,7 +713,7 @@
               "message": "invariant violations remain: {'FairWaitDistribution': 1}",
               "metrics": {
                 "returncode": 1,
-                "stderr_tail": "F\n======================================================================\nFAIL: test_fair_wait_distribution (tests.test_fourway_invariants.FourWayInvariantGate.test_fair_wait_distribution)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\replay_trials\\C-FourWayDeadlock\\C-T3-distance-sort-blueprint\\tests\\test_fourway_invariants.py\", line 16, in test_fair_wait_distribution\n    self.assertEqual(violations[\"FairWaitDistribution\"], 0)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 1 != 0\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)\n",
+                "stderr_tail": "F\n======================================================================\nFAIL: test_fair_wait_distribution (tests.test_fourway_invariants.FourWayInvariantGate.test_fair_wait_distribution)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\replay_trials\\C-FourWayDeadlock\\C-T3-distance-sort-blueprint\\tests\\test_fourway_invariants.py\", line 16, in test_fair_wait_distribution\n    self.assertEqual(violations[\"FairWaitDistribution\"], 0)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 1 != 0\n\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nFAILED (failures=1)\n",
                 "stdout_tail": "SANERBUG_METRICS {\"violations\": {\"NoCollisionOnGrant\": 0, \"FairWaitDistribution\": 1}}\n",
                 "trial_dir": "outputs/replay_trials/C-FourWayDeadlock/C-T3-distance-sort-blueprint",
                 "violations": {
