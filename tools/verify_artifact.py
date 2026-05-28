@@ -25,8 +25,12 @@ def load_json(path: Path) -> Any:
 
 
 def load_eval_rows(path: Path) -> dict[str, dict[str, str]]:
+    return load_csv_rows(path, "mode")
+
+
+def load_csv_rows(path: Path, key: str) -> dict[str, dict[str, str]]:
     with path.open("r", encoding="utf-8", newline="") as fh:
-        return {row["mode"]: row for row in csv.DictReader(fh)}
+        return {row[key]: row for row in csv.DictReader(fh)}
 
 
 def require(condition: bool, message: str) -> None:
@@ -45,9 +49,16 @@ def build_checks(args: argparse.Namespace) -> list[Check]:
     required_paths = [
         ROOT / "outputs/dashboard.html",
         ROOT / "outputs/eval_dashboard.html",
+        ROOT / "outputs/human_supervision_summary.csv",
+        ROOT / "outputs/maintainability_summary.csv",
         demo_report_path,
         eval_summary_path,
         eval_report_path,
+        ROOT / "schemas/policy.schema.json",
+        ROOT / "schemas/architecture_card.schema.json",
+        ROOT / "schemas/symptom_card.schema.json",
+        ROOT / "schemas/code_context.schema.json",
+        ROOT / "schemas/README.md",
         ROOT / "docs/paper_traceability.md",
         ROOT / "docs/gpt55_smoke_test.md",
         ROOT / "docs/real_project_integration.md",
@@ -103,8 +114,19 @@ def build_checks(args: argparse.Namespace) -> list[Check]:
 
     def check_eval_summary() -> None:
         rows = load_eval_rows(eval_summary_path)
-        required_modes = {"governed", "fixed_ladder", "broad_context", "single_attempt", "no_arch_card"}
-        require(set(rows) == required_modes, f"unexpected eval modes: {sorted(rows)}")
+        required_modes = {
+            "governed",
+            "B0_single_prompt",
+            "B1_multi_attempt_prompt",
+            "B2_tool_agent",
+            "B3_broad_context_agent",
+            "fixed_ladder",
+            "broad_context",
+            "single_attempt",
+            "no_arch_card",
+        }
+        missing_modes = sorted(required_modes - set(rows))
+        require(not missing_modes, f"missing eval modes: {missing_modes}")
 
         governed = rows["governed"]
         fixed = rows["fixed_ladder"]
@@ -118,11 +140,37 @@ def build_checks(args: argparse.Namespace) -> list[Check]:
     def check_ablation_degradation() -> None:
         rows = load_eval_rows(eval_summary_path)
         governed_accepted = int(rows["governed"]["accepted"])
-        for mode in ["broad_context", "single_attempt", "no_arch_card"]:
+        for mode in ["B0_single_prompt", "B1_multi_attempt_prompt", "B3_broad_context_agent", "broad_context", "no_arch_card"]:
             accepted = int(rows[mode]["accepted"])
             failed = int(rows[mode]["failed"])
             require(accepted < governed_accepted, f"{mode} should accept fewer cases than governed")
             require(failed > 0, f"{mode} should have at least one failed case")
+        require(
+            int(rows["B2_tool_agent"]["ci_runs"]) > int(rows["governed"]["ci_runs"]),
+            "B2 tool-agent baseline should use more CI runs than governed",
+        )
+
+    def check_human_supervision_summary() -> None:
+        rows = load_csv_rows(ROOT / "outputs/human_supervision_summary.csv", "condition")
+        expected = {
+            "file_scope_confirmation_only",
+            "bounded_hints",
+            "bounded_hints_and_escalation_approval",
+        }
+        require(set(rows) == expected, f"unexpected supervision rows: {sorted(rows)}")
+        require(
+            int(rows["bounded_hints_and_escalation_approval"]["escalation_reviews"]) > 0,
+            "escalation approval row should record broad-scope reviews",
+        )
+
+    def check_maintainability_summary() -> None:
+        rows = load_csv_rows(ROOT / "outputs/maintainability_summary.csv", "engine")
+        require("Unity" in rows, f"maintainability summary missing Unity row: {sorted(rows)}")
+        require("UE5" in rows, f"maintainability summary missing UE5 row: {sorted(rows)}")
+        require(
+            int(rows["Unity"]["accepted_patches"]) >= 3,
+            "Unity maintainability summary should cover accepted synthetic patches",
+        )
 
     def check_eval_report_metadata() -> None:
         report = load_json(eval_report_path)
@@ -141,7 +189,9 @@ def build_checks(args: argparse.Namespace) -> list[Check]:
         Check("D0 routes cover T0, T1, T2, and T3", check_routes),
         Check("case outcomes demonstrate accepted, retry, and partial repair", check_case_outcomes),
         Check("evaluation summary matches governed baseline expectations", check_eval_summary),
-        Check("evaluation ablations degrade relative to governed mode", check_ablation_degradation),
+        Check("B0-B3 baselines and ablations differ from governed mode", check_ablation_degradation),
+        Check("human-supervision summary exists and records escalation reviews", check_human_supervision_summary),
+        Check("maintainability summary exists for accepted patches", check_maintainability_summary),
         Check("evaluation report metadata matches offline replay setup", check_eval_report_metadata),
         Check("GitHub Actions workflow runs artifact verifier", check_ci_uses_verifier),
     ]

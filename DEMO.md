@@ -52,6 +52,10 @@ Expected result:
 ```text
 Mode           | Accepted | Partial | Failed | Attempts | CI
 governed       | 3        | 1       | 0      | 5        | 5
+B0_single_prompt        | 1        | 1       | 2
+B1_multi_attempt_prompt | 2        | 1       | 1
+B2_tool_agent           | 3        | 1       | 0
+B3_broad_context_agent  | 0        | 2       | 2
 fixed_ladder   | 3        | 1       | 0      | 12       | 12
 broad_context  | 0        | 2       | 2      | 4        | 4
 single_attempt | 2        | 1       | 1      | 4        | 4
@@ -67,6 +71,7 @@ outputs/eval_dashboard.html
 Use this table as the paper-facing argument:
 
 - governed matches fixed ladder acceptance while using fewer CI runs;
+- B0-B3 are present as named paper baselines;
 - broad context performs worse on these synthetic cases;
 - removing retries or Architecture Card context degrades outcomes.
 

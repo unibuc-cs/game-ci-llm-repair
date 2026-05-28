@@ -18,6 +18,10 @@ OpenAI credentials or game-engine installations.
 | Architecture Card constraints | Done | `config/architecture_cards.json` |
 | Symptom Card updates after gates | Done | `gate_history` and final cards in `outputs/demo_report.json` |
 | Ablation evaluation | Done | `python evaluate.py`, `outputs/eval_summary.csv` |
+| B0-B3 baseline protocols | Done | `outputs/eval_summary.csv` |
+| Human-supervision summary | Done | `outputs/human_supervision_summary.csv` |
+| Maintainability-delta proxy | Done | `outputs/maintainability_summary.csv` |
+| Release-facing schemas | Done | `schemas/` |
 | Static dashboards | Done | `outputs/dashboard.html`, `outputs/eval_dashboard.html` |
 | Paper traceability matrix | Done | `docs/paper_traceability.md` |
 | Demo script | Done | `DEMO.md` |
@@ -53,6 +57,10 @@ Expected evaluation summary:
 
 ```text
 governed       3 accepted, 1 partial, 5 CI runs
+B0_single_prompt        1 accepted, 1 partial, 2 failed
+B1_multi_attempt_prompt 2 accepted
+B2_tool_agent           3 accepted, more CI than governed
+B3_broad_context_agent  0 accepted, 2 partial, 2 failed
 fixed_ladder   3 accepted, 1 partial, 12 CI runs
 broad_context  0 accepted, 2 partial, 2 failed
 single_attempt 2 accepted, 1 partial, 1 failed

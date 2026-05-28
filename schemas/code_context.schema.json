@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Code Context",
+  "type": "object",
+  "required": ["primary_files", "neighbors"],
+  "properties": {
+    "primary_files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "component"],
+        "properties": {
+          "path": {"type": "string"},
+          "component": {"type": "string"}
+        }
+      }
+    },
+    "neighbors": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["path", "component"],
+          "properties": {
+            "path": {"type": "string"},
+            "component": {"type": "string"}
+          }
+        }
+      }
+    }
+  }
+}

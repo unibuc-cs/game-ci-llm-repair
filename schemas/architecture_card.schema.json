@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Architecture Card Map",
+  "type": "object",
+  "additionalProperties": {
+    "type": "object",
+    "required": ["invariants", "perf_budget", "allowed_components", "file_allowlist", "gates"],
+    "properties": {
+      "invariants": {"type": "array", "items": {"type": "string"}},
+      "perf_budget": {
+        "type": "object",
+        "additionalProperties": {"type": "number"}
+      },
+      "allowed_components": {"type": "array", "items": {"type": "string"}},
+      "file_allowlist": {"type": "array", "items": {"type": "string"}},
+      "gates": {"type": "array", "items": {"type": "string"}}
+    }
+  }
+}

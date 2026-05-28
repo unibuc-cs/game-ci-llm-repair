@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Symptom Card",
+  "type": "object",
+  "required": ["bug_id", "engine", "tests_failed", "exceptions", "perf", "invariants", "static_features", "visual_graph"],
+  "properties": {
+    "bug_id": {"type": "string"},
+    "engine": {"type": "string", "enum": ["Unity", "UE5"]},
+    "tests_failed": {"type": "array", "items": {"type": "object"}},
+    "exceptions": {"type": "array"},
+    "perf": {"type": "object"},
+    "invariants": {"type": "array", "items": {"type": "object"}},
+    "static_features": {"type": "object"},
+    "visual_graph": {"type": "object"},
+    "domain_hints": {"type": "object"},
+    "human_hints": {"type": "array", "items": {"type": "string"}},
+    "last_failing_gate": {"type": ["string", "null"]},
+    "gate_history": {"type": "array", "items": {"type": "object"}}
+  }
+}

@@ -100,6 +100,8 @@ It writes:
 ```text
 outputs/eval_results.json
 outputs/eval_summary.csv
+outputs/human_supervision_summary.csv
+outputs/maintainability_summary.csv
 outputs/eval_dashboard.html
 ```
 
@@ -122,6 +124,8 @@ gpt-5.5` to either `orchestrator.py`, `run_demo.py`, or `evaluate.py`.
   pass criteria.
 - `docs/real_project_integration.md` describes how to connect the workflow to
   a real Unity or UE5 repository.
+- `schemas/` documents the release-facing Policy, Symptom Card, Architecture
+  Card, and CodeContext structures.
 - `DEMO.md` gives a short presentation script with expected command output.
 - `tools/verify_artifact.py` prints a pass/fail checklist for the generated
   demo and evaluation evidence.

@@ -18,6 +18,10 @@ not a full Unity or UE5 plugin.
 | Adaptive escalation | `orchestrator.run_case` starts at D0-selected level, stops at failing gates, updates the Symptom Card, and tries the next allowed attempt or level. | `B-BrakeOscillation` demonstrates failed perf feedback followed by a better T2 candidate. |
 | CI-gated validation | `ReplayProjectGateRunner` copies `synthetic_project`, applies the candidate unified diff, and runs real unittest gates against the patched copy. | `python run_demo.py` uses replay mode by default. |
 | Ablation evaluation | `evaluate.py` compares governed routing with `fixed_ladder`, `broad_context`, `single_attempt`, and `no_arch_card`. | `outputs/eval_summary.csv` shows governed success with fewer CI runs than fixed ladder and degraded outcomes for ablations. |
+| B0-B3 baseline protocols | `evaluate.py` includes `B0_single_prompt`, `B1_multi_attempt_prompt`, `B2_tool_agent`, and `B3_broad_context_agent` modes. | `outputs/eval_summary.csv` reports each named baseline under the same replay gates. |
+| Human supervision accounting | `evaluate.py` emits deterministic offline rows for file-scope confirmation, bounded hints, and escalation approval. | `outputs/human_supervision_summary.csv` records hints/item, review minutes/item, and escalation reviews. |
+| Maintainability deltas | `evaluate.py` emits a synthetic maintainability proxy over accepted patches. | `outputs/maintainability_summary.csv` records median files changed and local delta proxies. |
+| Release schemas | `schemas/` contains JSON Schema documentation for Policy, Symptom Card, Architecture Card, and CodeContext. | `python -m json.tool schemas/*.schema.json` validates the schema files syntactically. |
 | Dashboard evidence | `dashboard.py` and `evaluate.py` emit static HTML artifacts for inspection. | Open `outputs/dashboard.html` and `outputs/eval_dashboard.html`. |
 | GPT-5.5 provider path | `OpenAIPatchProvider` defaults to `gpt-5.5` and returns structured candidate patches with unified diffs. | Run `python tools/gpt55_smoke.py` after setting `OPENAI_API_KEY`. |
 | Synthetic data policy | Synthetic cases make the demo deterministic and runnable without engine installations or credentials. | All commands run offline with the default synthetic provider. |
@@ -37,6 +41,10 @@ C-FourWayDeadlock   T3  partial
 
 ```text
 governed       3 accepted, 1 partial, 5 CI runs
+B0_single_prompt        1 accepted, 1 partial, 2 failed
+B1_multi_attempt_prompt 2 accepted, 1 partial, 1 failed
+B2_tool_agent           3 accepted, 1 partial, 12 CI runs
+B3_broad_context_agent  0 accepted, 2 partial, 2 failed
 fixed_ladder   3 accepted, 1 partial, 12 CI runs
 broad_context  0 accepted, 2 partial, 2 failed
 single_attempt 2 accepted, 1 partial, 1 failed

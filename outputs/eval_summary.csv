@@ -1,5 +1,9 @@
 mode,cases,accepted,partial,failed,success_rate,attempts,ci_runs,avg_attempts,avg_ci_runs,failing_gates
 governed,4,3,1,0,0.75,5,5,1.25,1.25,"{""invariants"": 1}"
+B0_single_prompt,4,1,1,2,0.25,4,4,1.0,1.0,"{""perf"": 1, ""unit"": 2}"
+B1_multi_attempt_prompt,4,2,1,1,0.5,13,13,3.25,3.25,"{""perf"": 1, ""unit"": 1}"
+B2_tool_agent,4,3,1,0,0.75,12,12,3.0,3.0,"{""invariants"": 1}"
+B3_broad_context_agent,4,0,2,2,0.0,4,4,1.0,1.0,"{""invariants"": 1, ""perf"": 1, ""unit"": 2}"
 fixed_ladder,4,3,1,0,0.75,12,12,3.0,3.0,"{""invariants"": 1}"
 broad_context,4,0,2,2,0.0,4,4,1.0,1.0,"{""invariants"": 1, ""perf"": 1, ""unit"": 2}"
 single_attempt,4,2,1,1,0.5,4,4,1.0,1.0,"{""build"": 1, ""perf"": 1}"

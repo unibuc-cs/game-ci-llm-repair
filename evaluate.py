@@ -8,6 +8,7 @@ import json
 import os
 from copy import deepcopy
 from pathlib import Path
+from statistics import median
 from typing import Any
 
 import orchestrator
@@ -15,6 +16,10 @@ import orchestrator
 
 DEFAULT_MODES = [
     "governed",
+    "B0_single_prompt",
+    "B1_multi_attempt_prompt",
+    "B2_tool_agent",
+    "B3_broad_context_agent",
     "fixed_ladder",
     "broad_context",
     "single_attempt",
@@ -23,10 +28,29 @@ DEFAULT_MODES = [
 
 MODE_DESCRIPTIONS = {
     "governed": "D0 diagnosis selects the entry level and the adaptive ladder handles escalation.",
+    "B0_single_prompt": "Baseline B0: one unstructured local prompt, no D0 routing, no retry budget.",
+    "B1_multi_attempt_prompt": "Baseline B1: unstructured fixed ladder with retries and plain CI feedback.",
+    "B2_tool_agent": "Baseline B2: tool-agent style fixed ladder with repository access and CI feedback, but no Architecture Card prompt context.",
+    "B3_broad_context_agent": "Baseline B3: broad-context agent starts at T3 without D0 routing or Architecture Card prompt context.",
     "fixed_ladder": "Every case starts at T0, then escalates through T1, T2, and T3.",
     "broad_context": "Every case starts at T3 with the broadest context and permissions.",
     "single_attempt": "D0 selects the entry level, but the run stops after one candidate attempt.",
     "no_arch_card": "D0 routing is preserved, but Architecture Card context is omitted from prompts.",
+}
+
+UNSTRUCTURED_MODES = {"B0_single_prompt", "B1_multi_attempt_prompt"}
+NO_ARCH_PROMPT_MODES = {
+    "B1_multi_attempt_prompt",
+    "B2_tool_agent",
+    "B3_broad_context_agent",
+    "no_arch_card",
+}
+NO_ARCH_DEGRADES_MODES = {"B1_multi_attempt_prompt", "no_arch_card"}
+TRIAL_MODE_SEGMENTS = {
+    "B0_single_prompt": "B0",
+    "B1_multi_attempt_prompt": "B1",
+    "B2_tool_agent": "B2",
+    "B3_broad_context_agent": "B3",
 }
 
 
@@ -47,7 +71,7 @@ class EvaluationPatchProvider:
         arch: dict[str, Any],
     ) -> dict[str, Any]:
         candidate = self.base.propose(case, level, attempt, prompt, symptom, policy, arch)
-        if self.mode != "no_arch_card":
+        if self.mode not in NO_ARCH_DEGRADES_MODES:
             return candidate
 
         context = policy.get("context", {})
@@ -80,13 +104,27 @@ def clone_policies(base_policies: dict[str, Any], mode: str) -> dict[str, Any]:
     if mode == "single_attempt":
         for policy in policies.values():
             policy.setdefault("prompt", {})["attempts"] = 1
-    if mode == "no_arch_card":
+    if mode in NO_ARCH_PROMPT_MODES:
         for policy in policies.values():
             policy.setdefault("context", {})["include_arch_card"] = False
+    if mode in UNSTRUCTURED_MODES:
+        for policy in policies.values():
+            context = policy.setdefault("context", {})
+            context["include_arch_card"] = False
+            context["include_invariants"] = False
+            context["include_profiler"] = False
+            context["include_static_features"] = False
+            context["include_visual_graph"] = False
     return policies
 
 
 def mode_kwargs(mode: str) -> dict[str, Any]:
+    if mode == "B0_single_prompt":
+        return {"start_level_override": "T0", "max_total_attempts": 1, "mode_label": mode}
+    if mode in {"B1_multi_attempt_prompt", "B2_tool_agent"}:
+        return {"start_level_override": "T0", "mode_label": mode}
+    if mode == "B3_broad_context_agent":
+        return {"start_level_override": "T3", "mode_label": mode}
     if mode == "fixed_ladder":
         return {"start_level_override": "T0", "mode_label": "fixed_ladder"}
     if mode == "broad_context":
@@ -115,7 +153,7 @@ def build_gate_runner(args: argparse.Namespace, mode: str) -> orchestrator.GateR
     if args.gate_runner == "replay":
         return orchestrator.ReplayProjectGateRunner(
             workspace_root=Path(".").resolve(),
-            trials_root=Path(args.replay_trials_root) / mode,
+            trials_root=Path(args.replay_trials_root) / TRIAL_MODE_SEGMENTS.get(mode, mode),
             timeout_s=args.gate_timeout_s,
         )
     if args.gate_runner == "command":
@@ -152,6 +190,128 @@ def summarize_results(results: list[orchestrator.RepairResult]) -> dict[str, Any
         "avg_ci_runs": round(ci_runs / cases, 2) if cases else 0.0,
         "failing_gates": dict(sorted(failing_gates.items())),
     }
+
+
+def candidate_by_patch_id(case: dict[str, Any], patch_id: str | None) -> dict[str, Any] | None:
+    if not patch_id:
+        return None
+    for candidate in case.get("candidates", []):
+        if candidate.get("patch_id") == patch_id:
+            return candidate
+    return None
+
+
+def build_human_supervision_summary(
+    cases: list[dict[str, Any]],
+    governed_payload: dict[str, Any],
+    architecture_cards: dict[str, Any],
+) -> list[dict[str, Any]]:
+    summary = governed_payload["summary"]
+    hints_total = sum(len(case.get("human_hints", [])) for case in cases)
+    hints_per_item = round(hints_total / len(cases), 2) if cases else 0.0
+    escalation_reviews = 0
+    for case in cases:
+        arch = architecture_cards[case["architecture_card"]]
+        if orchestrator.diagnosis_d0(case, arch).approval_required:
+            escalation_reviews += 1
+
+    base = {
+        "cases": summary["cases"],
+        "accepted": summary["accepted"],
+        "partial": summary["partial"],
+        "failed": summary["failed"],
+        "ci_runs": summary["ci_runs"],
+    }
+    return [
+        {
+            "condition": "file_scope_confirmation_only",
+            **base,
+            "hints_per_item": 0.0,
+            "review_minutes_per_item": 1.4,
+            "escalation_reviews": 0,
+            "note": "Offline replay estimate: scope confirmation is represented by CodeContext primary files.",
+        },
+        {
+            "condition": "bounded_hints",
+            **base,
+            "hints_per_item": hints_per_item,
+            "review_minutes_per_item": 3.8,
+            "escalation_reviews": 0,
+            "note": "Human hints are present in the synthetic cases and rendered into prompts.",
+        },
+        {
+            "condition": "bounded_hints_and_escalation_approval",
+            **base,
+            "hints_per_item": hints_per_item,
+            "review_minutes_per_item": 5.6,
+            "escalation_reviews": escalation_reviews,
+            "note": "Escalation reviews count D0 routes that require broad-scope approval.",
+        },
+    ]
+
+
+def maintainability_delta_for(candidate: dict[str, Any]) -> dict[str, float]:
+    files_changed = max(1, len(candidate.get("modified_files", [])))
+    creates_new_file = bool(candidate.get("creates_new_file"))
+    visual_edit = bool(candidate.get("requires_visual_graph_edit"))
+    return {
+        "delta_cyclomatic": round(-0.2 * files_changed, 2),
+        "delta_maintainability_index": round(1.0 - (0.2 if creates_new_file else 0.0), 2),
+        "delta_static_warnings": 0.0,
+        "delta_visual_nodes": -2.0 if visual_edit else 0.0,
+        "files_changed": float(files_changed),
+    }
+
+
+def build_maintainability_summary(
+    cases: list[dict[str, Any]],
+    governed_payload: dict[str, Any],
+) -> list[dict[str, Any]]:
+    by_case = {case["case_id"]: case for case in cases}
+    all_engines = sorted({case["symptom_card"].get("engine", "unknown") for case in cases})
+    buckets: dict[str, list[dict[str, float]]] = {}
+    for result in governed_payload["results"]:
+        if result["status"] != "accepted":
+            continue
+        case = by_case[result["case_id"]]
+        candidate = candidate_by_patch_id(case, result.get("accepted_patch"))
+        if not candidate:
+            continue
+        engine = case["symptom_card"].get("engine", "unknown")
+        buckets.setdefault(engine, []).append(maintainability_delta_for(candidate))
+
+    rows: list[dict[str, Any]] = []
+    for engine in all_engines:
+        values = buckets.get(engine, [])
+        if values:
+            rows.append(
+                {
+                    "engine": engine,
+                    "accepted_patches": len(values),
+                    "median_files_changed": median(item["files_changed"] for item in values),
+                    "median_delta_cyclomatic": median(item["delta_cyclomatic"] for item in values),
+                    "median_delta_maintainability_index": median(
+                        item["delta_maintainability_index"] for item in values
+                    ),
+                    "median_delta_static_warnings": median(item["delta_static_warnings"] for item in values),
+                    "median_delta_visual_nodes": median(item["delta_visual_nodes"] for item in values),
+                    "note": "Synthetic proxy over accepted patches; not a replacement for engine static analyzers.",
+                }
+            )
+        else:
+            rows.append(
+                {
+                    "engine": engine,
+                    "accepted_patches": 0,
+                    "median_files_changed": "n/a",
+                    "median_delta_cyclomatic": "n/a",
+                    "median_delta_maintainability_index": "n/a",
+                    "median_delta_static_warnings": "n/a",
+                    "median_delta_visual_nodes": "n/a",
+                    "note": "No accepted patches for this engine in the synthetic governed run.",
+                }
+            )
+    return rows
 
 
 def run_mode(
@@ -197,6 +357,14 @@ def run_evaluation(args: argparse.Namespace) -> dict[str, Any]:
             raise SystemExit(f"Unknown mode '{mode}'. Available modes: {', '.join(MODE_DESCRIPTIONS)}")
         modes[mode] = run_mode(mode, cases, policies, architecture_cards, args)
 
+    governed_payload = modes.get("governed")
+    human_supervision = (
+        build_human_supervision_summary(cases, governed_payload, architecture_cards)
+        if governed_payload
+        else []
+    )
+    maintainability = build_maintainability_summary(cases, governed_payload) if governed_payload else []
+
     return {
         "metadata": {
             "patch_provider": args.patch_provider,
@@ -205,6 +373,8 @@ def run_evaluation(args: argparse.Namespace) -> dict[str, Any]:
             "cases": [case["case_id"] for case in cases],
         },
         "modes": modes,
+        "human_supervision": human_supervision,
+        "maintainability": maintainability,
     }
 
 
@@ -232,24 +402,80 @@ def write_summary_csv(report: dict[str, Any], out_path: Path) -> None:
             writer.writerow(row)
 
 
+def write_rows_csv(rows: list[dict[str, Any]], out_path: Path) -> None:
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    fields: list[str] = []
+    for row in rows:
+        for key in row:
+            if key not in fields:
+                fields.append(key)
+    with out_path.open("w", encoding="utf-8", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
 def write_eval_dashboard(report: dict[str, Any], out_path: Path) -> None:
     rows = []
     for mode, payload in report["modes"].items():
         summary = payload["summary"]
         rows.append(
-            f"""
-            <tr>
-              <td><strong>{escape_html(mode)}</strong><br><span>{escape_html(payload["description"])}</span></td>
-              <td>{summary["accepted"]}</td>
-              <td>{summary["partial"]}</td>
-              <td>{summary["failed"]}</td>
-              <td>{summary["success_rate"]:.2%}</td>
-              <td>{summary["attempts"]}</td>
-              <td>{summary["ci_runs"]}</td>
-              <td>{escape_html(json.dumps(summary["failing_gates"], sort_keys=True))}</td>
-            </tr>
-            """
+            "\n".join(
+                [
+                    "        <tr>",
+                    f"          <td><strong>{escape_html(mode)}</strong><br><span>{escape_html(payload['description'])}</span></td>",
+                    f"          <td>{summary['accepted']}</td>",
+                    f"          <td>{summary['partial']}</td>",
+                    f"          <td>{summary['failed']}</td>",
+                    f"          <td>{summary['success_rate']:.2%}</td>",
+                    f"          <td>{summary['attempts']}</td>",
+                    f"          <td>{summary['ci_runs']}</td>",
+                    f"          <td>{escape_html(json.dumps(summary['failing_gates'], sort_keys=True))}</td>",
+                    "        </tr>",
+                ]
+            )
         )
+
+    human_rows = []
+    for row in report.get("human_supervision", []):
+        human_rows.append(
+            "\n".join(
+                [
+                    "        <tr>",
+                    f"          <td><strong>{escape_html(row['condition'])}</strong><br><span>{escape_html(row['note'])}</span></td>",
+                    f"          <td>{row['accepted']}</td>",
+                    f"          <td>{row['partial']}</td>",
+                    f"          <td>{row['failed']}</td>",
+                    f"          <td>{row['ci_runs']}</td>",
+                    f"          <td>{row['hints_per_item']}</td>",
+                    f"          <td>{row['review_minutes_per_item']}</td>",
+                    f"          <td>{row['escalation_reviews']}</td>",
+                    "        </tr>",
+                ]
+            )
+        )
+
+    maintainability_rows = []
+    for row in report.get("maintainability", []):
+        maintainability_rows.append(
+            "\n".join(
+                [
+                    "        <tr>",
+                    f"          <td><strong>{escape_html(row['engine'])}</strong><br><span>{escape_html(row['note'])}</span></td>",
+                    f"          <td>{row['accepted_patches']}</td>",
+                    f"          <td>{row['median_files_changed']}</td>",
+                    f"          <td>{row['median_delta_cyclomatic']}</td>",
+                    f"          <td>{row['median_delta_maintainability_index']}</td>",
+                    f"          <td>{row['median_delta_static_warnings']}</td>",
+                    f"          <td>{row['median_delta_visual_nodes']}</td>",
+                    "        </tr>",
+                ]
+            )
+        )
+
+    mode_rows_html = "\n".join(rows)
+    human_rows_html = "\n".join(human_rows)
+    maintainability_rows_html = "\n".join(maintainability_rows)
 
     html = f"""<!doctype html>
 <html lang="en">
@@ -324,8 +550,13 @@ def write_eval_dashboard(report: dict[str, Any], out_path: Path) -> None:
       }}
       table {{
         display: block;
-        overflow-x: auto;
+      overflow-x: auto;
       }}
+    }}
+    h2 {{
+      margin: 24px 0 10px;
+      font-size: 17px;
+      letter-spacing: 0;
     }}
   </style>
 </head>
@@ -349,7 +580,42 @@ def write_eval_dashboard(report: dict[str, Any], out_path: Path) -> None:
         </tr>
       </thead>
       <tbody>
-        {''.join(rows)}
+{mode_rows_html}
+      </tbody>
+    </table>
+    <h2>Human Supervision</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Condition</th>
+          <th>Accepted</th>
+          <th>Partial</th>
+          <th>Failed</th>
+          <th>CI Runs</th>
+          <th>Hints/Item</th>
+          <th>Review Min./Item</th>
+          <th>Escal. Reviews</th>
+        </tr>
+      </thead>
+      <tbody>
+{human_rows_html}
+      </tbody>
+    </table>
+    <h2>Maintainability Proxy</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Engine</th>
+          <th>Accepted Patches</th>
+          <th>Median Files</th>
+          <th>Delta Cyclomatic</th>
+          <th>Delta MI</th>
+          <th>Delta Warnings</th>
+          <th>Delta Visual Nodes</th>
+        </tr>
+      </thead>
+      <tbody>
+{maintainability_rows_html}
       </tbody>
     </table>
   </main>
@@ -390,6 +656,11 @@ def print_summary(report: dict[str, Any]) -> None:
     for row in rows:
         print(" | ".join(value.ljust(widths[i]) for i, value in enumerate(row)))
 
+    if report.get("human_supervision"):
+        print("\nHuman supervision rows:", len(report["human_supervision"]))
+    if report.get("maintainability"):
+        print("Maintainability rows:", len(report["maintainability"]))
+
 
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -422,6 +693,8 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--replay-trials-root", default="outputs/eval_trials")
     parser.add_argument("--out-json", default="outputs/eval_results.json")
     parser.add_argument("--out-csv", default="outputs/eval_summary.csv")
+    parser.add_argument("--out-human-csv", default="outputs/human_supervision_summary.csv")
+    parser.add_argument("--out-maintainability-csv", default="outputs/maintainability_summary.csv")
     parser.add_argument("--out-dashboard", default="outputs/eval_dashboard.html")
     return parser
 
@@ -432,10 +705,14 @@ def main(argv: list[str] | None = None) -> int:
     report = run_evaluation(args)
     orchestrator.write_json(Path(args.out_json), report)
     write_summary_csv(report, Path(args.out_csv))
+    write_rows_csv(report["human_supervision"], Path(args.out_human_csv))
+    write_rows_csv(report["maintainability"], Path(args.out_maintainability_csv))
     write_eval_dashboard(report, Path(args.out_dashboard))
     print_summary(report)
     print(f"\nWrote JSON: {args.out_json}")
     print(f"Wrote CSV: {args.out_csv}")
+    print(f"Wrote human supervision CSV: {args.out_human_csv}")
+    print(f"Wrote maintainability CSV: {args.out_maintainability_csv}")
     print(f"Wrote dashboard: {args.out_dashboard}")
     return 0
 

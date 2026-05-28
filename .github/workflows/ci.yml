@@ -25,6 +25,10 @@ jobs:
           python -m json.tool config/policies.json > /dev/null
           python -m json.tool config/architecture_cards.json > /dev/null
           python -m json.tool config/gate_commands.example.json > /dev/null
+          python -m json.tool schemas/policy.schema.json > /dev/null
+          python -m json.tool schemas/architecture_card.schema.json > /dev/null
+          python -m json.tool schemas/symptom_card.schema.json > /dev/null
+          python -m json.tool schemas/code_context.schema.json > /dev/null
 
       - name: Compile Python sources
         run: |

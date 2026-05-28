@@ -1,0 +1,3 @@
+engine,accepted_patches,median_files_changed,median_delta_cyclomatic,median_delta_maintainability_index,median_delta_static_warnings,median_delta_visual_nodes,note
+UE5,0,n/a,n/a,n/a,n/a,n/a,No accepted patches for this engine in the synthetic governed run.
+Unity,3,1.0,-0.2,1.0,0.0,0.0,Synthetic proxy over accepted patches; not a replacement for engine static analyzers.

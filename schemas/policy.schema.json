@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Repair Policy Map",
+  "type": "object",
+  "required": ["T0", "T1", "T2", "T3"],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^T[0-3]$": {
+      "type": "object",
+      "required": ["level", "context", "allowed_actions", "gates", "prompt"],
+      "additionalProperties": true,
+      "properties": {
+        "level": {"type": "string", "enum": ["T0", "T1", "T2", "T3"]},
+        "context": {
+          "type": "object",
+          "required": ["cg_hops", "include_arch_card", "include_invariants", "include_profiler", "include_static_features", "include_visual_graph"],
+          "properties": {
+            "cg_hops": {"type": "integer", "minimum": 0},
+            "include_arch_card": {"type": "boolean"},
+            "include_invariants": {"type": "boolean"},
+            "include_profiler": {"type": "boolean"},
+            "include_static_features": {"type": "boolean"},
+            "include_visual_graph": {"type": "boolean"}
+          }
+        },
+        "allowed_actions": {
+          "type": "object",
+          "required": ["file_allowlist", "new_files", "visual_graph_edits"],
+          "properties": {
+            "file_allowlist": {"type": "array", "items": {"type": "string"}},
+            "new_files": {"type": "boolean"},
+            "visual_graph_edits": {"type": "boolean"}
+          }
+        },
+        "gates": {"type": "array", "items": {"type": "string"}},
+        "prompt": {
+          "type": "object",
+          "required": ["attempts", "temperature"],
+          "properties": {
+            "attempts": {"type": "integer", "minimum": 1},
+            "temperature": {"type": "number"}
+          }
+        }
+      }
+    }
+  }
+}
