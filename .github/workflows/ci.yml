@@ -29,7 +29,7 @@ jobs:
       - name: Compile Python sources
         run: |
           python -m py_compile orchestrator.py dashboard.py run_demo.py evaluate.py
-          python -m py_compile tools/gpt55_smoke.py
+          python -m py_compile tools/gpt55_smoke.py tools/verify_artifact.py
           python -m py_compile tests/test_orchestrator.py tests/test_dashboard.py tests/test_evaluate.py
           python -m py_compile synthetic_project/src/unity/SpeedLimiter.py synthetic_project/tests/test_speed_limiter_unit.py synthetic_project/tests/test_build.py
 
@@ -43,34 +43,4 @@ jobs:
         run: python evaluate.py
 
       - name: Verify generated artifacts
-        run: |
-          python - <<'PY'
-          import csv
-          import json
-          from pathlib import Path
-
-          required = [
-              Path("outputs/demo_report.json"),
-              Path("outputs/dashboard.html"),
-              Path("outputs/eval_results.json"),
-              Path("outputs/eval_summary.csv"),
-              Path("outputs/eval_dashboard.html"),
-          ]
-          missing = [str(path) for path in required if not path.exists()]
-          if missing:
-              raise SystemExit(f"Missing generated artifacts: {missing}")
-
-          report = json.loads(Path("outputs/demo_report.json").read_text(encoding="utf-8"))
-          assert report["summary"]["cases"] == 4, report["summary"]
-          assert report["summary"]["accepted"] == 3, report["summary"]
-          assert report["summary"]["partial"] == 1, report["summary"]
-
-          rows = {
-              row["mode"]: row
-              for row in csv.DictReader(Path("outputs/eval_summary.csv").open(encoding="utf-8"))
-          }
-          assert rows["governed"]["accepted"] == "3", rows["governed"]
-          assert rows["governed"]["partial"] == "1", rows["governed"]
-          assert rows["fixed_ladder"]["ci_runs"] == "12", rows["fixed_ladder"]
-          assert int(rows["fixed_ladder"]["ci_runs"]) > int(rows["governed"]["ci_runs"])
-          PY
+        run: python tools/verify_artifact.py

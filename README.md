@@ -59,6 +59,12 @@ Run tests with:
 python -m unittest discover -s tests
 ```
 
+Run the submission-readiness verifier:
+
+```powershell
+python tools/verify_artifact.py
+```
+
 ## Dashboard
 
 Generate a self-contained HTML dashboard from the latest report:
@@ -115,6 +121,8 @@ gpt-5.5` to either `orchestrator.py`, `run_demo.py`, or `evaluate.py`.
 - `docs/real_project_integration.md` describes how to connect the workflow to
   a real Unity or UE5 repository.
 - `DEMO.md` gives a short presentation script with expected command output.
+- `tools/verify_artifact.py` prints a pass/fail checklist for the generated
+  demo and evaluation evidence.
 - `.github/workflows/ci.yml` runs JSON validation, tests, the replay demo, and
   the evaluation suite on GitHub Actions.
 
