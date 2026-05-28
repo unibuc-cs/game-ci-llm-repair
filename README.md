@@ -116,6 +116,8 @@ gpt-5.5` to either `orchestrator.py`, `run_demo.py`, or `evaluate.py`.
 
 - `docs/paper_traceability.md` maps paper criteria to the concrete repo files,
   commands, and generated evidence.
+- `SUBMISSION_CHECKLIST.md` summarizes the offline submission state and the
+  remaining GPT-5.5 credential-blocked step.
 - `docs/gpt55_smoke_test.md` documents the live GPT-5.5 smoke-test command and
   pass criteria.
 - `docs/real_project_integration.md` describes how to connect the workflow to

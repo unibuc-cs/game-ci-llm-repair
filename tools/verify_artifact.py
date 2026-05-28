@@ -51,6 +51,7 @@ def build_checks(args: argparse.Namespace) -> list[Check]:
         ROOT / "docs/paper_traceability.md",
         ROOT / "docs/gpt55_smoke_test.md",
         ROOT / "docs/real_project_integration.md",
+        ROOT / "SUBMISSION_CHECKLIST.md",
         ROOT / "DEMO.md",
         ROOT / ".github/workflows/ci.yml",
         ROOT / "tools/gpt55_smoke.py",
