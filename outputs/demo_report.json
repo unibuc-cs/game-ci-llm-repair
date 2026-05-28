@@ -1,6 +1,101 @@
 {
   "results": [
     {
+      "accepted_patch": "D-T0-clamp-speed-limit",
+      "attempts": 1,
+      "best_patch": "D-T0-clamp-speed-limit",
+      "case_id": "D-SpeedLimitClamp",
+      "ci_runs": 1,
+      "description": "Unity local speed limiter returns overspeed values instead of clamping them.",
+      "diagnosis": {
+        "approval_required": false,
+        "mode": "local_source",
+        "reasons": [
+          "fault evidence is local to the primary file set"
+        ],
+        "start_level": "T0"
+      },
+      "final_symptom_card": {
+        "bug_id": "D-SpeedLimitClamp",
+        "domain_hints": {
+          "traffic": {
+            "speed_control": {
+              "expected_local_clamp": true,
+              "recommended_components": [
+                "SpeedLimiter"
+              ]
+            }
+          }
+        },
+        "engine": "Unity",
+        "exceptions": [],
+        "gate_history": [],
+        "human_hints": [
+          "Keep the limiter local; do not change vehicle AI or physics budgets."
+        ],
+        "invariants": [],
+        "perf": {
+          "FixedUpdate_ms_avg": 2.4,
+          "Physics_Step_ms_p95": 3.7
+        },
+        "static_features": {
+          "api_usage": {},
+          "complexity": {
+            "cyclomatic_total": 3,
+            "maintainability_index": 91
+          }
+        },
+        "tests_failed": [
+          {
+            "message": "Expected 50.0 but got 72.5",
+            "name": "SpeedLimiter_ShouldClampAboveMax",
+            "stack": "SpeedLimiterTests.test_clamps_speed_above_limit"
+          }
+        ],
+        "visual_graph": {}
+      },
+      "gate_history": [
+        {
+          "failing_gate": null,
+          "gates": [
+            {
+              "gate": "build",
+              "message": "replay gate passed",
+              "metrics": {
+                "returncode": 0,
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "stdout_tail": "",
+                "trial_dir": "outputs/replay_trials/D-SpeedLimitClamp/D-T0-clamp-speed-limit"
+              },
+              "ok": true
+            },
+            {
+              "gate": "unit",
+              "message": "replay gate passed",
+              "metrics": {
+                "returncode": 0,
+                "stderr_tail": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+                "stdout_tail": "",
+                "trial_dir": "outputs/replay_trials/D-SpeedLimitClamp/D-T0-clamp-speed-limit"
+              },
+              "ok": true
+            }
+          ],
+          "level": "T0",
+          "patch_id": "D-T0-clamp-speed-limit"
+        }
+      ],
+      "last_failing_gate": null,
+      "prompts": [
+        {
+          "attempt": "1",
+          "level": "T0",
+          "text": "Role: Senior engineer\nTask: Propose minimal patch\nBug: D-SpeedLimitClamp\nEngine: Unity\n\nEvidence:\n{\n  \"domain_hints\": {\n    \"traffic\": {\n      \"speed_control\": {\n        \"expected_local_clamp\": true,\n        \"recommended_components\": [\n          \"SpeedLimiter\"\n        ]\n      }\n    }\n  },\n  \"exceptions\": [],\n  \"human_hints\": [\n    \"Keep the limiter local; do not change vehicle AI or physics budgets.\"\n  ],\n  \"last_failing_gate\": null,\n  \"paths\": [\n    \"src/unity/SpeedLimiter.py\"\n  ],\n  \"tests_failed\": [\n    {\n      \"message\": \"Expected 50.0 but got 72.5\",\n      \"name\": \"SpeedLimiter_ShouldClampAboveMax\",\n      \"stack\": \"SpeedLimiterTests.test_clamps_speed_above_limit\"\n    }\n  ]\n}\n\nPolicy:\n{\n  \"allowed_actions\": {\n    \"file_allowlist\": [\n      \"src/**\",\n      \"tests/**\",\n      \"!src/**/experimental/**\"\n    ],\n    \"new_files\": false,\n    \"visual_graph_edits\": false\n  },\n  \"attempts\": 1,\n  \"gates\": [\n    \"build\",\n    \"unit\"\n  ],\n  \"level\": \"T0\"\n}\n\nDeliver: unified diff; 3-line rationale; test plan"
+        }
+      ],
+      "status": "accepted"
+    },
+    {
       "accepted_patch": "A-T1-propagate-phase-state",
       "attempts": 1,
       "best_patch": "A-T1-propagate-phase-state",
@@ -645,9 +740,9 @@
     }
   ],
   "summary": {
-    "accepted": 2,
-    "cases": 3,
-    "ci_runs": 4,
+    "accepted": 3,
+    "cases": 4,
+    "ci_runs": 5,
     "failed": 0,
     "gate_runner": "replay",
     "partial": 1,

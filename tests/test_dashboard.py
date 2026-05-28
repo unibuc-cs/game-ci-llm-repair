@@ -26,7 +26,7 @@ class DashboardTests(unittest.TestCase):
         )
         self.assertIsNotNone(match)
         embedded = json.loads(match.group(1))
-        self.assertEqual(embedded["summary"]["cases"], 3)
+        self.assertEqual(embedded["summary"]["cases"], 4)
 
 
 if __name__ == "__main__":

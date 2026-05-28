@@ -20,6 +20,7 @@ class OrchestratorDemoTests(unittest.TestCase):
             arch = self.architectures[case["architecture_card"]]
             routes[case["case_id"]] = orchestrator.diagnosis_d0(case, arch).start_level
 
+        self.assertEqual(routes["D-SpeedLimitClamp"], "T0")
         self.assertEqual(routes["A-CrosswalkDesync"], "T1")
         self.assertEqual(routes["B-BrakeOscillation"], "T2")
         self.assertEqual(routes["C-FourWayDeadlock"], "T3")
@@ -31,9 +32,11 @@ class OrchestratorDemoTests(unittest.TestCase):
         ]
         by_case = {result.case_id: result for result in results}
 
+        self.assertEqual(by_case["D-SpeedLimitClamp"].status, "accepted")
         self.assertEqual(by_case["A-CrosswalkDesync"].status, "accepted")
         self.assertEqual(by_case["B-BrakeOscillation"].status, "accepted")
         self.assertEqual(by_case["C-FourWayDeadlock"].status, "partial")
+        self.assertEqual(by_case["D-SpeedLimitClamp"].attempts, 1)
         self.assertEqual(by_case["B-BrakeOscillation"].attempts, 2)
         self.assertEqual(by_case["C-FourWayDeadlock"].last_failing_gate, "invariants")
 
@@ -54,6 +57,7 @@ class OrchestratorDemoTests(unittest.TestCase):
         ]
         by_case = {result.case_id: result for result in results}
 
+        self.assertEqual(by_case["D-SpeedLimitClamp"].status, "accepted")
         self.assertEqual(by_case["A-CrosswalkDesync"].status, "accepted")
         self.assertEqual(by_case["B-BrakeOscillation"].status, "accepted")
         self.assertEqual(by_case["C-FourWayDeadlock"].status, "partial")

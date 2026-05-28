@@ -1,5 +1,92 @@
 [
   {
+    "case_id": "D-SpeedLimitClamp",
+    "description": "Unity local speed limiter returns overspeed values instead of clamping them.",
+    "architecture_card": "unity_traffic",
+    "replay": {
+      "project_path": "synthetic_project",
+      "gate_commands": {
+        "build": "python -m unittest tests.test_build",
+        "unit": "python -m unittest tests.test_speed_limiter_unit"
+      }
+    },
+    "human_hints": [
+      "Keep the limiter local; do not change vehicle AI or physics budgets."
+    ],
+    "symptom_card": {
+      "bug_id": "D-SpeedLimitClamp",
+      "engine": "Unity",
+      "tests_failed": [
+        {
+          "name": "SpeedLimiter_ShouldClampAboveMax",
+          "message": "Expected 50.0 but got 72.5",
+          "stack": "SpeedLimiterTests.test_clamps_speed_above_limit"
+        }
+      ],
+      "exceptions": [],
+      "perf": {
+        "FixedUpdate_ms_avg": 2.4,
+        "Physics_Step_ms_p95": 3.7
+      },
+      "invariants": [],
+      "static_features": {
+        "api_usage": {},
+        "complexity": {
+          "cyclomatic_total": 3,
+          "maintainability_index": 91
+        }
+      },
+      "visual_graph": {},
+      "domain_hints": {
+        "traffic": {
+          "speed_control": {
+            "expected_local_clamp": true,
+            "recommended_components": [
+              "SpeedLimiter"
+            ]
+          }
+        }
+      }
+    },
+    "code_context": {
+      "primary_files": [
+        {
+          "path": "src/unity/SpeedLimiter.py",
+          "component": "Traffic"
+        }
+      ],
+      "neighbors": {}
+    },
+    "candidates": [
+      {
+        "level": "T0",
+        "attempt": 1,
+        "patch_id": "D-T0-clamp-speed-limit",
+        "summary": "Clamp local speed values to the configured maximum without touching neighbors.",
+        "unified_diff": "diff --git a/src/unity/SpeedLimiter.py b/src/unity/SpeedLimiter.py\n--- a/src/unity/SpeedLimiter.py\n+++ b/src/unity/SpeedLimiter.py\n@@ -5,4 +5,4 @@ class SpeedLimiter:\n     def clamp(self, speed: float) -> float:\n         if speed < self.max_speed:\n             return speed\n-        return speed\n+        return self.max_speed",
+        "modified_files": [
+          "src/unity/SpeedLimiter.py"
+        ],
+        "creates_new_file": false,
+        "requires_visual_graph_edit": false,
+        "gate_results": {
+          "build": {
+            "ok": true,
+            "metrics": {},
+            "message": "Unity scripts import successfully."
+          },
+          "unit": {
+            "ok": true,
+            "metrics": {
+              "tests": 2
+            },
+            "message": "Speed limiter unit tests passed."
+          }
+        }
+      }
+    ]
+  },
+  {
     "case_id": "A-CrosswalkDesync",
     "description": "Unity crosswalk state update is missed by a neighboring pedestrian agent.",
     "architecture_card": "unity_traffic",

@@ -10,7 +10,8 @@ can be inspected and tested anywhere Python runs.
 
 ## Demo Scope
 
-- `data/synthetic_cases.json` contains three synthetic defect cases:
+- `data/synthetic_cases.json` contains four synthetic defect cases:
+  - `D-SpeedLimitClamp`: local Unity gameplay repair routed to T0.
   - `A-CrosswalkDesync`: cross-file Unity gameplay repair routed to T1.
   - `B-BrakeOscillation`: Unity performance/invariant repair routed to T2.
   - `C-FourWayDeadlock`: UE5 visual-scripting repair routed to T3 and reported

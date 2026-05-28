@@ -1,6 +1,7 @@
 {
   "metadata": {
     "cases": [
+      "D-SpeedLimitClamp",
       "A-CrosswalkDesync",
       "B-BrakeOscillation",
       "C-FourWayDeadlock"
@@ -19,6 +20,133 @@
     "broad_context": {
       "description": "Every case starts at T3 with the broadest context and permissions.",
       "results": [
+        {
+          "accepted_patch": null,
+          "attempts": 1,
+          "best_patch": "D-SpeedLimitClamp-T3-1-noop",
+          "case_id": "D-SpeedLimitClamp",
+          "ci_runs": 1,
+          "description": "Unity local speed limiter returns overspeed values instead of clamping them.",
+          "diagnosis": {
+            "approval_required": false,
+            "mode": "broad_context",
+            "reasons": [
+              "fault evidence is local to the primary file set",
+              "evaluation override starts repair at T3"
+            ],
+            "start_level": "T3"
+          },
+          "final_symptom_card": {
+            "bug_id": "D-SpeedLimitClamp",
+            "domain_hints": {
+              "traffic": {
+                "speed_control": {
+                  "expected_local_clamp": true,
+                  "recommended_components": [
+                    "SpeedLimiter"
+                  ]
+                }
+              }
+            },
+            "engine": "Unity",
+            "exceptions": [],
+            "gate_history": [
+              {
+                "failing_gate": "unit",
+                "gates": [
+                  {
+                    "gate": "build",
+                    "message": "replay gate passed",
+                    "metrics": {
+                      "returncode": 0,
+                      "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                      "stdout_tail": "",
+                      "trial_dir": "outputs/eval_trials/broad_context/D-SpeedLimitClamp/D-SpeedLimitClamp-T3-1-noop"
+                    },
+                    "ok": true
+                  },
+                  {
+                    "gate": "unit",
+                    "message": "FAILED (failures=1)",
+                    "metrics": {
+                      "returncode": 1,
+                      "stderr_tail": "F.\n======================================================================\nFAIL: test_clamps_speed_above_limit (tests.test_speed_limiter_unit.SpeedLimiterUnitGate.test_clamps_speed_above_limit)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\eval_trials\\broad_context\\D-SpeedLimitClamp\\D-SpeedLimitClamp-T3-1-noop\\tests\\test_speed_limiter_unit.py\", line 10, in test_clamps_speed_above_limit\n    self.assertEqual(limiter.clamp(72.5), 50.0)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 72.5 != 50.0\n\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nFAILED (failures=1)\n",
+                      "stdout_tail": "",
+                      "trial_dir": "outputs/eval_trials/broad_context/D-SpeedLimitClamp/D-SpeedLimitClamp-T3-1-noop"
+                    },
+                    "ok": false
+                  }
+                ],
+                "level": "T3",
+                "patch_id": "D-SpeedLimitClamp-T3-1-noop"
+              }
+            ],
+            "human_hints": [
+              "Keep the limiter local; do not change vehicle AI or physics budgets."
+            ],
+            "invariants": [],
+            "last_failing_gate": "unit",
+            "perf": {
+              "FixedUpdate_ms_avg": 2.4,
+              "Physics_Step_ms_p95": 3.7
+            },
+            "static_features": {
+              "api_usage": {},
+              "complexity": {
+                "cyclomatic_total": 3,
+                "maintainability_index": 91
+              }
+            },
+            "tests_failed": [
+              {
+                "message": "Expected 50.0 but got 72.5",
+                "name": "SpeedLimiter_ShouldClampAboveMax",
+                "stack": "SpeedLimiterTests.test_clamps_speed_above_limit"
+              }
+            ],
+            "visual_graph": {}
+          },
+          "gate_history": [
+            {
+              "failing_gate": "unit",
+              "gates": [
+                {
+                  "gate": "build",
+                  "message": "replay gate passed",
+                  "metrics": {
+                    "returncode": 0,
+                    "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                    "stdout_tail": "",
+                    "trial_dir": "outputs/eval_trials/broad_context/D-SpeedLimitClamp/D-SpeedLimitClamp-T3-1-noop"
+                  },
+                  "ok": true
+                },
+                {
+                  "gate": "unit",
+                  "message": "FAILED (failures=1)",
+                  "metrics": {
+                    "returncode": 1,
+                    "stderr_tail": "F.\n======================================================================\nFAIL: test_clamps_speed_above_limit (tests.test_speed_limiter_unit.SpeedLimiterUnitGate.test_clamps_speed_above_limit)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\eval_trials\\broad_context\\D-SpeedLimitClamp\\D-SpeedLimitClamp-T3-1-noop\\tests\\test_speed_limiter_unit.py\", line 10, in test_clamps_speed_above_limit\n    self.assertEqual(limiter.clamp(72.5), 50.0)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 72.5 != 50.0\n\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nFAILED (failures=1)\n",
+                    "stdout_tail": "",
+                    "trial_dir": "outputs/eval_trials/broad_context/D-SpeedLimitClamp/D-SpeedLimitClamp-T3-1-noop"
+                  },
+                  "ok": false
+                }
+              ],
+              "level": "T3",
+              "patch_id": "D-SpeedLimitClamp-T3-1-noop"
+            }
+          ],
+          "last_failing_gate": "unit",
+          "prompts": [
+            {
+              "attempt": "1",
+              "level": "T3",
+              "text": "Role: Senior engineer\nTask: Propose minimal patch\nBug: D-SpeedLimitClamp\nEngine: Unity\n\nEvidence:\n{\n  \"domain_hints\": {\n    \"traffic\": {\n      \"speed_control\": {\n        \"expected_local_clamp\": true,\n        \"recommended_components\": [\n          \"SpeedLimiter\"\n        ]\n      }\n    }\n  },\n  \"exceptions\": [],\n  \"human_hints\": [\n    \"Keep the limiter local; do not change vehicle AI or physics budgets.\"\n  ],\n  \"invariants\": [],\n  \"last_failing_gate\": null,\n  \"paths\": [\n    \"src/unity/SpeedLimiter.py\"\n  ],\n  \"perf\": {\n    \"FixedUpdate_ms_avg\": 2.4,\n    \"Physics_Step_ms_p95\": 3.7\n  },\n  \"static_features\": {\n    \"api_usage\": {},\n    \"complexity\": {\n      \"cyclomatic_total\": 3,\n      \"maintainability_index\": 91\n    }\n  },\n  \"tests_failed\": [\n    {\n      \"message\": \"Expected 50.0 but got 72.5\",\n      \"name\": \"SpeedLimiter_ShouldClampAboveMax\",\n      \"stack\": \"SpeedLimiterTests.test_clamps_speed_above_limit\"\n    }\n  ],\n  \"visual_graph\": {}\n}\n\nPolicy:\n{\n  \"allowed_actions\": {\n    \"file_allowlist\": [\n      \"src/**\",\n      \"tests/**\",\n      \"Content/Blueprints/**\",\n      \"!src/**/experimental/**\"\n    ],\n    \"new_files\": true,\n    \"visual_graph_edits\": true\n  },\n  \"architecture_card\": {\n    \"allowed_components\": [\n      \"Traffic\",\n      \"Gameplay\",\n      \"Tests\"\n    ],\n    \"file_allowlist\": [\n      \"src/unity/**\",\n      \"tests/unity/**\"\n    ],\n    \"invariants\": [\n      \"CrosswalkMutualExclusion\",\n      \"ListenerLifecycle\",\n      \"NoBackwardTeleport\"\n    ],\n    \"perf_budget\": {\n      \"FixedUpdate_ms_avg\": 12.0,\n      \"Physics_Step_ms_p95\": 12.0\n    }\n  },\n  \"attempts\": 1,\n  \"gates\": [\n    \"build\",\n    \"unit\",\n    \"integration\",\n    \"perf\",\n    \"invariants\"\n  ],\n  \"level\": \"T3\"\n}\n\nDeliver: unified diff; 3-line rationale; test plan"
+            }
+          ],
+          "status": "failed"
+        },
         {
           "accepted_patch": null,
           "attempts": 1,
@@ -611,16 +739,16 @@
       ],
       "summary": {
         "accepted": 0,
-        "attempts": 3,
+        "attempts": 4,
         "avg_attempts": 1.0,
         "avg_ci_runs": 1.0,
-        "cases": 3,
-        "ci_runs": 3,
-        "failed": 1,
+        "cases": 4,
+        "ci_runs": 4,
+        "failed": 2,
         "failing_gates": {
           "invariants": 1,
           "perf": 1,
-          "unit": 1
+          "unit": 2
         },
         "partial": 2,
         "success_rate": 0.0
@@ -629,6 +757,102 @@
     "fixed_ladder": {
       "description": "Every case starts at T0, then escalates through T1, T2, and T3.",
       "results": [
+        {
+          "accepted_patch": "D-T0-clamp-speed-limit",
+          "attempts": 1,
+          "best_patch": "D-T0-clamp-speed-limit",
+          "case_id": "D-SpeedLimitClamp",
+          "ci_runs": 1,
+          "description": "Unity local speed limiter returns overspeed values instead of clamping them.",
+          "diagnosis": {
+            "approval_required": false,
+            "mode": "fixed_ladder",
+            "reasons": [
+              "fault evidence is local to the primary file set",
+              "evaluation override starts repair at T0"
+            ],
+            "start_level": "T0"
+          },
+          "final_symptom_card": {
+            "bug_id": "D-SpeedLimitClamp",
+            "domain_hints": {
+              "traffic": {
+                "speed_control": {
+                  "expected_local_clamp": true,
+                  "recommended_components": [
+                    "SpeedLimiter"
+                  ]
+                }
+              }
+            },
+            "engine": "Unity",
+            "exceptions": [],
+            "gate_history": [],
+            "human_hints": [
+              "Keep the limiter local; do not change vehicle AI or physics budgets."
+            ],
+            "invariants": [],
+            "perf": {
+              "FixedUpdate_ms_avg": 2.4,
+              "Physics_Step_ms_p95": 3.7
+            },
+            "static_features": {
+              "api_usage": {},
+              "complexity": {
+                "cyclomatic_total": 3,
+                "maintainability_index": 91
+              }
+            },
+            "tests_failed": [
+              {
+                "message": "Expected 50.0 but got 72.5",
+                "name": "SpeedLimiter_ShouldClampAboveMax",
+                "stack": "SpeedLimiterTests.test_clamps_speed_above_limit"
+              }
+            ],
+            "visual_graph": {}
+          },
+          "gate_history": [
+            {
+              "failing_gate": null,
+              "gates": [
+                {
+                  "gate": "build",
+                  "message": "replay gate passed",
+                  "metrics": {
+                    "returncode": 0,
+                    "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                    "stdout_tail": "",
+                    "trial_dir": "outputs/eval_trials/fixed_ladder/D-SpeedLimitClamp/D-T0-clamp-speed-limit"
+                  },
+                  "ok": true
+                },
+                {
+                  "gate": "unit",
+                  "message": "replay gate passed",
+                  "metrics": {
+                    "returncode": 0,
+                    "stderr_tail": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+                    "stdout_tail": "",
+                    "trial_dir": "outputs/eval_trials/fixed_ladder/D-SpeedLimitClamp/D-T0-clamp-speed-limit"
+                  },
+                  "ok": true
+                }
+              ],
+              "level": "T0",
+              "patch_id": "D-T0-clamp-speed-limit"
+            }
+          ],
+          "last_failing_gate": null,
+          "prompts": [
+            {
+              "attempt": "1",
+              "level": "T0",
+              "text": "Role: Senior engineer\nTask: Propose minimal patch\nBug: D-SpeedLimitClamp\nEngine: Unity\n\nEvidence:\n{\n  \"domain_hints\": {\n    \"traffic\": {\n      \"speed_control\": {\n        \"expected_local_clamp\": true,\n        \"recommended_components\": [\n          \"SpeedLimiter\"\n        ]\n      }\n    }\n  },\n  \"exceptions\": [],\n  \"human_hints\": [\n    \"Keep the limiter local; do not change vehicle AI or physics budgets.\"\n  ],\n  \"last_failing_gate\": null,\n  \"paths\": [\n    \"src/unity/SpeedLimiter.py\"\n  ],\n  \"tests_failed\": [\n    {\n      \"message\": \"Expected 50.0 but got 72.5\",\n      \"name\": \"SpeedLimiter_ShouldClampAboveMax\",\n      \"stack\": \"SpeedLimiterTests.test_clamps_speed_above_limit\"\n    }\n  ]\n}\n\nPolicy:\n{\n  \"allowed_actions\": {\n    \"file_allowlist\": [\n      \"src/**\",\n      \"tests/**\",\n      \"!src/**/experimental/**\"\n    ],\n    \"new_files\": false,\n    \"visual_graph_edits\": false\n  },\n  \"attempts\": 1,\n  \"gates\": [\n    \"build\",\n    \"unit\"\n  ],\n  \"level\": \"T0\"\n}\n\nDeliver: unified diff; 3-line rationale; test plan"
+            }
+          ],
+          "status": "accepted"
+        },
         {
           "accepted_patch": "A-T1-propagate-phase-state",
           "attempts": 2,
@@ -680,7 +904,7 @@
                     "message": "FAILED (failures=1)",
                     "metrics": {
                       "returncode": 1,
-                      "stderr_tail": "F\n======================================================================\nFAIL: test_car_green_revokes_walk_permission (tests.test_crosswalk_unit.CrosswalkUnitGate.test_car_green_revokes_walk_permission)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\eval_trials\\fixed_ladder\\A-CrosswalkDesync\\A-CrosswalkDesync-T0-1-noop\\tests\\test_crosswalk_unit.py\", line 16, in test_car_green_revokes_walk_permission\n    self.assertFalse(crosswalk.can_walk())\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: True is not false\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (failures=1)\n",
+                      "stderr_tail": "F\n======================================================================\nFAIL: test_car_green_revokes_walk_permission (tests.test_crosswalk_unit.CrosswalkUnitGate.test_car_green_revokes_walk_permission)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\eval_trials\\fixed_ladder\\A-CrosswalkDesync\\A-CrosswalkDesync-T0-1-noop\\tests\\test_crosswalk_unit.py\", line 16, in test_car_green_revokes_walk_permission\n    self.assertFalse(crosswalk.can_walk())\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: True is not false\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)\n",
                       "stdout_tail": "",
                       "trial_dir": "outputs/eval_trials/fixed_ladder/A-CrosswalkDesync/A-CrosswalkDesync-T0-1-noop"
                     },
@@ -739,7 +963,7 @@
                   "message": "FAILED (failures=1)",
                   "metrics": {
                     "returncode": 1,
-                    "stderr_tail": "F\n======================================================================\nFAIL: test_car_green_revokes_walk_permission (tests.test_crosswalk_unit.CrosswalkUnitGate.test_car_green_revokes_walk_permission)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\eval_trials\\fixed_ladder\\A-CrosswalkDesync\\A-CrosswalkDesync-T0-1-noop\\tests\\test_crosswalk_unit.py\", line 16, in test_car_green_revokes_walk_permission\n    self.assertFalse(crosswalk.can_walk())\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: True is not false\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (failures=1)\n",
+                    "stderr_tail": "F\n======================================================================\nFAIL: test_car_green_revokes_walk_permission (tests.test_crosswalk_unit.CrosswalkUnitGate.test_car_green_revokes_walk_permission)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\eval_trials\\fixed_ladder\\A-CrosswalkDesync\\A-CrosswalkDesync-T0-1-noop\\tests\\test_crosswalk_unit.py\", line 16, in test_car_green_revokes_walk_permission\n    self.assertFalse(crosswalk.can_walk())\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: True is not false\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)\n",
                     "stdout_tail": "",
                     "trial_dir": "outputs/eval_trials/fixed_ladder/A-CrosswalkDesync/A-CrosswalkDesync-T0-1-noop"
                   },
@@ -1836,23 +2060,118 @@
         }
       ],
       "summary": {
-        "accepted": 2,
-        "attempts": 11,
-        "avg_attempts": 3.67,
-        "avg_ci_runs": 3.67,
-        "cases": 3,
-        "ci_runs": 11,
+        "accepted": 3,
+        "attempts": 12,
+        "avg_attempts": 3.0,
+        "avg_ci_runs": 3.0,
+        "cases": 4,
+        "ci_runs": 12,
         "failed": 0,
         "failing_gates": {
           "invariants": 1
         },
         "partial": 1,
-        "success_rate": 0.6667
+        "success_rate": 0.75
       }
     },
     "governed": {
       "description": "D0 diagnosis selects the entry level and the adaptive ladder handles escalation.",
       "results": [
+        {
+          "accepted_patch": "D-T0-clamp-speed-limit",
+          "attempts": 1,
+          "best_patch": "D-T0-clamp-speed-limit",
+          "case_id": "D-SpeedLimitClamp",
+          "ci_runs": 1,
+          "description": "Unity local speed limiter returns overspeed values instead of clamping them.",
+          "diagnosis": {
+            "approval_required": false,
+            "mode": "local_source",
+            "reasons": [
+              "fault evidence is local to the primary file set"
+            ],
+            "start_level": "T0"
+          },
+          "final_symptom_card": {
+            "bug_id": "D-SpeedLimitClamp",
+            "domain_hints": {
+              "traffic": {
+                "speed_control": {
+                  "expected_local_clamp": true,
+                  "recommended_components": [
+                    "SpeedLimiter"
+                  ]
+                }
+              }
+            },
+            "engine": "Unity",
+            "exceptions": [],
+            "gate_history": [],
+            "human_hints": [
+              "Keep the limiter local; do not change vehicle AI or physics budgets."
+            ],
+            "invariants": [],
+            "perf": {
+              "FixedUpdate_ms_avg": 2.4,
+              "Physics_Step_ms_p95": 3.7
+            },
+            "static_features": {
+              "api_usage": {},
+              "complexity": {
+                "cyclomatic_total": 3,
+                "maintainability_index": 91
+              }
+            },
+            "tests_failed": [
+              {
+                "message": "Expected 50.0 but got 72.5",
+                "name": "SpeedLimiter_ShouldClampAboveMax",
+                "stack": "SpeedLimiterTests.test_clamps_speed_above_limit"
+              }
+            ],
+            "visual_graph": {}
+          },
+          "gate_history": [
+            {
+              "failing_gate": null,
+              "gates": [
+                {
+                  "gate": "build",
+                  "message": "replay gate passed",
+                  "metrics": {
+                    "returncode": 0,
+                    "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                    "stdout_tail": "",
+                    "trial_dir": "outputs/eval_trials/governed/D-SpeedLimitClamp/D-T0-clamp-speed-limit"
+                  },
+                  "ok": true
+                },
+                {
+                  "gate": "unit",
+                  "message": "replay gate passed",
+                  "metrics": {
+                    "returncode": 0,
+                    "stderr_tail": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+                    "stdout_tail": "",
+                    "trial_dir": "outputs/eval_trials/governed/D-SpeedLimitClamp/D-T0-clamp-speed-limit"
+                  },
+                  "ok": true
+                }
+              ],
+              "level": "T0",
+              "patch_id": "D-T0-clamp-speed-limit"
+            }
+          ],
+          "last_failing_gate": null,
+          "prompts": [
+            {
+              "attempt": "1",
+              "level": "T0",
+              "text": "Role: Senior engineer\nTask: Propose minimal patch\nBug: D-SpeedLimitClamp\nEngine: Unity\n\nEvidence:\n{\n  \"domain_hints\": {\n    \"traffic\": {\n      \"speed_control\": {\n        \"expected_local_clamp\": true,\n        \"recommended_components\": [\n          \"SpeedLimiter\"\n        ]\n      }\n    }\n  },\n  \"exceptions\": [],\n  \"human_hints\": [\n    \"Keep the limiter local; do not change vehicle AI or physics budgets.\"\n  ],\n  \"last_failing_gate\": null,\n  \"paths\": [\n    \"src/unity/SpeedLimiter.py\"\n  ],\n  \"tests_failed\": [\n    {\n      \"message\": \"Expected 50.0 but got 72.5\",\n      \"name\": \"SpeedLimiter_ShouldClampAboveMax\",\n      \"stack\": \"SpeedLimiterTests.test_clamps_speed_above_limit\"\n    }\n  ]\n}\n\nPolicy:\n{\n  \"allowed_actions\": {\n    \"file_allowlist\": [\n      \"src/**\",\n      \"tests/**\",\n      \"!src/**/experimental/**\"\n    ],\n    \"new_files\": false,\n    \"visual_graph_edits\": false\n  },\n  \"attempts\": 1,\n  \"gates\": [\n    \"build\",\n    \"unit\"\n  ],\n  \"level\": \"T0\"\n}\n\nDeliver: unified diff; 3-line rationale; test plan"
+            }
+          ],
+          "status": "accepted"
+        },
         {
           "accepted_patch": "A-T1-propagate-phase-state",
           "attempts": 1,
@@ -2049,7 +2368,7 @@
                       "Physics_Step_ms_p95": 12.88,
                       "RaycastCount_per_frame_avg": 10500,
                       "returncode": 1,
-                      "stderr_tail": "F\n======================================================================\nFAIL: test_fixed_update_and_physics_budget (tests.test_brake_perf.BrakePerfGate.test_fixed_update_and_physics_budget)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\eval_trials\\governed\\B-BrakeOscillation\\B-T2-cache-last-raycast-only\\tests\\test_brake_perf.py\", line 12, in test_fixed_update_and_physics_budget\n    self.assertLessEqual(metrics[\"Physics_Step_ms_p95\"], 12.0)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 12.88 not less than or equal to 12.0\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)\n",
+                      "stderr_tail": "F\n======================================================================\nFAIL: test_fixed_update_and_physics_budget (tests.test_brake_perf.BrakePerfGate.test_fixed_update_and_physics_budget)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\eval_trials\\governed\\B-BrakeOscillation\\B-T2-cache-last-raycast-only\\tests\\test_brake_perf.py\", line 12, in test_fixed_update_and_physics_budget\n    self.assertLessEqual(metrics[\"Physics_Step_ms_p95\"], 12.0)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 12.88 not less than or equal to 12.0\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (failures=1)\n",
                       "stdout_tail": "SANERBUG_METRICS {\"FixedUpdate_ms_avg\": 10.43, \"Physics_Step_ms_p95\": 12.88, \"RaycastCount_per_frame_avg\": 10500, \"NoBackwardTeleport\": 0}\n",
                       "trial_dir": "outputs/eval_trials/governed/B-BrakeOscillation/B-T2-cache-last-raycast-only"
                     },
@@ -2076,7 +2395,7 @@
               "Physics_Step_ms_p95": 12.88,
               "RaycastCount_per_frame_avg": 10500,
               "returncode": 1,
-              "stderr_tail": "F\n======================================================================\nFAIL: test_fixed_update_and_physics_budget (tests.test_brake_perf.BrakePerfGate.test_fixed_update_and_physics_budget)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\eval_trials\\governed\\B-BrakeOscillation\\B-T2-cache-last-raycast-only\\tests\\test_brake_perf.py\", line 12, in test_fixed_update_and_physics_budget\n    self.assertLessEqual(metrics[\"Physics_Step_ms_p95\"], 12.0)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 12.88 not less than or equal to 12.0\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)\n",
+              "stderr_tail": "F\n======================================================================\nFAIL: test_fixed_update_and_physics_budget (tests.test_brake_perf.BrakePerfGate.test_fixed_update_and_physics_budget)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\eval_trials\\governed\\B-BrakeOscillation\\B-T2-cache-last-raycast-only\\tests\\test_brake_perf.py\", line 12, in test_fixed_update_and_physics_budget\n    self.assertLessEqual(metrics[\"Physics_Step_ms_p95\"], 12.0)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 12.88 not less than or equal to 12.0\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (failures=1)\n",
               "stdout_tail": "SANERBUG_METRICS {\"FixedUpdate_ms_avg\": 10.43, \"Physics_Step_ms_p95\": 12.88, \"RaycastCount_per_frame_avg\": 10500, \"NoBackwardTeleport\": 0}\n",
               "trial_dir": "outputs/eval_trials/governed/B-BrakeOscillation/B-T2-cache-last-raycast-only"
             },
@@ -2148,7 +2467,7 @@
                     "Physics_Step_ms_p95": 12.88,
                     "RaycastCount_per_frame_avg": 10500,
                     "returncode": 1,
-                    "stderr_tail": "F\n======================================================================\nFAIL: test_fixed_update_and_physics_budget (tests.test_brake_perf.BrakePerfGate.test_fixed_update_and_physics_budget)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\eval_trials\\governed\\B-BrakeOscillation\\B-T2-cache-last-raycast-only\\tests\\test_brake_perf.py\", line 12, in test_fixed_update_and_physics_budget\n    self.assertLessEqual(metrics[\"Physics_Step_ms_p95\"], 12.0)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 12.88 not less than or equal to 12.0\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)\n",
+                    "stderr_tail": "F\n======================================================================\nFAIL: test_fixed_update_and_physics_budget (tests.test_brake_perf.BrakePerfGate.test_fixed_update_and_physics_budget)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \".\\outputs\\eval_trials\\governed\\B-BrakeOscillation\\B-T2-cache-last-raycast-only\\tests\\test_brake_perf.py\", line 12, in test_fixed_update_and_physics_budget\n    self.assertLessEqual(metrics[\"Physics_Step_ms_p95\"], 12.0)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 12.88 not less than or equal to 12.0\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (failures=1)\n",
                     "stdout_tail": "SANERBUG_METRICS {\"FixedUpdate_ms_avg\": 10.43, \"Physics_Step_ms_p95\": 12.88, \"RaycastCount_per_frame_avg\": 10500, \"NoBackwardTeleport\": 0}\n",
                     "trial_dir": "outputs/eval_trials/governed/B-BrakeOscillation/B-T2-cache-last-raycast-only"
                   },
@@ -2241,7 +2560,7 @@
             {
               "attempt": "2",
               "level": "T2",
-              "text": "Role: Senior engineer\nTask: Propose minimal patch\nBug: B-BrakeOscillation\nEngine: Unity\n\nEvidence:\n{\n  \"domain_hints\": {\n    \"traffic\": {\n      \"sensing\": {\n        \"hotspots\": [\n          \"CarController.FixedUpdate\"\n        ],\n        \"recommended_components\": [\n          \"ProximityGrid\",\n          \"BrakeIntent\"\n        ],\n        \"risk_flags\": [\n          \"per-agent sensing loop\"\n        ],\n        \"shared_sensing_present\": false\n      }\n    }\n  },\n  \"exceptions\": [],\n  \"human_hints\": [\n    \"Prefer shared sensing data over per-agent raycast loops.\"\n  ],\n  \"invariants\": [\n    {\n      \"name\": \"NoBackwardTeleport\",\n      \"violations\": 2\n    }\n  ],\n  \"last_failing_gate\": \"perf\",\n  \"paths\": [\n    \"src/unity/CarController.cs\",\n    \"src/unity/TrafficAIPlanner.cs\",\n    \"src/unity/VehicleSensors.cs\"\n  ],\n  \"perf\": {\n    \"FixedUpdate_ms_avg\": 10.43,\n    \"NoBackwardTeleport\": 0,\n    \"Physics_Step_ms_p95\": 12.88,\n    \"RaycastCount_per_frame_avg\": 10500,\n    \"returncode\": 1,\n    \"stderr_tail\": \"F\\n======================================================================\\nFAIL: test_fixed_update_and_physics_budget (tests.test_brake_perf.BrakePerfGate.test_fixed_update_and_physics_budget)\\n----------------------------------------------------------------------\\nTraceback (most recent call last):\\n  File \\\".\\\\outputs\\\\eval_trials\\\\governed\\\\B-BrakeOscillation\\\\B-T2-cache-last-raycast-only\\\\tests\\\\test_brake_perf.py\\\", line 12, in test_fixed_update_and_physics_budget\\n    self.assertLessEqual(metrics[\\\"Physics_Step_ms_p95\\\"], 12.0)\\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError: 12.88 not less than or equal to 12.0\\n\\n----------------------------------------------------------------------\\nRan 1 test in 0.001s\\n\\nFAILED (failures=1)\\n\",\n    \"stdout_tail\": \"SANERBUG_METRICS {\\\"FixedUpdate_ms_avg\\\": 10.43, \\\"Physics_Step_ms_p95\\\": 12.88, \\\"RaycastCount_per_frame_avg\\\": 10500, \\\"NoBackwardTeleport\\\": 0}\\n\",\n    \"trial_dir\": \"outputs/eval_trials/governed/B-BrakeOscillation/B-T2-cache-last-raycast-only\"\n  },\n  \"static_features\": {\n    \"api_usage\": {\n      \"GC.Alloc\": 6,\n      \"Physics.Raycast\": 18230\n    },\n    \"complexity\": {\n      \"cyclomatic_total\": 83,\n      \"maintainability_index\": 64\n    }\n  },\n  \"tests_failed\": [\n    {\n      \"message\": \"avg FixedUpdate > 12ms at N=300\",\n      \"name\": \"Perf_300Cars_PhysicsBudget\",\n      \"stack\": \"PerformanceSuite.Run -> CarController.FixedUpdate\"\n    }\n  ],\n  \"visual_graph\": {}\n}\n\nPolicy:\n{\n  \"allowed_actions\": {\n    \"file_allowlist\": [\n      \"src/**\",\n      \"tests/**\",\n      \"!src/**/experimental/**\"\n    ],\n    \"new_files\": true,\n    \"visual_graph_edits\": false\n  },\n  \"architecture_card\": {\n    \"allowed_components\": [\n      \"Traffic\",\n      \"Gameplay\",\n      \"Tests\"\n    ],\n    \"file_allowlist\": [\n      \"src/unity/**\",\n      \"tests/unity/**\"\n    ],\n    \"invariants\": [\n      \"CrosswalkMutualExclusion\",\n      \"ListenerLifecycle\",\n      \"NoBackwardTeleport\"\n    ],\n    \"perf_budget\": {\n      \"FixedUpdate_ms_avg\": 12.0,\n      \"Physics_Step_ms_p95\": 12.0\n    }\n  },\n  \"attempts\": 2,\n  \"gates\": [\n    \"build\",\n    \"unit\",\n    \"integration\",\n    \"perf\",\n    \"invariants\"\n  ],\n  \"level\": \"T2\"\n}\n\nDeliver: unified diff; 3-line rationale; test plan"
+              "text": "Role: Senior engineer\nTask: Propose minimal patch\nBug: B-BrakeOscillation\nEngine: Unity\n\nEvidence:\n{\n  \"domain_hints\": {\n    \"traffic\": {\n      \"sensing\": {\n        \"hotspots\": [\n          \"CarController.FixedUpdate\"\n        ],\n        \"recommended_components\": [\n          \"ProximityGrid\",\n          \"BrakeIntent\"\n        ],\n        \"risk_flags\": [\n          \"per-agent sensing loop\"\n        ],\n        \"shared_sensing_present\": false\n      }\n    }\n  },\n  \"exceptions\": [],\n  \"human_hints\": [\n    \"Prefer shared sensing data over per-agent raycast loops.\"\n  ],\n  \"invariants\": [\n    {\n      \"name\": \"NoBackwardTeleport\",\n      \"violations\": 2\n    }\n  ],\n  \"last_failing_gate\": \"perf\",\n  \"paths\": [\n    \"src/unity/CarController.cs\",\n    \"src/unity/TrafficAIPlanner.cs\",\n    \"src/unity/VehicleSensors.cs\"\n  ],\n  \"perf\": {\n    \"FixedUpdate_ms_avg\": 10.43,\n    \"NoBackwardTeleport\": 0,\n    \"Physics_Step_ms_p95\": 12.88,\n    \"RaycastCount_per_frame_avg\": 10500,\n    \"returncode\": 1,\n    \"stderr_tail\": \"F\\n======================================================================\\nFAIL: test_fixed_update_and_physics_budget (tests.test_brake_perf.BrakePerfGate.test_fixed_update_and_physics_budget)\\n----------------------------------------------------------------------\\nTraceback (most recent call last):\\n  File \\\".\\\\outputs\\\\eval_trials\\\\governed\\\\B-BrakeOscillation\\\\B-T2-cache-last-raycast-only\\\\tests\\\\test_brake_perf.py\\\", line 12, in test_fixed_update_and_physics_budget\\n    self.assertLessEqual(metrics[\\\"Physics_Step_ms_p95\\\"], 12.0)\\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError: 12.88 not less than or equal to 12.0\\n\\n----------------------------------------------------------------------\\nRan 1 test in 0.000s\\n\\nFAILED (failures=1)\\n\",\n    \"stdout_tail\": \"SANERBUG_METRICS {\\\"FixedUpdate_ms_avg\\\": 10.43, \\\"Physics_Step_ms_p95\\\": 12.88, \\\"RaycastCount_per_frame_avg\\\": 10500, \\\"NoBackwardTeleport\\\": 0}\\n\",\n    \"trial_dir\": \"outputs/eval_trials/governed/B-BrakeOscillation/B-T2-cache-last-raycast-only\"\n  },\n  \"static_features\": {\n    \"api_usage\": {\n      \"GC.Alloc\": 6,\n      \"Physics.Raycast\": 18230\n    },\n    \"complexity\": {\n      \"cyclomatic_total\": 83,\n      \"maintainability_index\": 64\n    }\n  },\n  \"tests_failed\": [\n    {\n      \"message\": \"avg FixedUpdate > 12ms at N=300\",\n      \"name\": \"Perf_300Cars_PhysicsBudget\",\n      \"stack\": \"PerformanceSuite.Run -> CarController.FixedUpdate\"\n    }\n  ],\n  \"visual_graph\": {}\n}\n\nPolicy:\n{\n  \"allowed_actions\": {\n    \"file_allowlist\": [\n      \"src/**\",\n      \"tests/**\",\n      \"!src/**/experimental/**\"\n    ],\n    \"new_files\": true,\n    \"visual_graph_edits\": false\n  },\n  \"architecture_card\": {\n    \"allowed_components\": [\n      \"Traffic\",\n      \"Gameplay\",\n      \"Tests\"\n    ],\n    \"file_allowlist\": [\n      \"src/unity/**\",\n      \"tests/unity/**\"\n    ],\n    \"invariants\": [\n      \"CrosswalkMutualExclusion\",\n      \"ListenerLifecycle\",\n      \"NoBackwardTeleport\"\n    ],\n    \"perf_budget\": {\n      \"FixedUpdate_ms_avg\": 12.0,\n      \"Physics_Step_ms_p95\": 12.0\n    }\n  },\n  \"attempts\": 2,\n  \"gates\": [\n    \"build\",\n    \"unit\",\n    \"integration\",\n    \"perf\",\n    \"invariants\"\n  ],\n  \"level\": \"T2\"\n}\n\nDeliver: unified diff; 3-line rationale; test plan"
             }
           ],
           "status": "accepted"
@@ -2498,23 +2817,118 @@
         }
       ],
       "summary": {
-        "accepted": 2,
-        "attempts": 4,
-        "avg_attempts": 1.33,
-        "avg_ci_runs": 1.33,
-        "cases": 3,
-        "ci_runs": 4,
+        "accepted": 3,
+        "attempts": 5,
+        "avg_attempts": 1.25,
+        "avg_ci_runs": 1.25,
+        "cases": 4,
+        "ci_runs": 5,
         "failed": 0,
         "failing_gates": {
           "invariants": 1
         },
         "partial": 1,
-        "success_rate": 0.6667
+        "success_rate": 0.75
       }
     },
     "no_arch_card": {
       "description": "D0 routing is preserved, but Architecture Card context is omitted from prompts.",
       "results": [
+        {
+          "accepted_patch": "D-T0-clamp-speed-limit",
+          "attempts": 1,
+          "best_patch": "D-T0-clamp-speed-limit",
+          "case_id": "D-SpeedLimitClamp",
+          "ci_runs": 1,
+          "description": "Unity local speed limiter returns overspeed values instead of clamping them.",
+          "diagnosis": {
+            "approval_required": false,
+            "mode": "local_source",
+            "reasons": [
+              "fault evidence is local to the primary file set"
+            ],
+            "start_level": "T0"
+          },
+          "final_symptom_card": {
+            "bug_id": "D-SpeedLimitClamp",
+            "domain_hints": {
+              "traffic": {
+                "speed_control": {
+                  "expected_local_clamp": true,
+                  "recommended_components": [
+                    "SpeedLimiter"
+                  ]
+                }
+              }
+            },
+            "engine": "Unity",
+            "exceptions": [],
+            "gate_history": [],
+            "human_hints": [
+              "Keep the limiter local; do not change vehicle AI or physics budgets."
+            ],
+            "invariants": [],
+            "perf": {
+              "FixedUpdate_ms_avg": 2.4,
+              "Physics_Step_ms_p95": 3.7
+            },
+            "static_features": {
+              "api_usage": {},
+              "complexity": {
+                "cyclomatic_total": 3,
+                "maintainability_index": 91
+              }
+            },
+            "tests_failed": [
+              {
+                "message": "Expected 50.0 but got 72.5",
+                "name": "SpeedLimiter_ShouldClampAboveMax",
+                "stack": "SpeedLimiterTests.test_clamps_speed_above_limit"
+              }
+            ],
+            "visual_graph": {}
+          },
+          "gate_history": [
+            {
+              "failing_gate": null,
+              "gates": [
+                {
+                  "gate": "build",
+                  "message": "replay gate passed",
+                  "metrics": {
+                    "returncode": 0,
+                    "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                    "stdout_tail": "",
+                    "trial_dir": "outputs/eval_trials/no_arch_card/D-SpeedLimitClamp/D-T0-clamp-speed-limit"
+                  },
+                  "ok": true
+                },
+                {
+                  "gate": "unit",
+                  "message": "replay gate passed",
+                  "metrics": {
+                    "returncode": 0,
+                    "stderr_tail": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+                    "stdout_tail": "",
+                    "trial_dir": "outputs/eval_trials/no_arch_card/D-SpeedLimitClamp/D-T0-clamp-speed-limit"
+                  },
+                  "ok": true
+                }
+              ],
+              "level": "T0",
+              "patch_id": "D-T0-clamp-speed-limit"
+            }
+          ],
+          "last_failing_gate": null,
+          "prompts": [
+            {
+              "attempt": "1",
+              "level": "T0",
+              "text": "Role: Senior engineer\nTask: Propose minimal patch\nBug: D-SpeedLimitClamp\nEngine: Unity\n\nEvidence:\n{\n  \"domain_hints\": {\n    \"traffic\": {\n      \"speed_control\": {\n        \"expected_local_clamp\": true,\n        \"recommended_components\": [\n          \"SpeedLimiter\"\n        ]\n      }\n    }\n  },\n  \"exceptions\": [],\n  \"human_hints\": [\n    \"Keep the limiter local; do not change vehicle AI or physics budgets.\"\n  ],\n  \"last_failing_gate\": null,\n  \"paths\": [\n    \"src/unity/SpeedLimiter.py\"\n  ],\n  \"tests_failed\": [\n    {\n      \"message\": \"Expected 50.0 but got 72.5\",\n      \"name\": \"SpeedLimiter_ShouldClampAboveMax\",\n      \"stack\": \"SpeedLimiterTests.test_clamps_speed_above_limit\"\n    }\n  ]\n}\n\nPolicy:\n{\n  \"allowed_actions\": {\n    \"file_allowlist\": [\n      \"src/**\",\n      \"tests/**\",\n      \"!src/**/experimental/**\"\n    ],\n    \"new_files\": false,\n    \"visual_graph_edits\": false\n  },\n  \"attempts\": 1,\n  \"gates\": [\n    \"build\",\n    \"unit\"\n  ],\n  \"level\": \"T0\"\n}\n\nDeliver: unified diff; 3-line rationale; test plan"
+            }
+          ],
+          "status": "accepted"
+        },
         {
           "accepted_patch": "A-T1-propagate-phase-state",
           "attempts": 1,
@@ -3243,24 +3657,119 @@
         }
       ],
       "summary": {
-        "accepted": 1,
-        "attempts": 5,
-        "avg_attempts": 1.67,
-        "avg_ci_runs": 1.67,
-        "cases": 3,
-        "ci_runs": 5,
+        "accepted": 2,
+        "attempts": 6,
+        "avg_attempts": 1.5,
+        "avg_ci_runs": 1.5,
+        "cases": 4,
+        "ci_runs": 6,
         "failed": 1,
         "failing_gates": {
           "perf": 1,
           "unit": 1
         },
         "partial": 1,
-        "success_rate": 0.3333
+        "success_rate": 0.5
       }
     },
     "single_attempt": {
       "description": "D0 selects the entry level, but the run stops after one candidate attempt.",
       "results": [
+        {
+          "accepted_patch": "D-T0-clamp-speed-limit",
+          "attempts": 1,
+          "best_patch": "D-T0-clamp-speed-limit",
+          "case_id": "D-SpeedLimitClamp",
+          "ci_runs": 1,
+          "description": "Unity local speed limiter returns overspeed values instead of clamping them.",
+          "diagnosis": {
+            "approval_required": false,
+            "mode": "local_source",
+            "reasons": [
+              "fault evidence is local to the primary file set"
+            ],
+            "start_level": "T0"
+          },
+          "final_symptom_card": {
+            "bug_id": "D-SpeedLimitClamp",
+            "domain_hints": {
+              "traffic": {
+                "speed_control": {
+                  "expected_local_clamp": true,
+                  "recommended_components": [
+                    "SpeedLimiter"
+                  ]
+                }
+              }
+            },
+            "engine": "Unity",
+            "exceptions": [],
+            "gate_history": [],
+            "human_hints": [
+              "Keep the limiter local; do not change vehicle AI or physics budgets."
+            ],
+            "invariants": [],
+            "perf": {
+              "FixedUpdate_ms_avg": 2.4,
+              "Physics_Step_ms_p95": 3.7
+            },
+            "static_features": {
+              "api_usage": {},
+              "complexity": {
+                "cyclomatic_total": 3,
+                "maintainability_index": 91
+              }
+            },
+            "tests_failed": [
+              {
+                "message": "Expected 50.0 but got 72.5",
+                "name": "SpeedLimiter_ShouldClampAboveMax",
+                "stack": "SpeedLimiterTests.test_clamps_speed_above_limit"
+              }
+            ],
+            "visual_graph": {}
+          },
+          "gate_history": [
+            {
+              "failing_gate": null,
+              "gates": [
+                {
+                  "gate": "build",
+                  "message": "replay gate passed",
+                  "metrics": {
+                    "returncode": 0,
+                    "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                    "stdout_tail": "",
+                    "trial_dir": "outputs/eval_trials/single_attempt/D-SpeedLimitClamp/D-T0-clamp-speed-limit"
+                  },
+                  "ok": true
+                },
+                {
+                  "gate": "unit",
+                  "message": "replay gate passed",
+                  "metrics": {
+                    "returncode": 0,
+                    "stderr_tail": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+                    "stdout_tail": "",
+                    "trial_dir": "outputs/eval_trials/single_attempt/D-SpeedLimitClamp/D-T0-clamp-speed-limit"
+                  },
+                  "ok": true
+                }
+              ],
+              "level": "T0",
+              "patch_id": "D-T0-clamp-speed-limit"
+            }
+          ],
+          "last_failing_gate": null,
+          "prompts": [
+            {
+              "attempt": "1",
+              "level": "T0",
+              "text": "Role: Senior engineer\nTask: Propose minimal patch\nBug: D-SpeedLimitClamp\nEngine: Unity\n\nEvidence:\n{\n  \"domain_hints\": {\n    \"traffic\": {\n      \"speed_control\": {\n        \"expected_local_clamp\": true,\n        \"recommended_components\": [\n          \"SpeedLimiter\"\n        ]\n      }\n    }\n  },\n  \"exceptions\": [],\n  \"human_hints\": [\n    \"Keep the limiter local; do not change vehicle AI or physics budgets.\"\n  ],\n  \"last_failing_gate\": null,\n  \"paths\": [\n    \"src/unity/SpeedLimiter.py\"\n  ],\n  \"tests_failed\": [\n    {\n      \"message\": \"Expected 50.0 but got 72.5\",\n      \"name\": \"SpeedLimiter_ShouldClampAboveMax\",\n      \"stack\": \"SpeedLimiterTests.test_clamps_speed_above_limit\"\n    }\n  ]\n}\n\nPolicy:\n{\n  \"allowed_actions\": {\n    \"file_allowlist\": [\n      \"src/**\",\n      \"tests/**\",\n      \"!src/**/experimental/**\"\n    ],\n    \"new_files\": false,\n    \"visual_graph_edits\": false\n  },\n  \"attempts\": 1,\n  \"gates\": [\n    \"build\",\n    \"unit\"\n  ],\n  \"level\": \"T0\"\n}\n\nDeliver: unified diff; 3-line rationale; test plan"
+            }
+          ],
+          "status": "accepted"
+        },
         {
           "accepted_patch": "A-T1-propagate-phase-state",
           "attempts": 1,
@@ -3715,19 +4224,19 @@
         }
       ],
       "summary": {
-        "accepted": 1,
-        "attempts": 3,
+        "accepted": 2,
+        "attempts": 4,
         "avg_attempts": 1.0,
         "avg_ci_runs": 1.0,
-        "cases": 3,
-        "ci_runs": 3,
+        "cases": 4,
+        "ci_runs": 4,
         "failed": 1,
         "failing_gates": {
           "build": 1,
           "perf": 1
         },
         "partial": 1,
-        "success_rate": 0.3333
+        "success_rate": 0.5
       }
     }
   }

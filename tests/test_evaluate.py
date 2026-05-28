@@ -19,7 +19,7 @@ class EvaluationTests(unittest.TestCase):
         report = evaluate.run_evaluation(args)
         modes = report["modes"]
 
-        self.assertEqual(modes["governed"]["summary"]["accepted"], 2)
+        self.assertEqual(modes["governed"]["summary"]["accepted"], 3)
         self.assertEqual(modes["governed"]["summary"]["partial"], 1)
         self.assertGreater(
             modes["fixed_ladder"]["summary"]["attempts"],
