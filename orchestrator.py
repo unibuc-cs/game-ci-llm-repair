@@ -235,6 +235,15 @@ def policies_from(policies: dict[str, Any], start_level: str) -> list[tuple[str,
     return [(level, policies[level]) for level in LEVEL_ORDER[start_index:]]
 
 
+def final_gate_names(case: dict[str, Any], arch: dict[str, Any]) -> list[str]:
+    gate_commands = (case.get("replay") or {}).get("gate_commands") or {}
+    if gate_commands:
+        ordered = [gate for gate in arch.get("gates", []) if gate in gate_commands]
+        extras = [gate for gate in gate_commands if gate not in ordered]
+        return ordered + extras
+    return list(arch.get("gates", []))
+
+
 def assemble_prompt(
     policy: dict[str, Any],
     symptom: dict[str, Any],
@@ -624,7 +633,7 @@ class ReplayProjectGateRunner:
         timeout_s: int = 120,
         keep_trials: bool = True,
     ) -> None:
-        self.workspace_root = workspace_root
+        self.workspace_root = workspace_root.resolve()
         self.trials_root = trials_root
         self.timeout_s = timeout_s
         self.keep_trials = keep_trials
@@ -650,11 +659,12 @@ class ReplayProjectGateRunner:
 
         replay = candidate.get("replay") or {}
         command = (replay.get("gate_commands") or {}).get(gate)
+        trial_report_path = self._display_path(trial_dir)
         if not command:
             return GateOutcome(
                 gate=gate,
                 ok=False,
-                metrics={"trial_dir": str(trial_dir)},
+                metrics={"trial_dir": trial_report_path},
                 message=f"no replay command configured for gate '{gate}'",
             )
 
@@ -682,7 +692,7 @@ class ReplayProjectGateRunner:
             return GateOutcome(
                 gate=gate,
                 ok=False,
-                metrics={"trial_dir": str(trial_dir), "timeout_s": self.timeout_s},
+                metrics={"trial_dir": trial_report_path, "timeout_s": self.timeout_s},
                 message=f"replay gate timed out: {exc}",
             )
 
@@ -690,9 +700,9 @@ class ReplayProjectGateRunner:
         metrics.update(
             {
                 "returncode": completed.returncode,
-                "trial_dir": str(trial_dir),
-                "stdout_tail": completed.stdout[-1200:],
-                "stderr_tail": completed.stderr[-1200:],
+                "trial_dir": trial_report_path,
+                "stdout_tail": self._clean_output(completed.stdout),
+                "stderr_tail": self._clean_output(completed.stderr),
             }
         )
         ok = completed.returncode == 0
@@ -765,14 +775,27 @@ class ReplayProjectGateRunner:
                 )
             diff_path.unlink(missing_ok=True)
 
-        candidate["trial_dir"] = str(trial_dir)
+        candidate["trial_dir"] = self._display_path(trial_dir)
         self._prepared[patch_id] = trial_dir
         return trial_dir
 
     def _failure_message(self, completed: subprocess.CompletedProcess[str]) -> str:
-        text = (completed.stderr or completed.stdout or "replay gate failed").strip()
+        text = self._clean_output(completed.stderr or completed.stdout or "replay gate failed").strip()
         lines = [line.strip() for line in text.splitlines() if line.strip()]
         return lines[-1] if lines else "replay gate failed"
+
+    def _display_path(self, path: Path) -> str:
+        try:
+            return path.resolve().relative_to(self.workspace_root).as_posix()
+        except ValueError:
+            return str(path)
+
+    def _clean_output(self, text: str) -> str:
+        cleaned = text.replace(str(self.workspace_root), ".")
+        workspace_posix = self.workspace_root.as_posix()
+        if workspace_posix != str(self.workspace_root):
+            cleaned = cleaned.replace(workspace_posix, ".")
+        return cleaned[-1200:]
 
     def _remove_tree(self, path: Path) -> None:
         def clear_readonly(function, failed_path, excinfo) -> None:
@@ -835,6 +858,10 @@ def run_case(
     architecture_cards: dict[str, Any],
     patch_provider: PatchProvider | None = None,
     gate_runner: GateRunner | None = None,
+    start_level_override: str | None = None,
+    max_total_attempts: int | None = None,
+    require_final_gates: bool = False,
+    mode_label: str | None = None,
 ) -> RepairResult:
     patch_provider = patch_provider or SyntheticPatchProvider()
     gate_runner = gate_runner or SyntheticGateRunner()
@@ -843,6 +870,14 @@ def run_case(
     symptom["human_hints"] = deepcopy(case.get("human_hints", []))
     symptom.setdefault("gate_history", [])
     diagnosis = diagnosis_d0(case, arch)
+    if start_level_override:
+        diagnosis = Diagnosis(
+            mode=mode_label or f"{diagnosis.mode}_override",
+            start_level=start_level_override,
+            approval_required=diagnosis.approval_required,
+            reasons=diagnosis.reasons
+            + [f"evaluation override starts repair at {start_level_override}"],
+        )
 
     attempts_total = 0
     ci_runs = 0
@@ -855,6 +890,18 @@ def run_case(
     for level, policy in policies_from(policies, diagnosis.start_level):
         attempts = int(policy.get("prompt", {}).get("attempts", 1))
         for attempt in range(1, attempts + 1):
+            if max_total_attempts is not None and attempts_total >= max_total_attempts:
+                return stopped_result(
+                    case=case,
+                    diagnosis=diagnosis,
+                    attempts_total=attempts_total,
+                    ci_runs=ci_runs,
+                    best_patch=best_patch,
+                    best_passed_count=best_passed_count,
+                    last_failing_gate=last_failing_gate,
+                    prompts=prompts,
+                    symptom=symptom,
+                )
             attempts_total += 1
             prompt = assemble_prompt(policy, symptom, arch, case["code_context"])
             prompts.append({"level": level, "attempt": str(attempt), "text": prompt})
@@ -885,6 +932,18 @@ def run_case(
                     failing_gate = gate
                     break
                 passed_count += 1
+
+            if failing_gate is None and require_final_gates:
+                already_run = {outcome.gate for outcome in outcomes}
+                for gate in final_gate_names(case, arch):
+                    if gate in already_run:
+                        continue
+                    outcome = gate_runner.run(gate, candidate, policy, arch)
+                    outcomes.append(outcome)
+                    if not outcome.ok:
+                        failing_gate = gate
+                        break
+                    passed_count += 1
 
             if passed_count > best_passed_count:
                 best_passed_count = passed_count
@@ -925,6 +984,34 @@ def run_case(
             last_failing_gate = failing_gate
             update_symptom_card(symptom, level, candidate, outcomes, failing_gate)
 
+    status = "partial" if best_passed_count >= 3 else "failed"
+    return RepairResult(
+        case_id=case["case_id"],
+        description=case["description"],
+        diagnosis=diagnosis,
+        status=status,
+        attempts=attempts_total,
+        ci_runs=ci_runs,
+        accepted_patch=None,
+        best_patch=best_patch,
+        last_failing_gate=last_failing_gate,
+        gate_history=symptom.get("gate_history", []),
+        prompts=prompts,
+        final_symptom_card=symptom,
+    )
+
+
+def stopped_result(
+    case: dict[str, Any],
+    diagnosis: Diagnosis,
+    attempts_total: int,
+    ci_runs: int,
+    best_patch: str | None,
+    best_passed_count: int,
+    last_failing_gate: str | None,
+    prompts: list[dict[str, str]],
+    symptom: dict[str, Any],
+) -> RepairResult:
     status = "partial" if best_passed_count >= 3 else "failed"
     return RepairResult(
         case_id=case["case_id"],

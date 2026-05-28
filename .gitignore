@@ -8,3 +8,4 @@ __pycache__/
 doc/.$*.dtmp
 outputs/replay_trials/
 outputs/test_replay_trials/
+outputs/eval_trials/

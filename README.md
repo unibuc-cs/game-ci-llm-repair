@@ -70,6 +70,41 @@ Open `outputs/dashboard.html` directly in a browser. It shows the D0 route,
 case status, CI gate history, runtime evidence, prompt snapshots, and final
 Symptom Card for each synthetic defect.
 
+## Evaluation
+
+Run the paper-style comparison suite:
+
+```powershell
+python evaluate.py
+```
+
+The evaluator replays the same synthetic cases under five modes:
+
+- `governed`: D0 selects the entry level and the adaptive ladder escalates only
+  after failed evidence.
+- `fixed_ladder`: every case starts at T0 and climbs the full ladder.
+- `broad_context`: every case starts directly at T3.
+- `single_attempt`: D0 routing is preserved, but only one candidate is allowed.
+- `no_arch_card`: D0 routing is preserved, but Architecture Card context is
+  removed from prompts.
+
+It writes:
+
+```text
+outputs/eval_results.json
+outputs/eval_summary.csv
+outputs/eval_dashboard.html
+```
+
+This is the strongest current demo path because it shows both the governed
+workflow and ablations: fewer CI attempts than a fixed ladder, and worse
+outcomes when broad context, retry budget, or Architecture Card constraints are
+removed.
+
+To use GPT-5.5 for candidate generation instead of deterministic synthetic
+patches, set `OPENAI_API_KEY` and add `--patch-provider openai --llm-model
+gpt-5.5` to either `orchestrator.py`, `run_demo.py`, or `evaluate.py`.
+
 ## Providers and Gates
 
 The orchestrator now has replaceable patch providers and gate runners.
