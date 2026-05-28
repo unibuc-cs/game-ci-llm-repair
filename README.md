@@ -110,6 +110,10 @@ gpt-5.5` to either `orchestrator.py`, `run_demo.py`, or `evaluate.py`.
 
 - `docs/paper_traceability.md` maps paper criteria to the concrete repo files,
   commands, and generated evidence.
+- `docs/gpt55_smoke_test.md` documents the live GPT-5.5 smoke-test command and
+  pass criteria.
+- `docs/real_project_integration.md` describes how to connect the workflow to
+  a real Unity or UE5 repository.
 - `DEMO.md` gives a short presentation script with expected command output.
 - `.github/workflows/ci.yml` runs JSON validation, tests, the replay demo, and
   the evaluation suite on GitHub Actions.

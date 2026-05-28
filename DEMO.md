@@ -86,7 +86,7 @@ After setting credentials:
 
 ```powershell
 $env:OPENAI_API_KEY = "..."
-python orchestrator.py --case D-SpeedLimitClamp --patch-provider openai --llm-model gpt-5.5 --gate-runner replay --verbose
+python tools/gpt55_smoke.py
 ```
 
 This exercises the real LLM candidate-generation path on the smallest T0 case.

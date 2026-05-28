@@ -29,6 +29,7 @@ jobs:
       - name: Compile Python sources
         run: |
           python -m py_compile orchestrator.py dashboard.py run_demo.py evaluate.py
+          python -m py_compile tools/gpt55_smoke.py
           python -m py_compile tests/test_orchestrator.py tests/test_dashboard.py tests/test_evaluate.py
           python -m py_compile synthetic_project/src/unity/SpeedLimiter.py synthetic_project/tests/test_speed_limiter_unit.py synthetic_project/tests/test_build.py
 

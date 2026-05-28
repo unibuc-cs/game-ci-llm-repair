@@ -19,7 +19,7 @@ not a full Unity or UE5 plugin.
 | CI-gated validation | `ReplayProjectGateRunner` copies `synthetic_project`, applies the candidate unified diff, and runs real unittest gates against the patched copy. | `python run_demo.py` uses replay mode by default. |
 | Ablation evaluation | `evaluate.py` compares governed routing with `fixed_ladder`, `broad_context`, `single_attempt`, and `no_arch_card`. | `outputs/eval_summary.csv` shows governed success with fewer CI runs than fixed ladder and degraded outcomes for ablations. |
 | Dashboard evidence | `dashboard.py` and `evaluate.py` emit static HTML artifacts for inspection. | Open `outputs/dashboard.html` and `outputs/eval_dashboard.html`. |
-| GPT-5.5 provider path | `OpenAIPatchProvider` defaults to `gpt-5.5` and returns structured candidate patches with unified diffs. | Run with `--patch-provider openai --llm-model gpt-5.5` after setting `OPENAI_API_KEY`. |
+| GPT-5.5 provider path | `OpenAIPatchProvider` defaults to `gpt-5.5` and returns structured candidate patches with unified diffs. | Run `python tools/gpt55_smoke.py` after setting `OPENAI_API_KEY`. |
 | Synthetic data policy | Synthetic cases make the demo deterministic and runnable without engine installations or credentials. | All commands run offline with the default synthetic provider. |
 
 ## Current Expected Results
@@ -48,6 +48,7 @@ no_arch_card   2 accepted, 1 partial, 1 failed
 - The replay project is a Python fixture that emulates game CI gates; it is not
   a Unity or UE5 editor invocation.
 - The default patch provider is deterministic synthetic data. GPT-5.5 support
-  is wired but requires `OPENAI_API_KEY` and the `openai` package.
+  is wired but requires `OPENAI_API_KEY` and the `openai` package. See
+  `docs/gpt55_smoke_test.md`.
 - Visual Blueprint edits are represented as JSON diffs so the behavior can be
   replayed in a standard Python environment.
