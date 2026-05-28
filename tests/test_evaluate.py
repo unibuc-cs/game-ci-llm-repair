@@ -23,9 +23,10 @@ class EvaluationTests(unittest.TestCase):
         report = evaluate.run_evaluation(args)
         modes = report["modes"]
 
-        self.assertEqual(modes["governed"]["summary"]["accepted"], 3)
+        self.assertEqual(modes["governed"]["summary"]["accepted"], 4)
         self.assertEqual(modes["governed"]["summary"]["partial"], 1)
         self.assertEqual(modes["B0_single_prompt"]["summary"]["accepted"], 1)
+        self.assertEqual(modes["B3_broad_context_agent"]["summary"]["accepted"], 1)
         self.assertGreater(
             modes["fixed_ladder"]["summary"]["attempts"],
             modes["governed"]["summary"]["attempts"],
@@ -45,7 +46,7 @@ class EvaluationTests(unittest.TestCase):
         self.assertEqual(len(report["human_supervision"]), 3)
         maintainability = {row["engine"]: row for row in report["maintainability"]}
         self.assertGreaterEqual(maintainability["Unity"]["accepted_patches"], 3)
-        self.assertEqual(maintainability["UE5"]["accepted_patches"], 0)
+        self.assertGreaterEqual(maintainability["UE5"]["accepted_patches"], 1)
 
 
 if __name__ == "__main__":

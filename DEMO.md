@@ -22,6 +22,7 @@ D-SpeedLimitClamp  | T0 | accepted | 1        | 1  | -
 A-CrosswalkDesync  | T1 | accepted | 1        | 1  | -
 B-BrakeOscillation | T2 | accepted | 2        | 2  | -
 C-FourWayDeadlock  | T3 | partial  | 1        | 1  | invariants
+E-FairWaitBlueprint | T3 | accepted | 1        | 1  | -
 ```
 
 Point out:
@@ -29,6 +30,8 @@ Point out:
 - D0 covers every level from T0 through T3.
 - B shows adaptive retry after a performance failure.
 - C is intentionally partial because the fairness invariant still fails.
+- E demonstrates an accepted UE5 Blueprint repair that clears the same
+  fairness invariant class.
 - The default run applies unified diffs to copied replay projects and runs real
   unittest gates.
 
@@ -51,15 +54,15 @@ Expected result:
 
 ```text
 Mode           | Accepted | Partial | Failed | Attempts | CI
-governed       | 3        | 1       | 0      | 5        | 5
-B0_single_prompt        | 1        | 1       | 2
-B1_multi_attempt_prompt | 2        | 1       | 1
-B2_tool_agent           | 3        | 1       | 0
-B3_broad_context_agent  | 0        | 2       | 2
-fixed_ladder   | 3        | 1       | 0      | 12       | 12
-broad_context  | 0        | 2       | 2      | 4        | 4
-single_attempt | 2        | 1       | 1      | 4        | 4
-no_arch_card   | 2        | 1       | 1      | 6        | 6
+governed                | 4        | 1       | 0      | 6        | 6
+B0_single_prompt        | 1        | 1       | 3      | 5        | 5
+B1_multi_attempt_prompt | 2        | 1       | 2      | 18       | 18
+B2_tool_agent           | 4        | 1       | 0      | 17       | 17
+B3_broad_context_agent  | 1        | 2       | 2      | 5        | 5
+fixed_ladder            | 4        | 1       | 0      | 17       | 17
+broad_context           | 1        | 2       | 2      | 5        | 5
+single_attempt          | 3        | 2       | 0      | 5        | 5
+no_arch_card            | 2        | 1       | 2      | 7        | 7
 ```
 
 Open:

@@ -47,10 +47,15 @@ NO_ARCH_PROMPT_MODES = {
 }
 NO_ARCH_DEGRADES_MODES = {"B1_multi_attempt_prompt", "no_arch_card"}
 TRIAL_MODE_SEGMENTS = {
+    "governed": "G",
     "B0_single_prompt": "B0",
     "B1_multi_attempt_prompt": "B1",
     "B2_tool_agent": "B2",
     "B3_broad_context_agent": "B3",
+    "fixed_ladder": "FL",
+    "broad_context": "BC",
+    "single_attempt": "SA",
+    "no_arch_card": "NA",
 }
 
 

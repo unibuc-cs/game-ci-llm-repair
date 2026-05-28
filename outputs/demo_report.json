@@ -737,12 +737,187 @@
         }
       ],
       "status": "partial"
+    },
+    {
+      "accepted_patch": "E-T3-enable-fair-wait-blueprint",
+      "attempts": 1,
+      "best_patch": "E-T3-enable-fair-wait-blueprint",
+      "case_id": "E-FairWaitBlueprint",
+      "ci_runs": 1,
+      "description": "UE5 intersection Blueprint grants progress but leaves fair-wait ordering disabled.",
+      "diagnosis": {
+        "approval_required": true,
+        "mode": "visual_scripting",
+        "reasons": [
+          "visual-graph or Blueprint/event-binding evidence is present",
+          "broad repair level requires bounded human approval"
+        ],
+        "start_level": "T3"
+      },
+      "final_symptom_card": {
+        "bug_id": "E-FairWaitBlueprint",
+        "domain_hints": {
+          "traffic": {
+            "right_of_way": {
+              "anti_patterns": [
+                "random_tiebreak"
+              ],
+              "ordering_key_candidates": [
+                "DistanceToStopLine",
+                "EntryTime"
+              ],
+              "recommended_components": [
+                "FRightOfWayTicket"
+              ]
+            }
+          }
+        },
+        "engine": "UE5",
+        "exceptions": [],
+        "gate_history": [],
+        "human_hints": [
+          "Preserve Blueprint event names and add deterministic fairness without replacing the controller."
+        ],
+        "invariants": [
+          {
+            "name": "NoCollisionOnGrant",
+            "violations": 0
+          },
+          {
+            "name": "FairWaitDistribution",
+            "violations": 1
+          }
+        ],
+        "perf": {
+          "GameThread_ms_avg": 5.1,
+          "GameThread_ms_p95": 7.4
+        },
+        "static_features": {
+          "api_usage": {
+            "RandomIntegerInRange": 1
+          },
+          "complexity": {
+            "cyclomatic_total": 39,
+            "maintainability_index": 70
+          }
+        },
+        "tests_failed": [
+          {
+            "message": "FairWaitDistribution violation: older right-of-way ticket was skipped",
+            "name": "FairWaitDistribution_ShouldNotStarveOlderRequests",
+            "stack": "BP_IntersectionController::GrantNext"
+          }
+        ],
+        "visual_graph": {
+          "call_histogram": {
+            "Array_Sort": 1,
+            "RandomIntegerInRange": 1
+          },
+          "degree_stats": {
+            "in_max": 5,
+            "in_med": 1,
+            "in_min": 0,
+            "out_max": 4,
+            "out_med": 1,
+            "out_min": 0
+          },
+          "node_histogram": {
+            "K2Node_CallFunction": 31,
+            "K2Node_VariableGet": 42,
+            "K2Node_VariableSet": 7
+          },
+          "prop_access_histogram": {
+            "DistanceToStopLine": 3,
+            "EntryTime": 1,
+            "Heading": 0
+          }
+        }
+      },
+      "gate_history": [
+        {
+          "failing_gate": null,
+          "gates": [
+            {
+              "gate": "build",
+              "message": "replay gate passed",
+              "metrics": {
+                "returncode": 0,
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
+                "stdout_tail": "",
+                "trial_dir": "outputs/replay_trials/E-FairWaitBlueprint/E-T3-enable-fair-wait-blueprint"
+              },
+              "ok": true
+            },
+            {
+              "gate": "unit",
+              "message": "replay gate passed",
+              "metrics": {
+                "returncode": 0,
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
+                "stdout_tail": "",
+                "trial_dir": "outputs/replay_trials/E-FairWaitBlueprint/E-T3-enable-fair-wait-blueprint"
+              },
+              "ok": true
+            },
+            {
+              "gate": "integration",
+              "message": "replay gate passed",
+              "metrics": {
+                "returncode": 0,
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
+                "stdout_tail": "",
+                "trial_dir": "outputs/replay_trials/E-FairWaitBlueprint/E-T3-enable-fair-wait-blueprint"
+              },
+              "ok": true
+            },
+            {
+              "gate": "perf",
+              "message": "replay gate passed",
+              "metrics": {
+                "GameThread_ms_avg": 5.39,
+                "GameThread_ms_p95": 7.92,
+                "returncode": 0,
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
+                "stdout_tail": "SANERBUG_METRICS {\"GameThread_ms_avg\": 5.39, \"GameThread_ms_p95\": 7.92}\n",
+                "trial_dir": "outputs/replay_trials/E-FairWaitBlueprint/E-T3-enable-fair-wait-blueprint"
+              },
+              "ok": true
+            },
+            {
+              "gate": "invariants",
+              "message": "replay gate passed",
+              "metrics": {
+                "returncode": 0,
+                "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in <duration>s\n\nOK\n",
+                "stdout_tail": "SANERBUG_METRICS {\"violations\": {\"NoCollisionOnGrant\": 0, \"FairWaitDistribution\": 0}}\n",
+                "trial_dir": "outputs/replay_trials/E-FairWaitBlueprint/E-T3-enable-fair-wait-blueprint",
+                "violations": {
+                  "FairWaitDistribution": 0,
+                  "NoCollisionOnGrant": 0
+                }
+              },
+              "ok": true
+            }
+          ],
+          "level": "T3",
+          "patch_id": "E-T3-enable-fair-wait-blueprint"
+        }
+      ],
+      "last_failing_gate": null,
+      "prompts": [
+        {
+          "attempt": "1",
+          "level": "T3",
+          "text": "Role: Senior engineer\nTask: Propose minimal patch\nBug: E-FairWaitBlueprint\nEngine: UE5\n\nEvidence:\n{\n  \"domain_hints\": {\n    \"traffic\": {\n      \"right_of_way\": {\n        \"anti_patterns\": [\n          \"random_tiebreak\"\n        ],\n        \"ordering_key_candidates\": [\n          \"DistanceToStopLine\",\n          \"EntryTime\"\n        ],\n        \"recommended_components\": [\n          \"FRightOfWayTicket\"\n        ]\n      }\n    }\n  },\n  \"exceptions\": [],\n  \"human_hints\": [\n    \"Preserve Blueprint event names and add deterministic fairness without replacing the controller.\"\n  ],\n  \"invariants\": [\n    {\n      \"name\": \"NoCollisionOnGrant\",\n      \"violations\": 0\n    },\n    {\n      \"name\": \"FairWaitDistribution\",\n      \"violations\": 1\n    }\n  ],\n  \"last_failing_gate\": null,\n  \"paths\": [\n    \"Content/Blueprints/BP_IntersectionController.uasset.json\",\n    \"src/ue5/AI/VehicleController.cpp\"\n  ],\n  \"perf\": {\n    \"GameThread_ms_avg\": 5.1,\n    \"GameThread_ms_p95\": 7.4\n  },\n  \"static_features\": {\n    \"api_usage\": {\n      \"RandomIntegerInRange\": 1\n    },\n    \"complexity\": {\n      \"cyclomatic_total\": 39,\n      \"maintainability_index\": 70\n    }\n  },\n  \"tests_failed\": [\n    {\n      \"message\": \"FairWaitDistribution violation: older right-of-way ticket was skipped\",\n      \"name\": \"FairWaitDistribution_ShouldNotStarveOlderRequests\",\n      \"stack\": \"BP_IntersectionController::GrantNext\"\n    }\n  ],\n  \"visual_graph\": {\n    \"call_histogram\": {\n      \"Array_Sort\": 1,\n      \"RandomIntegerInRange\": 1\n    },\n    \"degree_stats\": {\n      \"in_max\": 5,\n      \"in_med\": 1,\n      \"in_min\": 0,\n      \"out_max\": 4,\n      \"out_med\": 1,\n      \"out_min\": 0\n    },\n    \"node_histogram\": {\n      \"K2Node_CallFunction\": 31,\n      \"K2Node_VariableGet\": 42,\n      \"K2Node_VariableSet\": 7\n    },\n    \"prop_access_histogram\": {\n      \"DistanceToStopLine\": 3,\n      \"EntryTime\": 1,\n      \"Heading\": 0\n    }\n  }\n}\n\nPolicy:\n{\n  \"allowed_actions\": {\n    \"file_allowlist\": [\n      \"src/**\",\n      \"tests/**\",\n      \"Content/Blueprints/**\",\n      \"!src/**/experimental/**\"\n    ],\n    \"new_files\": true,\n    \"visual_graph_edits\": true\n  },\n  \"architecture_card\": {\n    \"allowed_components\": [\n      \"Traffic\",\n      \"AI\",\n      \"Blueprints\",\n      \"Tests\"\n    ],\n    \"file_allowlist\": [\n      \"src/ue5/**\",\n      \"Content/Blueprints/**\",\n      \"tests/ue5/**\"\n    ],\n    \"invariants\": [\n      \"NoCollisionOnGrant\",\n      \"FairWaitDistribution\"\n    ],\n    \"perf_budget\": {\n      \"GameThread_ms_avg\": 8.0,\n      \"GameThread_ms_p95\": 12.0\n    }\n  },\n  \"attempts\": 1,\n  \"gates\": [\n    \"build\",\n    \"unit\",\n    \"integration\",\n    \"perf\",\n    \"invariants\"\n  ],\n  \"level\": \"T3\"\n}\n\nDeliver: unified diff; 3-line rationale; test plan"
+        }
+      ],
+      "status": "accepted"
     }
   ],
   "summary": {
-    "accepted": 3,
-    "cases": 4,
-    "ci_runs": 5,
+    "accepted": 4,
+    "cases": 5,
+    "ci_runs": 6,
     "failed": 0,
     "gate_runner": "replay",
     "partial": 1,

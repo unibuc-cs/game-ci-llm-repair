@@ -18,6 +18,7 @@ class DashboardTests(unittest.TestCase):
         self.assertIn("A-CrosswalkDesync", html)
         self.assertIn("B-BrakeOscillation", html)
         self.assertIn("C-FourWayDeadlock", html)
+        self.assertIn("E-FairWaitBlueprint", html)
 
         match = re.search(
             r'<script id="report-data" type="application/json">(.*?)</script>',
@@ -26,7 +27,7 @@ class DashboardTests(unittest.TestCase):
         )
         self.assertIsNotNone(match)
         embedded = json.loads(match.group(1))
-        self.assertEqual(embedded["summary"]["cases"], 4)
+        self.assertEqual(embedded["summary"]["cases"], 5)
 
 
 if __name__ == "__main__":

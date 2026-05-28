@@ -103,93 +103,93 @@
       <tbody>
         <tr>
           <td><strong>governed</strong><br><span>D0 diagnosis selects the entry level and the adaptive ladder handles escalation.</span></td>
-          <td>3</td>
+          <td>4</td>
           <td>1</td>
           <td>0</td>
-          <td>75.00%</td>
-          <td>5</td>
-          <td>5</td>
+          <td>80.00%</td>
+          <td>6</td>
+          <td>6</td>
           <td>{&quot;invariants&quot;: 1}</td>
         </tr>
         <tr>
           <td><strong>B0_single_prompt</strong><br><span>Baseline B0: one unstructured local prompt, no D0 routing, no retry budget.</span></td>
           <td>1</td>
           <td>1</td>
-          <td>2</td>
-          <td>25.00%</td>
-          <td>4</td>
-          <td>4</td>
-          <td>{&quot;perf&quot;: 1, &quot;unit&quot;: 2}</td>
+          <td>3</td>
+          <td>20.00%</td>
+          <td>5</td>
+          <td>5</td>
+          <td>{&quot;perf&quot;: 1, &quot;unit&quot;: 3}</td>
         </tr>
         <tr>
           <td><strong>B1_multi_attempt_prompt</strong><br><span>Baseline B1: unstructured fixed ladder with retries and plain CI feedback.</span></td>
           <td>2</td>
           <td>1</td>
-          <td>1</td>
-          <td>50.00%</td>
-          <td>13</td>
-          <td>13</td>
-          <td>{&quot;perf&quot;: 1, &quot;unit&quot;: 1}</td>
+          <td>2</td>
+          <td>40.00%</td>
+          <td>18</td>
+          <td>18</td>
+          <td>{&quot;perf&quot;: 1, &quot;unit&quot;: 2}</td>
         </tr>
         <tr>
           <td><strong>B2_tool_agent</strong><br><span>Baseline B2: tool-agent style fixed ladder with repository access and CI feedback, but no Architecture Card prompt context.</span></td>
-          <td>3</td>
+          <td>4</td>
           <td>1</td>
           <td>0</td>
-          <td>75.00%</td>
-          <td>12</td>
-          <td>12</td>
+          <td>80.00%</td>
+          <td>17</td>
+          <td>17</td>
           <td>{&quot;invariants&quot;: 1}</td>
         </tr>
         <tr>
           <td><strong>B3_broad_context_agent</strong><br><span>Baseline B3: broad-context agent starts at T3 without D0 routing or Architecture Card prompt context.</span></td>
-          <td>0</td>
+          <td>1</td>
           <td>2</td>
           <td>2</td>
-          <td>0.00%</td>
-          <td>4</td>
-          <td>4</td>
+          <td>20.00%</td>
+          <td>5</td>
+          <td>5</td>
           <td>{&quot;invariants&quot;: 1, &quot;perf&quot;: 1, &quot;unit&quot;: 2}</td>
         </tr>
         <tr>
           <td><strong>fixed_ladder</strong><br><span>Every case starts at T0, then escalates through T1, T2, and T3.</span></td>
-          <td>3</td>
+          <td>4</td>
           <td>1</td>
           <td>0</td>
-          <td>75.00%</td>
-          <td>12</td>
-          <td>12</td>
+          <td>80.00%</td>
+          <td>17</td>
+          <td>17</td>
           <td>{&quot;invariants&quot;: 1}</td>
         </tr>
         <tr>
           <td><strong>broad_context</strong><br><span>Every case starts at T3 with the broadest context and permissions.</span></td>
-          <td>0</td>
+          <td>1</td>
           <td>2</td>
           <td>2</td>
-          <td>0.00%</td>
-          <td>4</td>
-          <td>4</td>
+          <td>20.00%</td>
+          <td>5</td>
+          <td>5</td>
           <td>{&quot;invariants&quot;: 1, &quot;perf&quot;: 1, &quot;unit&quot;: 2}</td>
         </tr>
         <tr>
           <td><strong>single_attempt</strong><br><span>D0 selects the entry level, but the run stops after one candidate attempt.</span></td>
+          <td>3</td>
           <td>2</td>
-          <td>1</td>
-          <td>1</td>
-          <td>50.00%</td>
-          <td>4</td>
-          <td>4</td>
-          <td>{&quot;build&quot;: 1, &quot;perf&quot;: 1}</td>
+          <td>0</td>
+          <td>60.00%</td>
+          <td>5</td>
+          <td>5</td>
+          <td>{&quot;invariants&quot;: 1, &quot;perf&quot;: 1}</td>
         </tr>
         <tr>
           <td><strong>no_arch_card</strong><br><span>D0 routing is preserved, but Architecture Card context is omitted from prompts.</span></td>
           <td>2</td>
           <td>1</td>
-          <td>1</td>
-          <td>50.00%</td>
-          <td>6</td>
-          <td>6</td>
-          <td>{&quot;perf&quot;: 1, &quot;unit&quot;: 1}</td>
+          <td>2</td>
+          <td>40.00%</td>
+          <td>7</td>
+          <td>7</td>
+          <td>{&quot;perf&quot;: 1, &quot;unit&quot;: 2}</td>
         </tr>
       </tbody>
     </table>
@@ -210,33 +210,33 @@
       <tbody>
         <tr>
           <td><strong>file_scope_confirmation_only</strong><br><span>Offline replay estimate: scope confirmation is represented by CodeContext primary files.</span></td>
-          <td>3</td>
+          <td>4</td>
           <td>1</td>
           <td>0</td>
-          <td>5</td>
+          <td>6</td>
           <td>0.0</td>
           <td>1.4</td>
           <td>0</td>
         </tr>
         <tr>
           <td><strong>bounded_hints</strong><br><span>Human hints are present in the synthetic cases and rendered into prompts.</span></td>
-          <td>3</td>
+          <td>4</td>
           <td>1</td>
           <td>0</td>
-          <td>5</td>
+          <td>6</td>
           <td>1.0</td>
           <td>3.8</td>
           <td>0</td>
         </tr>
         <tr>
           <td><strong>bounded_hints_and_escalation_approval</strong><br><span>Escalation reviews count D0 routes that require broad-scope approval.</span></td>
-          <td>3</td>
+          <td>4</td>
           <td>1</td>
           <td>0</td>
-          <td>5</td>
+          <td>6</td>
           <td>1.0</td>
           <td>5.6</td>
-          <td>2</td>
+          <td>3</td>
         </tr>
       </tbody>
     </table>
@@ -255,13 +255,13 @@
       </thead>
       <tbody>
         <tr>
-          <td><strong>UE5</strong><br><span>No accepted patches for this engine in the synthetic governed run.</span></td>
-          <td>0</td>
-          <td>n/a</td>
-          <td>n/a</td>
-          <td>n/a</td>
-          <td>n/a</td>
-          <td>n/a</td>
+          <td><strong>UE5</strong><br><span>Synthetic proxy over accepted patches; not a replacement for engine static analyzers.</span></td>
+          <td>1</td>
+          <td>1.0</td>
+          <td>-0.2</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>-2.0</td>
         </tr>
         <tr>
           <td><strong>Unity</strong><br><span>Synthetic proxy over accepted patches; not a replacement for engine static analyzers.</span></td>

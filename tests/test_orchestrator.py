@@ -24,6 +24,7 @@ class OrchestratorDemoTests(unittest.TestCase):
         self.assertEqual(routes["A-CrosswalkDesync"], "T1")
         self.assertEqual(routes["B-BrakeOscillation"], "T2")
         self.assertEqual(routes["C-FourWayDeadlock"], "T3")
+        self.assertEqual(routes["E-FairWaitBlueprint"], "T3")
 
     def test_end_to_end_demo_statuses(self):
         results = [
@@ -36,6 +37,7 @@ class OrchestratorDemoTests(unittest.TestCase):
         self.assertEqual(by_case["A-CrosswalkDesync"].status, "accepted")
         self.assertEqual(by_case["B-BrakeOscillation"].status, "accepted")
         self.assertEqual(by_case["C-FourWayDeadlock"].status, "partial")
+        self.assertEqual(by_case["E-FairWaitBlueprint"].status, "accepted")
         self.assertEqual(by_case["D-SpeedLimitClamp"].attempts, 1)
         self.assertEqual(by_case["B-BrakeOscillation"].attempts, 2)
         self.assertEqual(by_case["C-FourWayDeadlock"].last_failing_gate, "invariants")
@@ -61,6 +63,7 @@ class OrchestratorDemoTests(unittest.TestCase):
         self.assertEqual(by_case["A-CrosswalkDesync"].status, "accepted")
         self.assertEqual(by_case["B-BrakeOscillation"].status, "accepted")
         self.assertEqual(by_case["C-FourWayDeadlock"].status, "partial")
+        self.assertEqual(by_case["E-FairWaitBlueprint"].status, "accepted")
         self.assertEqual(by_case["C-FourWayDeadlock"].last_failing_gate, "invariants")
 
     def test_permission_gate_rejects_disallowed_visual_edits_before_t3(self):

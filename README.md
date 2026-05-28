@@ -10,12 +10,14 @@ can be inspected and tested anywhere Python runs.
 
 ## Demo Scope
 
-- `data/synthetic_cases.json` contains four synthetic defect cases:
+- `data/synthetic_cases.json` contains five synthetic defect cases:
   - `D-SpeedLimitClamp`: local Unity gameplay repair routed to T0.
   - `A-CrosswalkDesync`: cross-file Unity gameplay repair routed to T1.
   - `B-BrakeOscillation`: Unity performance/invariant repair routed to T2.
   - `C-FourWayDeadlock`: UE5 visual-scripting repair routed to T3 and reported
     as a partial repair after a late invariant failure.
+  - `E-FairWaitBlueprint`: UE5 visual-scripting repair routed to T3 and
+    accepted after the fairness invariant passes.
 - `synthetic_project/` is a replayable failing project fixture. Replay mode
   copies it per attempt, applies the candidate unified diff, and runs real
   unittest-based gates against the patched copy.
@@ -85,7 +87,8 @@ Run the paper-style comparison suite:
 python evaluate.py
 ```
 
-The evaluator replays the same synthetic cases under five modes:
+The evaluator replays the same synthetic cases under governed mode, B0-B3
+paper baselines, and ablation modes:
 
 - `governed`: D0 selects the entry level and the adaptive ladder escalates only
   after failed evidence.

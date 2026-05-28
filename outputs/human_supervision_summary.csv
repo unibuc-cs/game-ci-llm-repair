@@ -1,4 +1,4 @@
 condition,cases,accepted,partial,failed,ci_runs,hints_per_item,review_minutes_per_item,escalation_reviews,note
-file_scope_confirmation_only,4,3,1,0,5,0.0,1.4,0,Offline replay estimate: scope confirmation is represented by CodeContext primary files.
-bounded_hints,4,3,1,0,5,1.0,3.8,0,Human hints are present in the synthetic cases and rendered into prompts.
-bounded_hints_and_escalation_approval,4,3,1,0,5,1.0,5.6,2,Escalation reviews count D0 routes that require broad-scope approval.
+file_scope_confirmation_only,5,4,1,0,6,0.0,1.4,0,Offline replay estimate: scope confirmation is represented by CodeContext primary files.
+bounded_hints,5,4,1,0,6,1.0,3.8,0,Human hints are present in the synthetic cases and rendered into prompts.
+bounded_hints_and_escalation_approval,5,4,1,0,6,1.0,5.6,3,Escalation reviews count D0 routes that require broad-scope approval.

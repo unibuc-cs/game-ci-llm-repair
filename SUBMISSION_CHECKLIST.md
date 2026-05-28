@@ -13,7 +13,7 @@ OpenAI credentials or game-engine installations.
 | T0 local repair case | Done | `D-SpeedLimitClamp` accepted at T0 |
 | T1 cross-file repair case | Done | `A-CrosswalkDesync` accepted at T1 |
 | T2 performance/invariant repair case | Done | `B-BrakeOscillation` accepted after one failed perf attempt |
-| T3 visual-scripting repair case | Done | `C-FourWayDeadlock` reaches partial with invariant failure |
+| T3 visual-scripting repair cases | Done | `C-FourWayDeadlock` reaches partial with invariant failure; `E-FairWaitBlueprint` is accepted |
 | Policy-scoped prompts | Done | Prompt snapshots in `outputs/demo_report.json` |
 | Architecture Card constraints | Done | `config/architecture_cards.json` |
 | Symptom Card updates after gates | Done | `gate_history` and final cards in `outputs/demo_report.json` |
@@ -45,6 +45,7 @@ D-SpeedLimitClamp   T0  accepted
 A-CrosswalkDesync   T1  accepted
 B-BrakeOscillation  T2  accepted
 C-FourWayDeadlock   T3  partial
+E-FairWaitBlueprint T3  accepted
 ```
 
 Run:
@@ -56,15 +57,15 @@ python evaluate.py
 Expected evaluation summary:
 
 ```text
-governed       3 accepted, 1 partial, 5 CI runs
-B0_single_prompt        1 accepted, 1 partial, 2 failed
-B1_multi_attempt_prompt 2 accepted
-B2_tool_agent           3 accepted, more CI than governed
-B3_broad_context_agent  0 accepted, 2 partial, 2 failed
-fixed_ladder   3 accepted, 1 partial, 12 CI runs
-broad_context  0 accepted, 2 partial, 2 failed
-single_attempt 2 accepted, 1 partial, 1 failed
-no_arch_card   2 accepted, 1 partial, 1 failed
+governed                4 accepted, 1 partial, 6 CI runs
+B0_single_prompt        1 accepted, 1 partial, 3 failed
+B1_multi_attempt_prompt 2 accepted, 1 partial, 2 failed
+B2_tool_agent           4 accepted, more CI than governed
+B3_broad_context_agent  1 accepted, 2 partial, 2 failed
+fixed_ladder            4 accepted, 1 partial, 17 CI runs
+broad_context           1 accepted, 2 partial, 2 failed
+single_attempt          3 accepted, 2 partial, 0 failed
+no_arch_card            2 accepted, 1 partial, 2 failed
 ```
 
 Run:

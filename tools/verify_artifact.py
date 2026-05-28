@@ -78,8 +78,8 @@ def build_checks(args: argparse.Namespace) -> list[Check]:
     def check_demo_summary() -> None:
         report = load_json(demo_report_path)
         summary = report["summary"]
-        require(summary["cases"] == 4, f"expected 4 demo cases, got {summary['cases']}")
-        require(summary["accepted"] == 3, f"expected 3 accepted demo cases, got {summary['accepted']}")
+        require(summary["cases"] == 5, f"expected 5 demo cases, got {summary['cases']}")
+        require(summary["accepted"] == 4, f"expected 4 accepted demo cases, got {summary['accepted']}")
         require(summary["partial"] == 1, f"expected 1 partial demo case, got {summary['partial']}")
         require(summary["failed"] == 0, f"expected 0 failed demo cases, got {summary['failed']}")
         require(summary["gate_runner"] == "replay", f"expected replay gate runner, got {summary['gate_runner']}")
@@ -96,6 +96,7 @@ def build_checks(args: argparse.Namespace) -> list[Check]:
             "A-CrosswalkDesync": "T1",
             "B-BrakeOscillation": "T2",
             "C-FourWayDeadlock": "T3",
+            "E-FairWaitBlueprint": "T3",
         }
         require(routes == expected, f"unexpected D0 routes: {routes}")
 
@@ -107,6 +108,7 @@ def build_checks(args: argparse.Namespace) -> list[Check]:
         require(outcomes["B-BrakeOscillation"]["status"] == "accepted", "T2 case was not accepted")
         require(outcomes["B-BrakeOscillation"]["attempts"] == 2, "T2 case should demonstrate retry")
         require(outcomes["C-FourWayDeadlock"]["status"] == "partial", "T3 case should remain partial")
+        require(outcomes["E-FairWaitBlueprint"]["status"] == "accepted", "accepted UE5 T3 case was not accepted")
         require(
             outcomes["C-FourWayDeadlock"]["last_failing_gate"] == "invariants",
             "T3 case should fail at invariants",
@@ -130,8 +132,8 @@ def build_checks(args: argparse.Namespace) -> list[Check]:
 
         governed = rows["governed"]
         fixed = rows["fixed_ladder"]
-        require(governed["cases"] == "4", f"expected 4 governed cases, got {governed['cases']}")
-        require(governed["accepted"] == "3", f"expected governed accepted=3, got {governed['accepted']}")
+        require(governed["cases"] == "5", f"expected 5 governed cases, got {governed['cases']}")
+        require(governed["accepted"] == "4", f"expected governed accepted=4, got {governed['accepted']}")
         require(governed["partial"] == "1", f"expected governed partial=1, got {governed['partial']}")
         require(governed["failed"] == "0", f"expected governed failed=0, got {governed['failed']}")
         require(int(fixed["ci_runs"]) > int(governed["ci_runs"]), "fixed ladder should use more CI runs")
@@ -171,13 +173,17 @@ def build_checks(args: argparse.Namespace) -> list[Check]:
             int(rows["Unity"]["accepted_patches"]) >= 3,
             "Unity maintainability summary should cover accepted synthetic patches",
         )
+        require(
+            int(rows["UE5"]["accepted_patches"]) >= 1,
+            "UE5 maintainability summary should include an accepted synthetic patch",
+        )
 
     def check_eval_report_metadata() -> None:
         report = load_json(eval_report_path)
         metadata = report["metadata"]
         require(metadata["patch_provider"] == "synthetic", "evaluation should use synthetic provider")
         require(metadata["gate_runner"] == "replay", "evaluation should use replay gate runner")
-        require(len(metadata["cases"]) == 4, f"expected 4 evaluated cases, got {metadata['cases']}")
+        require(len(metadata["cases"]) == 5, f"expected 5 evaluated cases, got {metadata['cases']}")
 
     def check_ci_uses_verifier() -> None:
         workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
